@@ -1,0 +1,18 @@
+{
+  "type": "WordScramble",
+  "puzzleID": "2",
+  "title": "Escape Word",
+  "state": "INIT",
+  "maxHints": 2,
+  "hints": [
+    { "level": 1, "text": "It's the theme of the game" }
+  ],
+  "allowedTime": "PT1M30S",
+  "variationSeed": 7,
+  "scoreValue": 30,
+  "timeToBeat": 25,
+  "startTime": 0,
+  "scrambledWord": "ECRSAPE",
+  "solution": "ESCAPE",
+  "hint": "Rooms need this."
+}

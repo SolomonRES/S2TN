@@ -1,0 +1,26 @@
+[
+	{
+		"uuid": "b937b71e-ccc4-4e8a-bb74-60c9f9030c11",
+		"username": "jdoe",
+		"score":0,
+		"rank":4
+	},
+	{
+		"uuid": "6b2f52b0-7b3a-4aa3-95c5-17ddf04db21f",
+		"username": "jodoe",
+		"score":2000,
+		"rank":3
+	},
+	{
+		"uuid": "4ed441fa-861b-4d90-bd12-1d8726054126",
+		"username": "PuzzleMaster",
+		"score":5243,
+		"rank":1
+	},
+	{
+		"uuid": "cfbec93f-2a04-43fd-82ed-d84bfbae8d01",
+		"username": "Solosum",
+		"score":3786,
+		"rank":2
+	}
+]

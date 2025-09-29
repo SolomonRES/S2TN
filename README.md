@@ -1,4 +1,4 @@
-# <img src="./assets/logo.png" alt="S²TN Logo" width="40"/> Escape Room Software – *S²TN*
+# <img src="./assets/logo.png" alt="S²TN Logo" width="28" style="vertical-align:middle; margin-right:8px;"/> Escape Room Software – *S²TN*
 
 A **Software Engineering Project** for *CSCE 247: Software Engineering* at the **University of South Carolina**.  
 This project delivers a **Java-based escape room puzzle experience**, with structured gameplay loops, accessibility considerations, and puzzle-solving progression.

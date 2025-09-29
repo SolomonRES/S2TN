@@ -1,0 +1,16 @@
+[
+  {
+    "puzzleId": "cp001",
+    "type": "code",
+    "difficulty": "easy",
+    "question": "Print 'Hello World' in Python",
+    "answer": "print('Hello World')"
+  },
+  {
+    "puzzleId": "cp002",
+    "type": "code",
+    "difficulty": "medium",
+    "question": "Write a loop that sums numbers 1 to 10",
+    "answer": "total = sum(range(1, 11))"
+  }
+]

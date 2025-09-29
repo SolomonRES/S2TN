@@ -1,7 +1,12 @@
 [
-    {
-        "userID": "",
-        "saveSlot": 0
-        
-    }
+  {
+    "saveId": "s001",
+    "userId": "u001",
+    "puzzleId": "mz001"
+  },
+  {
+    "saveId": "s002",
+    "userId": "u002",
+    "puzzleId": "sp001"
+  }
 ]

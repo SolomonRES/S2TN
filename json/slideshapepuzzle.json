@@ -1,0 +1,16 @@
+[
+  {
+    "puzzleId": "sp001",
+    "type": "slideShape",
+    "difficulty": "easy",
+    "goalShape": "square",
+    "movesAllowed": 10
+  },
+  {
+    "puzzleId": "sp002",
+    "type": "slideShape",
+    "difficulty": "medium",
+    "goalShape": "triangle",
+    "movesAllowed": 15
+  }
+]

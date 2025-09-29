@@ -27,7 +27,7 @@ This project delivers a **Java-based escape room puzzle experience**, with struc
 ### 🏗 Class & UML Diagrams
 📌 [View UML Diagrams (Lucidchart)](https://lucid.app/lucidchart/14657f64-6750-43e7-ba06-0a7251984d91/edit?existing=1&docId=14657f64-6750-43e7-ba06-0a7251984d91&shared=true&invitationId=inv_c8956674-c14c-44dd-9125-a59121b305e6&page=0_0#)  
 
-![Class Diagram](./docs/diagrams/class/main-UML.png) 
+![Class Diagram](./docs/diagrams/class/main-UML.pdf) 
 
 ### 🔄 Process Diagrams
 - diagram 1

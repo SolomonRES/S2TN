@@ -1,13 +1,13 @@
 [
   {
-    "puzzleId": "sp001",
+    "puzzleId": "c1b5aef0-82e6-4b5f-9f47-12f7cfd15db3",
     "type": "slideShape",
     "difficulty": "easy",
     "goalShape": "square",
     "movesAllowed": 10
   },
   {
-    "puzzleId": "sp002",
+    "puzzleId": "8a92bfa4-913c-4c87-9c28-6479a0a08d77",
     "type": "slideShape",
     "difficulty": "medium",
     "goalShape": "triangle",

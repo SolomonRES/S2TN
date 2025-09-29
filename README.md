@@ -27,7 +27,7 @@ This project delivers a **Java-based escape room puzzle experience**, with struc
 ### 🏗 Class & UML Diagrams
 📌 [View UML Diagrams (Lucidchart)](https://lucid.app/lucidchart/14657f64-6750-43e7-ba06-0a7251984d91/edit?existing=1&docId=14657f64-6750-43e7-ba06-0a7251984d91&shared=true&invitationId=inv_c8956674-c14c-44dd-9125-a59121b305e6&page=0_0#)  
 
-![Class Diagram](./docs/diagram/class/S²TN - UML Diagram.pdf) 
+![Class Diagram](./docs/diagrams/class/main-UML.png) 
 
 ### 🔄 Process Diagrams
 - diagram 1
@@ -36,7 +36,11 @@ This project delivers a **Java-based escape room puzzle experience**, with struc
 ### 💼 Business Use Case Diagram
 Illustrates the player journey from access (guest/login/register) through puzzles, hints, scoring, and post-game summary.  
 
-![Business Use Case Diagram](./docs/diagrams/business/main-business.png)
+--- 
+
+<p align="center">
+  <img src="./docs/diagrams/business/main-business.png" alt="Business Use Case Diagram" width="600"/>
+</p>
 
 ---
 

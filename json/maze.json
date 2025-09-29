@@ -1,0 +1,14 @@
+[
+  {
+    "puzzleId": "mz001",
+    "type": "maze",
+    "difficulty": "easy",
+    "solution": "R,D,D,R"
+  },
+  {
+    "puzzleId": "mz002",
+    "type": "maze",
+    "difficulty": "medium",
+    "solution": "U,U,R,R,D,D,L,L"
+  }
+]

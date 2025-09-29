@@ -27,7 +27,7 @@ This project delivers a **Java-based escape room puzzle experience**, with struc
 ### 🏗 Class & UML Diagrams
 📌 [View UML Diagrams (Lucidchart)](https://lucid.app/lucidchart/14657f64-6750-43e7-ba06-0a7251984d91/edit?existing=1&docId=14657f64-6750-43e7-ba06-0a7251984d91&shared=true&invitationId=inv_c8956674-c14c-44dd-9125-a59121b305e6&page=0_0#)  
 
-![Class Diagram](./docs/diagrams/class/main-UML.pdf) 
+📰 [View Class Diagram (PDF)](./docs/diagrams/class/main-UML.pdf)
 
 ### 🔄 Process Diagrams
 - diagram 1
@@ -50,8 +50,8 @@ Illustrates the player journey from access (guest/login/register) through puzzle
 ---
 
 ## 📌 Requirements
-- 🔧 **Functional Requirements:** [Google Sheet](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=595725144#gid=595725144)  
-- ⚙️ **Non-Functional Requirements:** [Google Sheet](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=918409337#gid=918409337)  
+- 🔧 **Functional Requirements:** [Google Sheet | FR](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=595725144#gid=595725144)  
+- ⚙️ **Non-Functional Requirements:** [Google Sheet | NFR](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=918409337#gid=918409337)  
 - 📑 **Detailed Specs:** Provided in linked documents above  
 
 ---

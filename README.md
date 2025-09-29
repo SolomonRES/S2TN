@@ -30,8 +30,10 @@ This project delivers a **Java-based escape room puzzle experience**, with struc
 📰 [View Class Diagram (PDF)](./docs/diagrams/class/main-UML.pdf)
 
 ### 🔄 Process Diagrams
-- diagram 1
-- diagram 2 
+- Diagram 1
+📄 [View Sequence Diagram 1 (PDF)](./docs/diagrams/sequence/SD1.pdf)
+- Diagram 2 
+📄 [View Sequence Diagram 2 (PDF)](./docs/diagrams/sequence/SD2.pdf)
 
 ### 💼 Business Use Case Diagram
 Illustrates the player journey from access (guest/login/register) through puzzles, hints, scoring, and post-game summary.  

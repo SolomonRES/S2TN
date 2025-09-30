@@ -1,0 +1,17 @@
+# compiled class files
+*.class
+
+# Package files #
+*.jar
+*.var
+*.ear
+
+# Log Files #
+*.Loglog/
+logs/
+
+# Build artificats and directories
+/build/
+/dist/
+/target/
+/out/

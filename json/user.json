@@ -1,28 +1,29 @@
-[{
-		"uuid": "4ed441fa-861b-4d90-bd12-1d8726054126",
-		"username": "PuzzleMaster",
-		"password": "4rfv5tgb$RFV%TGB",
-		"score":5243,
-		"rank":1,
-		"achievements":[
-			"eff348be-d2d4-49dc-9363-1f3b31e07274",
-			"23774c91-d9f8-49b3-94c8-31b9c05c6d28",
-			"054ca0cc-30a9-44a0-bc2b-4f00d99ba19a",
-			"02ef58d0-e279-43de-944a-b776f63d18a5",
-			"abca5634-38ff-441f-800e-11deb6bf1eac",
-			"e85b0072-8702-4259-8952-0a27632c8ee9",
-			"201f21f8-be29-434c-bef4-54a4e70b99b2",
-			"017e778a-da2d-4794-b05a-489129ba2129",
-			"f8b60b65-8e56-40d9-98dd-23151d33a659",
-			"934a2961-2f69-4cce-99ad-89208ab291d8"
-		]
-	},
-    {
-		"uuid": "b937b71e-ccc4-4e8a-bb74-60c9f9030c11",
-		"username": "jdoe",
-		"password": "password123",
-		"score":0,
-		"rank":4,
-		"achievements":[]
-	}
+[
+  {
+    "uuid": "4ed441fa-861b-4d90-bd12-1d8726054126",
+    "username": "PuzzleMaster",
+    "password": "4rfv5tgb$RFV%TGB",
+    "score": 5243,
+    "rank": 1,
+    "achievements": [
+      "eff348be-d2d4-49dc-9363-1f3b31e07274",
+      "23774c91-d9f8-49b3-94c8-31b9c05c6d28",
+      "054ca0cc-30a9-44a0-bc2b-4f00d99ba19a",
+      "02ef58d0-e279-43de-944a-b776f63d18a5",
+      "abca5634-38ff-441f-800e-11deb6bf1eac",
+      "e85b0072-8702-4259-8952-0a27632c8ee9",
+      "201f21f8-be29-434c-bef4-54a4e70b99b2",
+      "017e778a-da2d-4794-b05a-489129ba2129",
+      "f8b60b65-8e56-40d9-98dd-23151d33a659",
+      "934a2961-2f69-4cce-99ad-89208ab291d8"
+    ]
+  },
+  {
+    "uuid": "b937b71e-ccc4-4e8a-bb74-60c9f9030c11",
+    "username": "jdoe",
+    "password": "password123",
+    "score": 0,
+    "rank": 4,
+    "achievements": []
+  }
 ]

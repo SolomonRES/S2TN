@@ -5,8 +5,14 @@
   "state": "INIT",
   "maxHints": 3,
   "hints": [
-    { "level": 1, "text": "Appears on sunny days" },
-    { "level": 2, "text": "It copies your outline" }
+    {
+      "level": 1,
+      "text": "Appears on sunny days"
+    },
+    {
+      "level": 2,
+      "text": "It copies your outline"
+    }
   ],
   "allowedTime": "PT2M",
   "variationSeed": 42,

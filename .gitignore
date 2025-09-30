@@ -1,17 +1,38 @@
-# compiled class files
-*.class
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Package files #
-*.jar
-*.var
-*.ear
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
 
-# Log Files #
-*.Loglog/
-logs/
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Build artificats and directories
-/build/
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
 /dist/
-/target/
-/out/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store

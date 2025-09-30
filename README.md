@@ -65,10 +65,10 @@ summary.
 
 ## 📌 Requirements
 
-- 🔧 **Functional Requirements:
-  ** [Google Sheet | Functional Requirements (FR)](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=595725144#gid=595725144)
-- ⚙️ **Non-Functional Requirements:
-  ** [Google Sheet | Non-Functional Requirments (NFR)](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=918409337#gid=918409337)
+- 🔧 **Functional Requirements:**
+  [Google Sheet | Functional Requirements (FR)](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=595725144#gid=595725144)
+- ⚙️ **Non-Functional Requirements:**
+  [Google Sheet | Non-Functional Requirments (NFR)](https://docs.google.com/spreadsheets/d/1Nzz4jI4RE9BPDidwSTXgDZc6qNWl3crWn0uwHmMYTvM/edit?gid=918409337#gid=918409337)
 - 📑 **Detailed Specs:** Provided in linked documents above
 
 ---

@@ -1,0 +1,22 @@
+[
+  {
+    "dungeonId": "c6275f70-c80f-42c8-8d46-6b9ec5794186", 
+    "name": "Hall of Torches",
+    "difficulty": 3,
+    "rooms": ["a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2"],
+    "timer": {
+      "allowedTime": "00:05:00",
+      "elapsedTime": "00:00:00"
+    }
+  },
+  {
+    "dungeonId": "9347d0e3-6eeb-42ae-9275-f274cfa13de8",
+    "name": "The Golden Vault",
+    "difficulty": 4,
+    "rooms": ["39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a"],
+    "timer": {
+      "allowedTime": "00:07:00",
+      "elapsedTime": "00:00:00"
+    }
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "accountID": "5fbd3920-0a94-4d59-b3f7-217a49a3d41a",
+    "userName": "solomon",
+    "password": "hashedpassword",
+    "score": 1270,
+    "rank": 3,
+    "achievements": [
+      {
+        "achievementId": "dd1236a1-514c-4213-9030-7dbd7b18133c",
+        "name": "Torchlighter",
+        "description": "Solved the torchlight riddle without hints",
+        "dungeonId": "c6275f70-c80f-42c8-8d46-6b9ec5794186",
+        "puzzleId": "9f96a37d-28ab-4456-80e4-67e9e76f6799",
+        "points": 150
+      }
+    ]
+  },
+  {
+    "accountID": "1d2499d0-7114-4dd3-85b0-d4aa42133d37",
+    "userName": "thaddeus",
+    "password": "hashedpassword",
+    "score": 840,
+    "rank": 7,
+    "achievements": [
+      {
+        "achievementId": "bd762113-16db-4034-9a62-60b9f5af8b2a",
+        "name": "Unscrambler",
+        "description": "Solved a word scramble in under 60 seconds",
+        "dungeonId": "9347d0e3-6eeb-42ae-9275-f274cfa13de8",
+        "puzzleId": "4f3c1c78-153a-422f-8a83-6721fc5a5056",
+        "points": 120
+      }
+    ]
+  }
+]

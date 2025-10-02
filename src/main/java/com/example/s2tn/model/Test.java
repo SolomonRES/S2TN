@@ -1,4 +1,4 @@
-package main.java.com.example.s2tn.model;
+package com.example.s2tn.model;
 
 public class Test {
     public static void main (String[] args){

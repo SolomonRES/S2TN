@@ -37,9 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-# IDE and Maven wrapper files
-.idea/
-.mvn/
-mvnw
-mvnw.cmd
-pom.xml
+

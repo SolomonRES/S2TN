@@ -19,8 +19,8 @@ public class DataWriter {
     public void saveGame() {
     }
 
-    // public void saveLeaderboard(Leaderboard lb) {
-    // }
+    public void saveLeaderboard(Leaderboard lb) {
+    }
 
     private void writeJson(Path p, Object obj) {
         if (p != null && obj != null) {

@@ -16,7 +16,7 @@ public class DataLoader {
     //     return new ArrayList<>();
     // }
 
-    // public Leaderboard getLeaderboard() {
-    //     return new Leaderboard();
-    // }
+    public Leaderboard getLeaderboard() {
+        return new Leaderboard();
+    }
 }

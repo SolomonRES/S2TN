@@ -1,67 +1,101 @@
 [
-  {
-    "roomId": "a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2",
-    "puzzles": [
+{
+    "dungeonId": "c6275f70-c80f-42c8-8d46-6b9ec5794186",
+    "name": "Hall of Torches",
+    "difficulty": 3,
+    "timer": {
+      "allowedTime": "00:05:00",
+      "elapsedTime": "00:00:00"
+    },
+    "rooms": [
       {
-        "puzzleId": "9f96a37d-28ab-4456-80e4-67e9e76f6799",
-        "title": "Torchlight Riddle",
-        "status": "INIT",
-        "maxTries": 3,
+        "roomId": "a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2",
+        "puzzles": [
+          {
+            "puzzleId": "9f96a37d-28ab-4456-80e4-67e9e76f6799",
+            "title": "Torchlight Riddle",
+            "status": "INIT",
+            "maxTries": 3,
+            "hints": [
+              {
+                "level": 1,
+                "text": "Think about burning more than one torch at once",
+                "cost": 1.0
+              }
+            ],
+            "allowedTime": "00:02:00",
+            "versionSeed": 123456789,
+            "scoreValue": 150,
+            "startTime": "00:00:00",
+            "question": "You are in a dark dungeon corridor You have one match and three unlit torches Lighting any torch takes exactly 1 minute and a torch burns for 2 minutes How can you measure exactly 3 minutes of time",
+            "answer": "TORCH",
+            "hint": "Think about burning multiple torches together to create a timer"
+          }
+        ],
         "hints": [
           {
             "level": 1,
-            "text": "Think about burning more than one torch at once",
-            "cost": 1.0
+            "text": "Check the wall carvings about torch usage",
+            "cost": 0.5
           }
         ],
-        "allowedTime": "00:02:00",
-        "versionSeed": 123456789,
-        "scoreValue": 150,
-        "startTime": "00:00:00",
-        "question": "You are in a dark dungeon corridor You have one match and three unlit torches Lighting any torch takes exactly 1 minute and a torch burns for 2 minutes How can you measure exactly 3 minutes of time",
-        "answer": "TORCH",
-        "hint": "Think about burning multiple torches together to create a timer"
+        "exits": [
+          "39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a"
+        ],
+        "lockedExits": []
       }
-    ],
-    "hints": [
-      {
-        "level": 1,
-        "text": "Check the wall carvings about torch usage",
-        "cost": 0.5
-      }
-    ],
-    "exits": ["39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a"],
-    "lockedExits": []
+    ]
   },
   {
-    "roomId": "39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a",
-    "puzzles": [
+    "dungeonId": "9347d0e3-6eeb-42ae-9275-f274cfa13de8",
+    "name": "The Golden Vault",
+    "difficulty": 4,
+    "timer": {
+      "allowedTime": "00:07:00",
+      "elapsedTime": "00:00:00"
+    },
+    "rooms": [
       {
-        "puzzleId": "4f3c1c78-153a-422f-8a83-6721fc5a5056",
-        "title": "Laboratory Door Code",
-        "status": "INIT",
-        "maxTries": 5,
-        "hints": [
-          { "level": 1, "text": "It is a precious metal", "cost": 1.0 },
-          { "level": 2, "text": "Symbol Au", "cost": 1.5 }
+        "roomId": "39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a",
+        "puzzles": [
+          {
+            "puzzleId": "4f3c1c78-153a-422f-8a83-6721fc5a5056",
+            "title": "Laboratory Door Code",
+            "status": "INIT",
+            "maxTries": 5,
+            "hints": [
+              {
+                "level": 1,
+                "text": "It is a precious metal",
+                "cost": 1.0
+              },
+              {
+                "level": 2,
+                "text": "Symbol Au",
+                "cost": 1.5
+              }
+            ],
+            "allowedTime": "00:03:00",
+            "versionSeed": 987654321,
+            "scoreValue": 120,
+            "startTime": "00:00:00",
+            "scrambledWord": "DLOG",
+            "solution": "GOLD",
+            "hint": "Rearrange the letters"
+          }
         ],
-        "allowedTime": "00:03:00",
-        "versionSeed": 987654321,
-        "scoreValue": 120,
-        "startTime": "00:00:00",
-        "scrambledWord": "DLOG",
-        "solution": "GOLD",
-        "hint": "Rearrange the letters"
+        "hints": [
+          {
+            "level": 1,
+            "text": "The keypad accepts letters",
+            "cost": 0.5
+          }
+        ],
+        "exits": [
+          "a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2"
+        ],
+        "lockedExits": []
       }
-    ],
-    "hints": [
-      {
-        "level": 1,
-        "text": "The keypad accepts letters",
-        "cost": 0.5
-      }
-    ],
-    "exits": ["a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2"],
-    "lockedExits": []
+    ]
   }
 ]

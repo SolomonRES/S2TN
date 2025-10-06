@@ -13,9 +13,9 @@ public class DataLoader {
         return new ArrayList<>();
     }
 
-    // public ArrayList<Save> getSaves() {
-    //     return new ArrayList<>();
-    // }
+    public ArrayList<Progress> getSaves() {
+        return new ArrayList<>();
+    }
 
     public Leaderboard getLeaderboard() {
         return new Leaderboard();

@@ -1,11 +1,11 @@
 package com.example.s2tn;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class HelloApplication extends Application {
     @Override

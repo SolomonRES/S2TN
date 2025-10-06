@@ -1,6 +1,7 @@
 package com.example.s2tn.model;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Puzzle {
@@ -9,7 +10,7 @@ public abstract class Puzzle {
     private String title;
     private PuzzleState state;
     private int maxHints;
-    // private ArrayList<Hint> hints;
+    private ArrayList<Hint> hints;
     private Duration allowedTime;
     private long variationSeed;
     private int scoreValue;
@@ -21,7 +22,7 @@ public abstract class Puzzle {
         this.title = "";
         this.state = null;
         this.maxHints = 0;
-        // this.hints = new ArrayList<>();
+        this.hints = new ArrayList<>();
         this.allowedTime = Duration.ZERO;
         this.variationSeed = 0L;
         this.scoreValue = 0;
@@ -31,9 +32,9 @@ public abstract class Puzzle {
 
     public abstract void enterInput(String input); // this was for validation, I'll fix it later
 
-    // public Hint requestHint(int level) {
-    //     return null;
-    // }
+    public Hint requestHint(int level) {
+        return null;
+    }
 
     public void reset() {
     }

@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Room {
     private UUID roomID;
     private ArrayList<Puzzle> puzzles;
-    // private ArrayList<Hint> hints;
+    private ArrayList<Hint> hints;
     private ArrayList<Room> exits;
     private ArrayList<Room> lockedExits;
 
@@ -14,9 +14,9 @@ public class Room {
         return puzzles;
     }
 
-    // public ArrayList<Hint> getHints() {
-    //     return hints;
-    // }
+    public ArrayList<Hint> getHints() {
+        return hints;
+    }
 
     public ArrayList<Room> getExits() {
         return exits;

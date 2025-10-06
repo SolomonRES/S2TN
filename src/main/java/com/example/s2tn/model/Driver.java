@@ -42,6 +42,23 @@ public class Driver {
     }
 
     public static void main(String[] args) {
-        new Driver().start();
+    
+    // this is temporary comment out when needed
+        System.out.println("cwd: " + java.nio.file.Paths.get("").toAbsolutePath()); // where the app is running
+
+    var loader = new com.example.s2tn.model.DataLoader();
+    var users  = loader.getUsers();
+    System.out.println("Loaded users: " + users.size());
+
+    var list = com.example.s2tn.model.UserList.getInstance();
+    var a = new com.example.s2tn.model.Account();
+    a.setUserName("Nishant");
+    a.setPasswordHash("pw2");
+    a.setScore(10);
+    a.setRank(99);
+    list.addUser(a);
+
+    new com.example.s2tn.model.DataWriter().saveUsers();
+    System.out.println("Saved users to: " + com.example.s2tn.model.DataConstants.usersPath().toAbsolutePath());
     }
 }

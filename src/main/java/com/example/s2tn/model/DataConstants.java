@@ -5,19 +5,19 @@ import java.nio.file.Paths;
 
 public class DataConstants {
     
-    public static final String userDir = "../../../json/users.json";
-    public static final String dungeonDir = "../../../json/rooms.json";
-    public static final String lbFile = "../../../json/users.json";
+    // public static final String userDir = "../../../json/users.json";
+    // public static final String dungeonDir = "../../../json/rooms.json";
+    // public static final String lbFile = "../../../json/users.json";
 
     public static Path usersPath() {
-        return Paths.get(userDir);
+        return Paths.get("S2TN", "json", "users.json");
     }
 
     public static Path dungeonPath() {
-        return Paths.get(dungeonDir);
+        return Paths.get("S2TN","json", "room.json");
     }
 
     public static Path lbPath() {
-        return Paths.get(lbFile);
+        return Paths.get("S2TN","json", "users.json");
     }
 }

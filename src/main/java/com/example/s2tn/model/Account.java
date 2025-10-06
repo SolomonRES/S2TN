@@ -21,6 +21,12 @@ public class Account {
         this.rank = 0;
         this.achievements = new ArrayList<>();
     }
+    
+    public String getAccountID() { return accountID == null ? "" : accountID.toString(); }
+    public void setAccountID(String id) {
+        try { this.accountID = UUID.fromString(id); }
+        catch (Exception e) { this.accountID = UUID.randomUUID(); }
+    }
 
     public boolean login(String user, String pass) {
         return false;
@@ -36,7 +42,15 @@ public class Account {
         return new ArrayList<>();
     }
 
-    public int getRank() {
-        return rank;
-    }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
+
+    public int getRank() { return rank; }
+    public void setRank(int rank) { this.rank = rank; }
+    
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
 }

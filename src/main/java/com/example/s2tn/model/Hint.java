@@ -4,7 +4,7 @@ public class Hint {
 
     private int level;
     private String text;
-    private double cost; // cost in time
+    private double cost; // cost in time for the user
 
     public Hint() {
         this.level = 0;

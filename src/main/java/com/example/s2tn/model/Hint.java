@@ -9,7 +9,7 @@ public class Hint {
     public Hint() {
         this.level = 0;
         this.text = "";
-        this.cost = 0.0; // tester till we get hints
+        this.cost = 0.0; // tester until we get hints for mazes
     }
 
     public Hint(int level, String text, double cost) {

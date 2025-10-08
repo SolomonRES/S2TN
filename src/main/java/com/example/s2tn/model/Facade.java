@@ -129,11 +129,13 @@ public class Facade {
 
     public boolean answerRiddle(UUID puzzleId, String answer) {
         Riddle riddle = new Riddle();
+        riddle.displayRiddle();          // show the question first
         return riddle.checkAnswer(answer);
     }
 
     public boolean answerScramble(UUID puzzleId, String answer) {
         WordScramble scramble = new WordScramble();
+        scramble.displayScramble();      // show the scrambled word
         return scramble.checkAnswer(answer);
     }
 
@@ -161,6 +163,7 @@ public class Facade {
 
     private void submitScore(String userName, int score, long elapsedTime) {
     }
+
 
 // ------------------------------------------------------------------------------------------------------
 }

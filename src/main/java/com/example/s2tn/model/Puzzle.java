@@ -41,4 +41,8 @@ public abstract class Puzzle {
 
     public void checkForAchievement(double startTime, double time) {
     }
+
+    public PuzzleState getState() {
+        return this.state;
+    }
 }

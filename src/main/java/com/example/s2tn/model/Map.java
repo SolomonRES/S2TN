@@ -7,12 +7,18 @@ public class Map {
     private ArrayList<Room> completedRooms;
     private Dungeon dungeon;
     public void markExplored(Room room){
-        if(!exploredRooms.contains(room)){
+        if(!exploredRooms.contains(room) && dungeon.getCurrentRoom() == room){
             exploredRooms.add(room);
         }
     }
     public void markComplete(Room room){
-        if(!completedRooms.contains(room)){
+        boolean complete = true;
+        for(Puzzle isSolved : room.getPuzzles()){
+            if(isSolved.getState() != PuzzleState.SOLVED){
+                complete = false;
+            }
+        }
+        if(complete){
             completedRooms.add(room);
         }
     }

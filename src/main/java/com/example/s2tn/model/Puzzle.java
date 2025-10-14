@@ -7,7 +7,7 @@ import java.util.UUID;
 public abstract class Puzzle {
     private UUID puzzleID;
     private String title;
-    private PuzzleState state; // Assuming PuzzleState is defined
+    private PuzzleState state; // Assume the PuzzleState is defined
     private int maxHints;
     private ArrayList<Hint> hints;
     private Duration allowedTime;

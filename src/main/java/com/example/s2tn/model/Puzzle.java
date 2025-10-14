@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class Puzzle {
-
     private UUID puzzleID;
     private String title;
-    private PuzzleState state;
+    private PuzzleState state; // Assuming PuzzleState is defined
     private int maxHints;
     private ArrayList<Hint> hints;
     private Duration allowedTime;
@@ -20,7 +19,7 @@ public abstract class Puzzle {
     public Puzzle() {
         this.puzzleID = UUID.randomUUID();
         this.title = "";
-        this.state = null;
+        this.state = PuzzleState.NOT_STARTED; // starts with a suitable state
         this.maxHints = 0;
         this.hints = new ArrayList<>();
         this.allowedTime = Duration.ZERO;
@@ -30,19 +29,31 @@ public abstract class Puzzle {
         this.startTime = 0.0;
     }
 
-    public abstract void enterInput(String input); // this was for validation, I'll fix it later
+    // Abstract method to be used by subclasses
+    public abstract ValidationResult enterInput(String input);
 
     public Hint requestHint(int level) {
+        if (hints.size() > level && level >= 0) {
+            return hints.get(level);
+        }
         return null;
     }
 
     public void reset() {
+        this.state = PuzzleState.NOT_STARTED;
+        this.startTime = 0.0;
+        // Subclasses will add their reset logic
     }
 
     public void checkForAchievement(double startTime, double time) {
+        // Achievement logic
     }
 
-    public PuzzleState getState() {
-        return this.state;
-    }
+    // These are the Getters and Setters for the state management
+    public UUID getPuzzleID() { return puzzleID; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; } // Added setter for title
+    public PuzzleState getState() { return state; }
+    public void setState(PuzzleState state) { this.state = state; }
+    // add other getters and setters if needed
 }

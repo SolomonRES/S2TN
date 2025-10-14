@@ -17,12 +17,35 @@ public class Dungeon {
         //Will load a dungeon from the database
     }
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
-        return 0;
+        switch (difficulty){
+            case EASY -> {
+                return baseMaxAllowedTime * 2;
+            }
+            case NORMAL -> {
+                return baseMaxAllowedTime;
+            }
+            case HARD -> {
+                return baseMaxAllowedTime * 0.5;
+            }
+        }
+        return  baseMaxAllowedTime;
     }
-    public void addTimePenalty(){
-        //Will add time to clock for failures
+    public void addTimePenalty(Timer timer){
+        timer.addPenalty(15000);
     }
     public void changeRoom(Room room){
-        // Set the current room in the dungeon
+        boolean isUnlocked = true;
+        for(Room checkLock : room.getLockedExits()){
+            if(checkLock == room){
+                isUnlocked = false;
+            }
+        }
+        if(isUnlocked){
+            this.currentRoom = room;
+        }
+    }
+
+    public ArrayList<Room> getRooms() {
+        return rooms;
     }
 }

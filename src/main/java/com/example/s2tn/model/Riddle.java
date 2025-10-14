@@ -7,16 +7,18 @@ public class Riddle {
     private String hint;
 
     public Riddle() {
-        this.question = "";
-        this.answer = "";
-        this.hint = "";
+        this.question = "I follow you all the time and copy your every move, but you can’t touch me or catch me. What am I?";
+        this.answer = "shadow";
+        this.hint = "You see it when the sun is out.";
     }
 
     public void displayRiddle() {
+        System.out.println(question);
     }
 
     public boolean checkAnswer(String userInput) {
-        return false;
+        if (userInput == null) return false;
+        return userInput.trim().equalsIgnoreCase(answer.trim());
     }
 
     public String getHint() {

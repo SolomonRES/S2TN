@@ -71,7 +71,9 @@ public class MazePuzzle extends Puzzle {
     public boolean isSolved() { return rows > 0 && cols > 0 && cell(r, c) == 'G'; }
 
     @Override
-    public void enterInput(String input) { move(input); }
+    public ValidationResult enterInput(String input) { move(input);
+        return null;
+    }
 
     @Override
     public void reset() {

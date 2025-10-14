@@ -98,11 +98,16 @@ public class ShapeMatchPuzzle extends Puzzle {
         return true;
     }
 
-    /** Hook for text input if UI sends it; noop for now. */
+    /**
+     * Hook for text input if UI sends it; noop for now.
+     *
+     * @return
+     */
     @Override
-    public void enterInput(String input) {
-        if (input == null || input.isBlank()) return;
+    public ValidationResult enterInput(String input) {
+        if (input == null || input.isBlank()) return null;
         // could parse and update a user-pose map here later if needed
+        return null;
     }
 
     /** Provided for callers that want to “apply” alignment; currently stateless. */

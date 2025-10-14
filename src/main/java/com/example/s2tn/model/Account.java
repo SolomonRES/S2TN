@@ -29,8 +29,11 @@ public class Account {
     }
 
     public boolean login(String user, String pass) {
-        return false;
-    }
+    if (user == null || pass == null) return false;
+    if (this.userName == null || this.passwordHash == null) return false;
+    if (!this.userName.equalsIgnoreCase(user)) return false;
+    return pass.equals(this.passwordHash);
+}
 
     public void updateScore(int points) {
     }

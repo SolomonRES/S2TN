@@ -1,1 +1,34 @@
-[{"accountID":"5fbd3920-0a94-4d59-b3f7-217a49a3d41a","score":1270,"password":"hashedpassword","achievements":[],"rank":3,"userName":"solomon"},{"accountID":"1d2499d0-7114-4dd3-85b0-d4aa42133d37","score":840,"password":"hashedpassword","achievements":[],"rank":7,"userName":"thaddeus"},{"accountID":"a64d3536-1de3-46c4-abdf-9bbcc0c5a70e","score":10,"password":"pw","achievements":[],"rank":99,"userName":"new_user"},{"accountID":"2002ee33-ecf9-44e9-90e3-b79aeaf497bc","score":10,"password":"pw2","achievements":[],"rank":99,"userName":"Nishant"}]
+[
+    {
+        "accountID": "5fbd3920-0a94-4d59-b3f7-217a49a3d41a",
+        "score": 1270,
+        "password": "hashedpassword",
+        "achievements": [],
+        "rank": 3,
+        "userName": "solomon"
+    },
+    {
+        "accountID": "1d2499d0-7114-4dd3-85b0-d4aa42133d37",
+        "score": 840,
+        "password": "hashedpassword",
+        "achievements": [],
+        "rank": 7,
+        "userName": "thaddeus"
+    },
+    {
+        "accountID": "a64d3536-1de3-46c4-abdf-9bbcc0c5a70e",
+        "score": 10,
+        "password": "pw",
+        "achievements": [],
+        "rank": 99,
+        "userName": "san"
+    },
+    {
+        "accountID": "a6e86082-42b1-43f0-8689-7475a3196304",
+        "score": 10,
+        "password": "pw2",
+        "achievements": [],
+        "rank": 99,
+        "userName": "Nishant"
+    }
+]

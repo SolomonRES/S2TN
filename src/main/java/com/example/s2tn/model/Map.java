@@ -12,7 +12,14 @@ public class Map {
         }
     }
     public void markComplete(Room room){
-        if(!completedRooms.contains(room)){
+        boolean complete = true;
+        for(Puzzle isSolved : room.getPuzzles()){
+            if (isSolved.getState() != PuzzleState.SOLVED) {
+                complete = false;
+                break;
+            }
+        }
+        if(complete){
             completedRooms.add(room);
         }
     }

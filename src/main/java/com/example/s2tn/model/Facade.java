@@ -13,13 +13,18 @@ public class Facade {
 
 // ------------------------------------------------------------------------------------------------------
 
-    // account and session
     public Account signUp(String username, String password) {
         return new Account();
     }
 
     public Account login(String username, String password) {
-        return new Account();
+        UserList ul = UserList.getInstance();
+        Account a = ul.getUser(username);
+        if (a != null && a.login(username, password)) {
+            this.user = a;
+            return a;
+        }
+        return null;
     }
 
     public void logout() {
@@ -31,7 +36,6 @@ public class Facade {
 
 // ------------------------------------------------------------------------------------------------------
 
-    // saves and progress
     public void saveProgress() {
     }
 
@@ -59,7 +63,6 @@ public class Facade {
 
 // ------------------------------------------------------------------------------------------------------
 
-    // dungeon management
     public Dungeon selectDungeon(UUID dungeonId) {
         return new Dungeon(dungeon, null);
     }
@@ -98,7 +101,6 @@ public class Facade {
 
 // ------------------------------------------------------------------------------------------------------
 
-    // puzzle interactions
     public void attemptPuzzle(UUID puzzleId, String input) {
     }
 
@@ -126,16 +128,19 @@ public class Facade {
     }
 
     public boolean answerRiddle(UUID puzzleId, String answer) {
-        return false;
+        Riddle riddle = new Riddle();
+        riddle.displayRiddle();          // show the question first
+        return riddle.checkAnswer(answer);
     }
 
     public boolean answerScramble(UUID puzzleId, String answer) {
-        return false;
+        WordScramble scramble = new WordScramble();
+        scramble.displayScramble();      // show the scrambled word
+        return scramble.checkAnswer(answer);
     }
 
 // ------------------------------------------------------------------------------------------------------
-    
-    // time and leaderboard
+
     public void pauseTimer() {
     }
 
@@ -146,8 +151,7 @@ public class Facade {
     }
 
 // ------------------------------------------------------------------------------------------------------
-    
-    // room markers and scoring, 
+
     private void unlockExit(UUID fromRoom, UUID toRoom) {
     }
 
@@ -159,6 +163,7 @@ public class Facade {
 
     private void submitScore(String userName, int score, long elapsedTime) {
     }
+
 
 // ------------------------------------------------------------------------------------------------------
 }

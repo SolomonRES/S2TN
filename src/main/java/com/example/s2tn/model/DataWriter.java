@@ -3,7 +3,7 @@ package com.example.s2tn.model;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class DataWriter {
+public class DataWriter extends DataConstants {
     
     // don't think I'll need these but keep them jsut in case 
     // private static final Path USERS_PATH = Paths.get("../../../json/users.json");
@@ -11,7 +11,7 @@ public class DataWriter {
 
     public void saveUsers() {
         String path = DataConstants.usersPath().toString();
-        UserList.getInstance().saveToFile(path);
+        UserList.getInstance().saveToFile();
     }
 
     public void saveDungeon() {

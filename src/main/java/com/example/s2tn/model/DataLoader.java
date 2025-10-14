@@ -2,7 +2,7 @@ package com.example.s2tn.model;
 
 import java.util.ArrayList;
 
-public class DataLoader {
+public class DataLoader extends DataConstants {
     
     public ArrayList<Dungeon> getDungeons() {
         return new ArrayList<>();

@@ -5,4 +5,10 @@ public class ValidationResult {
     private String message;
     private PuzzleState newState;
 
+    public ValidationResult(boolean valid, String message, PuzzleState newState) {
+        this.valid = valid;
+        this.message = message;
+        this.newState = newState;
+    }
+
 }

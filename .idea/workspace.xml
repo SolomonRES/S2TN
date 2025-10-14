@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec5a6fd0-c293-4aca-95d8-888c3097bd02" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Exit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/GenerateFromCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Dungeon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Dungeon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Puzzle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Puzzle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Timer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/s2tn/model/Timer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

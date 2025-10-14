@@ -28,12 +28,23 @@ public class Dungeon {
         this.uuid = UUID.randomUUID();
     }
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
-        return 0;
+        switch (difficulty){
+            case EASY -> {
+                return baseMaxAllowedTime*2;
+            }
+            case NORMAL -> {
+                return baseMaxAllowedTime;
+            }
+            case HARD -> {
+                return baseMaxAllowedTime*0.5;
+            }
+        }
+        return baseMaxAllowedTime;
     }
-    public void addTimePenalty(){
-        //Will add time to clock for failures
+    public void addTimePenalty(Timer timer){
+        timer.addPenalty(15000);
     }
-    public void changeRoom(Exit exit){
+    public String changeRoom(Exit exit){
         // Set the current room in the dungeon
         boolean canExit = true;
         if(currentRoom == exit.getExitFrom()){
@@ -45,8 +56,10 @@ public class Dungeon {
         }
         if(canExit){
             this.currentRoom = exit.getExitTo();
+            return "";
         }else{
             //Print out the locked text
+            return exit.getLockText();
         }
     }
 

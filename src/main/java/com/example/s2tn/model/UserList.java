@@ -8,19 +8,24 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class UserList {
     
-    private static UserList instance;
-    private final List<Account> users;
+    private static volatile UserList instance;
+    private final List<Account> users = new ArrayList<>();
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-    private UserList() {
-        users = new ArrayList<>();
-    }
+    private UserList() {}
 
-    public static synchronized UserList getInstance() {
-        if (instance == null) instance = new UserList();
-        return instance;
+    public static UserList getInstance() {
+        UserList ref = instance;
+        if (ref == null) {
+            synchronized (UserList.class) {
+                ref = instance;
+                if (ref == null) instance = ref = new UserList();
+            }
+        }
+        return ref;
     }
-
+    
+    // snapshot of users (not changeable)
     public List<Account> getAll() {
         lock.readLock().lock();
         try {
@@ -29,16 +34,23 @@ public class UserList {
             lock.readLock().unlock();
         }
     }
+    
+    // used by the DataLoader 
+    public void replaceAll(List<Account> fresh) {
+        lock.writeLock().lock();
+        try {
+            users.clear();
+            if (fresh != null) users.addAll(fresh);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
 
     public Account getId(String accountId) {
         if (accountId == null || accountId.isBlank()) return null;
         lock.readLock().lock();
         try {
-            for (Account user : users) {
-                if (accountId.equals(user.getAccountID())) {
-                    return user;
-                }
-            }
+            for (Account a : users) if (accountId.equals(a.getAccountID())) return a;
             return null;
         } finally {
             lock.readLock().unlock();
@@ -60,6 +72,17 @@ public class UserList {
         }
     }
 
+    public Account getUserName(String userName) {
+        if (userName == null || userName.isBlank()) return null;
+        lock.readLock().lock();
+        try {
+            for (Account a : users) if (userName.equals(a.getUserName())) return a;
+            return null;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }    
+
     public boolean addUser(Account a) {
         if (a == null) return false;
 
@@ -80,91 +103,6 @@ public class UserList {
             return true;
         } finally {
             lock.writeLock().unlock();
-        }
-    }
-
-    public void loadFromFile() {
-        var path = DataConstants.usersPath();
-        try {
-            if (!java.nio.file.Files.exists(path)) {
-                System.err.println("users.json not found at: " + path.toAbsolutePath());
-                return; // leave list empty
-            }
-            var parser = new org.json.simple.parser.JSONParser();
-            try (var reader = new java.io.FileReader(path.toFile())) {
-                var root = parser.parse(reader);
-                var arr = (org.json.simple.JSONArray) root;
-                
-                lock.writeLock().lock();
-                try {
-                    users.clear();
-                    for (Object o : arr) {
-                        var u = (org.json.simple.JSONObject) o;
-                        String accountId = asString(u.get("accountID"));
-                        String userName  = asString(u.get("userName"));
-                        String password  = asString(u.get("password"));
-                        int score        = asInt(u.get("score"));
-                        int rank         = asInt(u.get("rank"));
-
-                        var a = new Account();
-                        a.setAccountID(accountId);
-                        a.setUserName(userName);
-                        a.setPasswordHash(password);
-                        a.setScore(score);
-                        a.setRank(rank);
-                        users.add(a);
-                    }
-                } finally {
-                    lock.writeLock().unlock();
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("load users failed at " + path.toAbsolutePath() + ": " + e.getMessage());
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-    public void saveToFile() {
-        var path = DataConstants.usersPath();
-        var arr  = new org.json.simple.JSONArray();
-        
-        lock.readLock().lock();
-        try {
-            for (Account a : users) {
-                var o = new org.json.simple.JSONObject();
-                o.put("accountID", a.getAccountID());
-                o.put("userName",  a.getUserName());
-                o.put("password",  a.getPasswordHash());
-                o.put("score",     a.getScore());
-                o.put("rank",      a.getRank());
-                o.put("achievements", new org.json.simple.JSONArray());
-                arr.add(o);
-            }
-        } finally {
-            lock.readLock().unlock();
-        }
-        try {
-            var parent = path.getParent();
-            if (parent != null) java.nio.file.Files.createDirectories(parent); // <-- fixes FileNotFoundException
-            try (var w = new java.io.FileWriter(path.toFile())) {
-                w.write(arr.toJSONString());
-            }
-        } catch (java.io.IOException e) {
-            throw new RuntimeException("saveToFile users failed at " + path.toAbsolutePath(), e);
-        }
-    }
-
-    private static String asString(Object v) { 
-        return v == null ? "" : String.valueOf(v); 
-    }
-    
-    private static int asInt(Object v) {
-        if (v instanceof Number n) return n.intValue();
-        if (v == null) return 0;
-        try { 
-            return Integer.parseInt(String.valueOf(v)); 
-        } catch (NumberFormatException e) { 
-            return 0; 
         }
     }
 

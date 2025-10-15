@@ -19,7 +19,7 @@ public abstract class Puzzle {
     public Puzzle() {
         this.puzzleID = UUID.randomUUID();
         this.title = "";
-        this.state = PuzzleState.NOT_STARTED; // starts with a suitable state
+        // this.state = PuzzleState.NOT_STARTED; // starts with a suitable state
         this.maxHints = 0;
         this.hints = new ArrayList<>();
         this.allowedTime = Duration.ZERO;
@@ -39,11 +39,17 @@ public abstract class Puzzle {
         return null;
     }
 
-    public void reset() {
-        this.state = PuzzleState.NOT_STARTED;
-        this.startTime = 0.0;
-        // Subclasses will add their reset logic
-    }
+    /**
+     * commenting out so it compiles
+     * @param startTime
+     * @param time
+     */
+
+    // public void reset() {
+    //     this.state = PuzzleState.NOT_STARTED;
+    //     this.startTime = 0.0;
+    //     // Subclasses will add their reset logic
+    // }
 
     public void checkForAchievement(double startTime, double time) {
         // Achievement logic

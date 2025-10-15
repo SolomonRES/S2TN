@@ -21,39 +21,80 @@ public class Account {
         this.rank = 0;
         this.achievements = new ArrayList<>();
     }
-    
-    public String getAccountID() { return accountID == null ? "" : accountID.toString(); }
+
+    public Account(String userName, String password) {
+        this.accountID = UUID.randomUUID();
+        this.userName = userName == null ? "" : userName.trim();
+        this.passwordHash = password == null ? "" : password.trim();
+        this.score = 0;
+        this.rank = 0;
+        this.achievements = new ArrayList<>();
+    }
+
+    public String getAccountID() {
+        return accountID == null ? "" : accountID.toString();
+    }
+
     public void setAccountID(String id) {
-        try { this.accountID = UUID.fromString(id); }
-        catch (Exception e) { this.accountID = UUID.randomUUID(); }
+        try {
+            this.accountID = UUID.fromString(id);
+        } catch (Exception e) {
+            this.accountID = UUID.randomUUID();
+        }
     }
 
     public boolean login(String user, String pass) {
-    if (user == null || pass == null) return false;
-    if (this.userName == null || this.passwordHash == null) return false;
-    if (!this.userName.equalsIgnoreCase(user)) return false;
-    return pass.equals(this.passwordHash);
-}
+        if (user == null || pass == null) return false;
+        if (this.userName == null || this.passwordHash == null) return false;
+        if (!this.userName.equalsIgnoreCase(user)) return false;
+        return pass.equals(this.passwordHash);
+    }
 
     public void updateScore(int points) {
+        if (points == 0) return;
+        long updated = (long) this.score + points;
+        this.score = (int) Math.max(0, Math.min(Integer.MAX_VALUE, updated));
     }
 
     public void addAchievements(Achievement a) {
+        if (a == null) return;
+        if (achievements == null) achievements = new ArrayList<>();
+        if (!achievements.contains(a)) achievements.add(a);
     }
 
     public List<Achievement> getAchievements() {
-        return new ArrayList<>();
+        return new ArrayList<>(achievements);
     }
 
-    public String getUserName() { return userName; }
-    public void setUserName(String userName) { this.userName = userName; }
+    public String getUserName() {
+        return userName;
+    }
 
-    public int getRank() { return rank; }
-    public void setRank(int rank) { this.rank = rank; }
-    
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public void setUserName(String userName) {
+        this.userName = userName == null ? "" : userName.trim();
+    }
 
-    public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash == null ? "" : passwordHash.trim();
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = Math.max(0, score);
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = Math.max(0, rank);
+    }
 }

@@ -98,20 +98,6 @@ public class ShapeMatchPuzzle extends Puzzle {
         return true;
     }
 
-    /** Hook for text input if UI sends it; noop for now. */
-    
-    
-
-    /**
-     * commenting out to compile
-     * @param shapes
-     */
-    // @Override
-    // public void enterInput(String input) {
-    //     if (input == null || input.isBlank()) return;
-    //     // could parse and update a user-pose map here later if needed
-    // }
-
     /** Provided for callers that want to “apply” alignment; currently stateless. */
     public void align(List<String> shapes) {
         // no state kept here; alignment is evaluated via isSolved()
@@ -122,8 +108,31 @@ public class ShapeMatchPuzzle extends Puzzle {
         return aligned(userShapes);
     }
 
+    // ---- UML-required: integrate PuzzleState transitions ----
     @Override
     public ValidationResult enterInput(String input) {
-        throw new UnsupportedOperationException("Unimplemented method 'enterInput'");
+        // Step 1: if puzzle hasn’t started yet, start it
+        if (getState() == PuzzleState.NOT_STARTED) {
+            start(); // NOT_STARTED -> IN_PROGRESS
+        }
+
+        // Step 2: parse user shapes (semicolon-separated string)
+        List<String> userShapes = new ArrayList<>();
+        if (input != null && !input.isBlank()) {
+            String[] parts = input.split(";");
+            for (String p : parts) userShapes.add(p.trim());
+        }
+
+        // Step 3: check correctness
+        boolean correct = isSolved(userShapes);
+
+        // Step 4: set PuzzleState transitions accordingly
+        if (correct) {
+            markSolved(); // IN_PROGRESS -> SOLVED
+            return new ValidationResult(true, "Shapes aligned correctly!", PuzzleState.SOLVED);
+        } else {
+            markFailed(); // IN_PROGRESS -> FAILED
+            return new ValidationResult(false, "Alignment incorrect, try again.", PuzzleState.FAILED);
+        }
     }
 }

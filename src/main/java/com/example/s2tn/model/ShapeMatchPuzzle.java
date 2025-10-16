@@ -98,17 +98,19 @@ public class ShapeMatchPuzzle extends Puzzle {
         return true;
     }
 
+    /** Hook for text input if UI sends it; noop for now. */
+    
+    
+
     /**
-     * Hook for text input if UI sends it; noop for now.
-     *
-     * @return
+     * commenting out to compile
+     * @param shapes
      */
-    @Override
-    public ValidationResult enterInput(String input) {
-        if (input == null || input.isBlank()) return null;
-        // could parse and update a user-pose map here later if needed
-        return null;
-    }
+    // @Override
+    // public void enterInput(String input) {
+    //     if (input == null || input.isBlank()) return;
+    //     // could parse and update a user-pose map here later if needed
+    // }
 
     /** Provided for callers that want to “apply” alignment; currently stateless. */
     public void align(List<String> shapes) {
@@ -118,5 +120,10 @@ public class ShapeMatchPuzzle extends Puzzle {
     /** Public solved check for the puzzle engine. */
     public boolean isSolved(List<String> userShapes) {
         return aligned(userShapes);
+    }
+
+    @Override
+    public ValidationResult enterInput(String input) {
+        throw new UnsupportedOperationException("Unimplemented method 'enterInput'");
     }
 }

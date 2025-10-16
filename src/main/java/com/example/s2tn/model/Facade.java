@@ -14,7 +14,16 @@ public class Facade {
 // ------------------------------------------------------------------------------------------------------
 
     public Account signUp(String username, String password) {
-        return new Account();
+        if (username == null || password == null) return null;
+        UserList ul = UserList.getInstance();
+        if (ul.getUser(username) != null) return null;
+        Account a = new Account(username, password);
+        a.setScore(0);
+        a.setRank(0);
+        if (!ul.addUser(a)) return null;
+        new DataWriter().saveUsers();
+        this.user = a;
+        return a;
     }
 
     public Account login(String username, String password) {
@@ -28,6 +37,7 @@ public class Facade {
     }
 
     public void logout() {
+        this.user = null;
     }
 
     public Account getAccount() {
@@ -129,13 +139,13 @@ public class Facade {
 
     public boolean answerRiddle(UUID puzzleId, String answer) {
         Riddle riddle = new Riddle();
-        riddle.displayRiddle();          // show the question first
+        riddle.displayRiddle();
         return riddle.checkAnswer(answer);
     }
 
     public boolean answerScramble(UUID puzzleId, String answer) {
         WordScramble scramble = new WordScramble();
-        scramble.displayScramble();      // show the scrambled word
+        scramble.displayScramble();
         return scramble.checkAnswer(answer);
     }
 
@@ -163,7 +173,6 @@ public class Facade {
 
     private void submitScore(String userName, int score, long elapsedTime) {
     }
-
 
 // ------------------------------------------------------------------------------------------------------
 }

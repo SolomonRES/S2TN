@@ -1,5 +1,7 @@
 package com.example.s2tn.model;
 
+import java.io.FileWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -10,8 +12,30 @@ public class DataWriter extends DataConstants {
     private static final Path ROOMS_PATH = Paths.get("../../../json/rooms.json");
 
     public void saveUsers() {
-        String path = DataConstants.usersPath().toString();
-        UserList.getInstance().saveToFile();
+        var path  = usersPath();                  // from DataConstants
+        var users = UserList.getInstance().getAll();
+        var arr   = new org.json.simple.JSONArray();
+
+        for (Account a : users) {
+            var o = new org.json.simple.JSONObject();
+            o.put("accountID", a.getAccountID());
+            o.put("userName",  a.getUserName());
+            o.put("password",  a.getPasswordHash());
+            o.put("score",     a.getScore());
+            o.put("rank",      a.getRank());
+            o.put("achievements", new org.json.simple.JSONArray()); // TODO
+            arr.add(o);
+        }
+
+        try {
+            Path parent = path.getParent();
+            if (parent != null) Files.createDirectories(parent);
+            try (var writer = new FileWriter(path.toFile(), false)) {
+                writer.write(arr.toJSONString());
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to save users at " + path.toAbsolutePath() + ": " + e.getMessage());
+        }
     }
 
     public void saveDungeon() {

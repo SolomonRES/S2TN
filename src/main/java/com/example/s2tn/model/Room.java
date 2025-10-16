@@ -56,4 +56,7 @@ public class Room {
         return false;
     }
 
+    public Room[] getLockedExits() {
+        return new Room[10];
+    }
 }

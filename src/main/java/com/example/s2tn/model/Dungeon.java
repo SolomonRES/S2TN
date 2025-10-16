@@ -14,7 +14,18 @@ public class Dungeon {
     private Room currentRoom;
     private Room startingRoom;
     public Dungeon(Dungeon dungeon, Difficulty difficulty){
-        //Will load a dungeon from the database
+
+    }
+    public Dungeon(String name, ArrayList<Room> rooms, double baseMaxAllowedTime, Difficulty difficulty, Room startingRoom){
+        this.name = name;
+        this.rooms = rooms;
+        this.timer = new Timer();
+        this.baseMaxAllowedTime = baseMaxAllowedTime;
+        this.maxTimeAllowed = setMaxTimeAllowed(difficulty, baseMaxAllowedTime);
+        this.difficulty = difficulty;
+        this.startingRoom = startingRoom;
+        this.currentRoom = startingRoom;
+        this.uuid = UUID.randomUUID();
     }
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
         switch (difficulty){

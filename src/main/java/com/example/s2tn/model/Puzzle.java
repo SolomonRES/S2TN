@@ -72,4 +72,10 @@ public abstract class Puzzle {
     public Difficulty getDifficulty() { return difficulty; }
 
     // add other getters and setters if needed
+
+        // 🔹 Helper: check if player can still move based on difficulty
+    public boolean canMakeMove(int movesMade) {
+        return movesMade < difficulty.getMaxMoves();
+    }
+
 }

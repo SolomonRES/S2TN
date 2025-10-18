@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * Sliding-shapes puzzle (UML subclass of Puzzle).
- * NOTE: This integrates PuzzleState transitions.
- * The actual sliding mechanics can be refined later.
+ * Minimal mechanics; integrates PuzzleState transitions and Difficulty move cap.
  */
 public class SlideShapePuzzle extends Puzzle {
 
@@ -54,35 +53,34 @@ public class SlideShapePuzzle extends Puzzle {
     }
 
     /**
-     * Minimal "slide" placeholder so we can validate transitions.
-     * Format expected: shapeId and direction, e.g., slide("A","UP").
-     * Returns true if the command is accepted; you can replace with real mechanics later.
+     * Minimal slide: validates input + enforces Difficulty move cap.
+     * Example: slide("A","UP")
      */
     public boolean slide(String shape, String direction) {
         if (shape == null || shape.isBlank() || direction == null || direction.isBlank()) return false;
-        // TODO: replace with real board updates. For now, accept common directions.
+
         String dir = direction.trim().toUpperCase();
         if (!(dir.equals("UP") || dir.equals("DOWN") || dir.equals("LEFT") || dir.equals("RIGHT"))) return false;
 
-        // Demo side-effect so something happens:
+        // Difficulty cap (use +1 to check the next move)
+        if (!canMakeMove(movesMade + 1)) {
+            return false;
+        }
+
         movesMade++;
-        // You can update currentConfiguration here when real rules are added.
+        // TODO: update currentConfiguration when real rules are added
         return true;
     }
 
-    /** Optional text hint. */
+    /** Simple hint text. */
     public String getHint() {
         return "Try moving a border piece toward an empty space.";
     }
 
     /**
-     * UML integration:
-     * - If NOT_STARTED → start()  (NOT_STARTED -> IN_PROGRESS)
-     * - Accept commands:
-     *      "SLIDE id:DIR"  e.g., "SLIDE A:UP"
-     *      "CHECK"         evaluate solved state
-     * - On solved → markSolved() (IN_PROGRESS -> SOLVED)
-     * - Otherwise → markFailed() (IN_PROGRESS -> FAILED)
+     * Commands:
+     *  - "SLIDE id:DIR"   e.g., "SLIDE A:UP"
+     *  - "CHECK"
      */
     @Override
     public ValidationResult enterInput(String input) {
@@ -91,14 +89,12 @@ public class SlideShapePuzzle extends Puzzle {
         }
 
         if (input == null || input.isBlank()) {
-            // invalid format, treat as failed attempt for now
             markFailed();
             return new ValidationResult(false, "Empty input.", PuzzleState.FAILED);
         }
 
         String trimmed = input.trim();
 
-        // Command: SLIDE id:DIR  (e.g., "SLIDE A:UP")
         if (trimmed.toUpperCase().startsWith("SLIDE ")) {
             String rest = trimmed.substring(6).trim();
             String[] parts = rest.split(":", 2);
@@ -109,18 +105,15 @@ public class SlideShapePuzzle extends Puzzle {
             boolean ok = slide(parts[0].trim(), parts[1].trim());
             if (!ok) {
                 markFailed();
-                return new ValidationResult(false, "Invalid slide.", PuzzleState.FAILED);
+                return new ValidationResult(false, "Invalid slide or max moves reached.", PuzzleState.FAILED);
             }
-            // Successful move but not necessarily solved yet
             if (isSolved()) {
                 markSolved();
                 return new ValidationResult(true, "Puzzle solved!", PuzzleState.SOLVED);
             }
-            // Still in progress after a valid move
             return new ValidationResult(false, "Move accepted.", PuzzleState.IN_PROGRESS);
         }
 
-        // Command: CHECK — evaluate current board against the target
         if (trimmed.equalsIgnoreCase("CHECK")) {
             if (isSolved()) {
                 markSolved();
@@ -131,7 +124,6 @@ public class SlideShapePuzzle extends Puzzle {
             }
         }
 
-        // Unknown command
         markFailed();
         return new ValidationResult(false, "Unknown command. Use 'SLIDE id:DIR' or 'CHECK'.", PuzzleState.FAILED);
     }

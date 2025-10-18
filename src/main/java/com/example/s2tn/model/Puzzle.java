@@ -7,7 +7,7 @@ import java.util.UUID;
 public abstract class Puzzle {
     private UUID puzzleID;
     private String title;
-    private PuzzleState state; // Assume PuzzleState is defined
+    private PuzzleState state;
     private int maxHints;
     private ArrayList<Hint> hints;
     private Duration allowedTime;
@@ -16,13 +16,13 @@ public abstract class Puzzle {
     private double timeToBeat;
     private double startTime;
 
-    // 🔹 New: store difficulty (default NORMAL)
+    // difficulty (default NORMAL)
     private Difficulty difficulty = Difficulty.NORMAL;
 
     public Puzzle() {
         this.puzzleID = UUID.randomUUID();
         this.title = "";
-        // this.state = PuzzleState.NOT_STARTED; // starts with a suitable state
+        this.state = PuzzleState.NOT_STARTED;
         this.maxHints = 0;
         this.hints = new ArrayList<>();
         this.allowedTime = Duration.ZERO;
@@ -32,33 +32,19 @@ public abstract class Puzzle {
         this.startTime = 0.0;
     }
 
-    // Abstract method to be used by subclasses
+    // subclasses implement their own input handling
     public abstract ValidationResult enterInput(String input);
 
     public Hint requestHint(int level) {
-        if (hints.size() > level && level >= 0) {
-            return hints.get(level);
-        }
+        if (level >= 0 && level < hints.size()) return hints.get(level);
         return null;
     }
 
-    /**
-     * commenting out so it compiles
-     * @param startTime
-     * @param time
-     */
-
-    // public void reset() {
-    //     this.state = PuzzleState.NOT_STARTED;
-    //     this.startTime = 0.0;
-    //     // Subclasses will add their reset logic
-    // }
-
     public void checkForAchievement(double startTime, double time) {
-        // Achievement logic
+        // no-op for now
     }
 
-    // ---------------- Getters / Setters ----------------
+    // getters / setters
     public UUID getPuzzleID() { return puzzleID; }
 
     public String getTitle() { return title; }
@@ -67,15 +53,17 @@ public abstract class Puzzle {
     public PuzzleState getState() { return state; }
     public void setState(PuzzleState state) { this.state = state; }
 
-    // 🔹 New: Difficulty accessors
     public void setDifficulty(Difficulty difficulty) { this.difficulty = difficulty; }
     public Difficulty getDifficulty() { return difficulty; }
 
-    // add other getters and setters if needed
-
-        // 🔹 Helper: check if player can still move based on difficulty
+    // helper for difficulty move cap
     public boolean canMakeMove(int movesMade) {
-        return movesMade < difficulty.getMaxMoves();
+        int cap = difficulty.getMaxMoves();
+        return cap == 0 || movesMade < cap; // 0 == unlimited
     }
 
+    // state helpers
+    public void start() { this.state = PuzzleState.IN_PROGRESS; }
+    public void markSolved() { this.state = PuzzleState.SOLVED; }
+    public void markFailed() { this.state = PuzzleState.FAILED; }
 }

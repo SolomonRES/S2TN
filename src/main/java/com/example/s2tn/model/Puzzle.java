@@ -7,7 +7,7 @@ import java.util.UUID;
 public abstract class Puzzle {
     private UUID puzzleID;
     private String title;
-    private PuzzleState state; // Assume the PuzzleState is defined
+    private PuzzleState state; // Assume PuzzleState is defined
     private int maxHints;
     private ArrayList<Hint> hints;
     private Duration allowedTime;
@@ -15,6 +15,9 @@ public abstract class Puzzle {
     private int scoreValue;
     private double timeToBeat;
     private double startTime;
+
+    // 🔹 New: store difficulty (default NORMAL)
+    private Difficulty difficulty = Difficulty.NORMAL;
 
     public Puzzle() {
         this.puzzleID = UUID.randomUUID();
@@ -55,11 +58,18 @@ public abstract class Puzzle {
         // Achievement logic
     }
 
-    // These are the Getters and Setters for the state management
+    // ---------------- Getters / Setters ----------------
     public UUID getPuzzleID() { return puzzleID; }
+
     public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; } // Added setter for title
+    public void setTitle(String title) { this.title = title; }
+
     public PuzzleState getState() { return state; }
     public void setState(PuzzleState state) { this.state = state; }
+
+    // 🔹 New: Difficulty accessors
+    public void setDifficulty(Difficulty difficulty) { this.difficulty = difficulty; }
+    public Difficulty getDifficulty() { return difficulty; }
+
     // add other getters and setters if needed
 }

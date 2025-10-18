@@ -11,16 +11,19 @@ public class ShapeMatchPuzzle extends Puzzle {
 
     private List<String> targetShapes;   // e.g., ["A:10,20,0", "B:30,40,90"]
     private double tolerance;            // pixels/deg tolerance
+    private int movesMade;               // 🔹 difficulty counter
 
     // ---- constructors ----
     public ShapeMatchPuzzle(List<String> targetShapes, double tolerance) {
         this.targetShapes = new ArrayList<>(targetShapes == null ? List.of() : targetShapes);
         this.tolerance = tolerance;
+        this.movesMade = 0;
     }
 
     public ShapeMatchPuzzle() {
         this.targetShapes = new ArrayList<>();
         this.tolerance = 0.0;
+        this.movesMade = 0;
     }
 
     // ---- getters / setters ----
@@ -111,22 +114,26 @@ public class ShapeMatchPuzzle extends Puzzle {
     // ---- UML-required: integrate PuzzleState transitions ----
     @Override
     public ValidationResult enterInput(String input) {
-        // Step 1: if puzzle hasn’t started yet, start it
         if (getState() == PuzzleState.NOT_STARTED) {
             start(); // NOT_STARTED -> IN_PROGRESS
         }
 
-        // Step 2: parse user shapes (semicolon-separated string)
+        // 🔹 difficulty cap: treat each alignment submission as one move
+        if (!canMakeMove(movesMade + 1)) {
+            markFailed();
+            return new ValidationResult(false, "Max moves reached for " + getDifficulty(), PuzzleState.FAILED);
+        }
+        movesMade++;
+
+        // parse user shapes (semicolon-separated string)
         List<String> userShapes = new ArrayList<>();
         if (input != null && !input.isBlank()) {
             String[] parts = input.split(";");
             for (String p : parts) userShapes.add(p.trim());
         }
 
-        // Step 3: check correctness
         boolean correct = isSolved(userShapes);
 
-        // Step 4: set PuzzleState transitions accordingly
         if (correct) {
             markSolved(); // IN_PROGRESS -> SOLVED
             return new ValidationResult(true, "Shapes aligned correctly!", PuzzleState.SOLVED);

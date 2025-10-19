@@ -11,7 +11,7 @@ public class Facade {
     private Account user;
     private Dungeon dungeon;
 
-// ------------------------------------------------------------------------------------------------------
+// --------Account---------------------------------------------------------------------------------------
 
     public Account signUp(String username, String password) {
         if (username == null || password == null) return null;
@@ -44,7 +44,7 @@ public class Facade {
         return user;
     }
 
-// ------------------------------------------------------------------------------------------------------
+// ----------------Progress-----------------------------------------------------------------------------
 
     public void saveProgress() {
     }
@@ -71,7 +71,7 @@ public class Facade {
         return new Progress();
     }
 
-// ------------------------------------------------------------------------------------------------------
+// --------------------Dungeon/Map----------------------------------------------------------------------
 
     public Dungeon selectDungeon(UUID dungeonId) {
         return new Dungeon(dungeon, null);
@@ -109,7 +109,7 @@ public class Facade {
     public void previousRoom() {
     }
 
-// ------------------------------------------------------------------------------------------------------
+// -------------------Puzzle(s)-------------------------------------------------------------------------
 
     public void attemptPuzzle(UUID puzzleId, String input) {
     }
@@ -155,18 +155,18 @@ public class Facade {
         return cp.submit(code);
     }
 
-// ------------------------------------------------------------------------------------------------------
+// -----------------------Start/Stop Time-------------------------------------------------------
 
     public void pauseTimer() {
     }
 
     public void resumeTimer() {
     }
-
+    // probably get rid of this one
     public void openLeaderboard(Account user) {
     }
 
-// ------------------------------------------------------------------------------------------------------
+// ------------------also progress/leaderboard/map? unsure------------------------------
 
     private void unlockExit(UUID fromRoom, UUID toRoom) {
     }

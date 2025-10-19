@@ -7,8 +7,23 @@ public class Room {
     private UUID roomID;
     private ArrayList<Puzzle> puzzles;
     private ArrayList<Hint> hints;
-    private ArrayList<Room> exits;
-    private ArrayList<Room> lockedExits;
+    private Room[] exits;
+    private Room[] lockedExits;
+
+    public Room(ArrayList<Puzzle> puzzles, ArrayList<Hint> hints, ArrayList<Room> exits, ArrayList<Room> lockedExits){
+        this.puzzles = puzzles;
+        this.hints = hints;
+        this.exits = new Room[10];
+        this.lockedExits = new Room[10];
+        for(int i = 0; i< this.exits.length; i++){
+            if(i < exits.size()){
+                this.exits[i] = exits.get(i);
+            }
+            if(i < lockedExits.size()){
+                this.lockedExits[i] = lockedExits.get(i);
+            }
+        }
+    }
 
     public ArrayList<Puzzle> getPuzzles(){
         return puzzles;
@@ -18,11 +33,11 @@ public class Room {
         return hints;
     }
 
-    public ArrayList<Room> getExits() {
+    public Room[] getExits() {
         return exits;
     }
 
-    public ArrayList<Room> getLockedExits() {
+    public Room[] getLockedExits() {
         return lockedExits;
     }
 

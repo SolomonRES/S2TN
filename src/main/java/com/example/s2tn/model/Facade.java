@@ -125,6 +125,7 @@ public class Facade {
     }
 
     public void submitCode(UUID puzzleId, String code) {
+        attemptCodePuzzle(code);
     }
 
     public void moveInMaze(UUID puzzleId, String direction) {
@@ -147,6 +148,11 @@ public class Facade {
         WordScramble scramble = new WordScramble();
         scramble.displayScramble();
         return scramble.checkAnswer(answer);
+    }
+
+    public boolean attemptCodePuzzle(String code) {
+        CodePuzzle cp = new CodePuzzle();
+        return cp.submit(code);
     }
 
 // ------------------------------------------------------------------------------------------------------

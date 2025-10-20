@@ -18,6 +18,7 @@ public class ShapeMatchPuzzle extends Puzzle {
 
     public ShapeMatchPuzzle() {
         applyDifficulty(); // keep existing defaults if difficulty is null
+        setState(PuzzleState.IN_PROGRESS); // add this
     }
 
     // setup: e.g. setTarget("A", 10, 20, 0)

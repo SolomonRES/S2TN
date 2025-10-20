@@ -9,7 +9,7 @@ public class DungeonList {
     private static List<Dungeon> dungeons;
 
     private DungeonList() {
-        this.dungeons = new ArrayList<>();
+        DungeonList.dungeons = new ArrayList<>();
     }
 
     public static DungeonList getInstance() {
@@ -23,11 +23,25 @@ public class DungeonList {
         return new java.util.ArrayList<>(dungeons);
     }
 
-    public void replaceAll(java.util.List<Dungeon> newList) {
-        dungeons.clear();
-        if (newList != null) {
-            dungeons.addAll(newList);
+    public Dungeon getById(java.util.UUID id) {
+        if (id == null) return null;
+        for (Dungeon d : dungeons) {
+            if (id.equals(d.getUUID())) return d;
         }
+        return null;
+    }
+
+    public Dungeon getByName(String name) {
+        if (name == null) return null;
+        for (Dungeon d : dungeons) {
+            if (name.equalsIgnoreCase(d.getName())) return d;
+        }
+        return null;
+    }
+
+    public void replaceAll(java.util.List<Dungeon> newOnes) {
+        dungeons.clear();
+        if (newOnes != null) dungeons.addAll(newOnes);
     }
 
     public List<UUID> getAllIds() {
@@ -71,4 +85,9 @@ public class DungeonList {
 
     public void fromJSON(String json) {
     }
+
+    public void clear() {
+    dungeons.clear();
+    }
+
 }

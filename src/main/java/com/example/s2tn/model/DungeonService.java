@@ -11,8 +11,8 @@ public final class DungeonService {
     public static DungeonService getInstance() { return INSTANCE; }
     private DungeonService() {
         // testing to see if if works properly
-        dungeons.add(new Dungeon("Dungeon One", 3, 2, Difficulty.EASY));
-        dungeons.add(new Dungeon("Dungeon Two", 2, 3, Difficulty.NORMAL));
+        // dungeons.add(new Dungeon("Dungeon One", 3, 2, Difficulty.EASY));
+        // dungeons.add(new Dungeon("Dungeon Two", 2, 3, Difficulty.NORMAL));
     }
 
     public enum Difficulty { EASY, NORMAL, HARD }
@@ -25,7 +25,9 @@ public final class DungeonService {
     }
 
     private static final class Puzzle {
+        @SuppressWarnings("unused")
         final UUID id = UUID.randomUUID();
+        @SuppressWarnings("unused")
         final String type;
         boolean solved = false;
         Puzzle(String type) { this.type = type; }
@@ -37,6 +39,7 @@ public final class DungeonService {
 
     private static final class Room {
         final UUID id = UUID.randomUUID();
+        @SuppressWarnings("unused")
         final String name;
         final List<Puzzle> puzzles = new ArrayList<>();
         Room(String name, int puzzleCount) {
@@ -59,15 +62,18 @@ public final class DungeonService {
     private static final class GameMap {
         private final HashMap<UUID, Boolean> completeByRoom = new HashMap<>();
         void markComplete(Room r) { completeByRoom.put(r.id, true); }
+        @SuppressWarnings("unused")
         boolean isMarked(Room r) { return completeByRoom.getOrDefault(r.id, false); }
     }
 
     private static final class Dungeon {
         final UUID id = UUID.randomUUID();
+        @SuppressWarnings("unused")
         final String name;
         final List<Room> rooms = new ArrayList<>();
         final GameMap map = new GameMap();
         final Timer timer = new Timer();
+        @SuppressWarnings("unused")
         final Difficulty difficulty;
         int currentRoomIndex = 0;
         Dungeon(String name, int roomCount, int puzzlesPerRoom, Difficulty diff) {
@@ -87,6 +93,10 @@ public final class DungeonService {
         boolean isComplete() {
             for (Room r : rooms) if (!r.isComplete()) return false;
             return true;
+        }
+
+        public Difficulty getDifficulty() {
+            return difficulty;
         }
     }
 

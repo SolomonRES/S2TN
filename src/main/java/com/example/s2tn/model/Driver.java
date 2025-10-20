@@ -19,10 +19,10 @@ public class Driver {
                     case 5 -> timerMenu(in, facade);
                     case 6 -> saveMenu(in, facade);
                     case 0 -> {
-                        println("Goodbye.");
+                        println("Goodbye");
                         running = false;
                     }
-                    default -> println("Invalid selection.");
+                    default -> println("Invalid selection");
                 }
             }
         }
@@ -55,21 +55,18 @@ public class Driver {
                 case 1 -> {
                     String u = ask(in, "Username: ");
                     String p = ask(in, "Password: ");
-                    var created = facade.signUp(u, p);
-                    println(created != null ? "Sign up successful." : "Sign up failed.");
+                    boolean ok = facade.signUp(u, p);
+                    println(ok ? "Sign up successful" : "Sign up failed");
                 }
                 case 2 -> {
                     String u = ask(in, "Username: ");
                     String p = ask(in, "Password: ");
                     boolean ok = facade.login(u, p);
-                    println(ok ? "Login successful." : "Login failed.");
+                    println(ok ? "Login successful." : "Login failed");
                 }
-                case 3 -> {
-                    facade.logout();
-                    println("Logged out.");
-                }
+                case 3 -> { facade.logout(); println("Logged out"); }
                 case 0 -> back = true;
-                default -> println("Invalid selection.");
+                default -> println("Invalid selection");
             }
         }
     }
@@ -89,47 +86,39 @@ public class Driver {
                 case 1 -> {
                     String diff = ask(in, "Difficulty [easy|normal|hard]: ");
                     facade.chooseDifficulty(diff);
-                    println("Difficulty set.");
+                    println("Difficulty set");
                 }
                 case 2 -> {
-                    List<Dungeon> ds = DungeonList.getInstance().getAll();
-                    if (ds.isEmpty()) {
-                        println("No dungeons loaded yet. Start one to trigger loading or ensure rooms.json is present.");
+                    List<Dungeon> ds = facade.listDungeons();
+                    if (ds == null || ds.isEmpty()) {
+                        println("No dungeons loaded. Ensure rooms.json is present");
                     } else {
                         println("Available dungeons:");
                         for (int i = 0; i < ds.size(); i++) {
                             Dungeon d = ds.get(i);
-                            String name = (d.getName() != null) ? d.getName() : ("Dungeon " + (i + 1));
-                            String diff = (d.getDifficulty() != null) ? d.getDifficulty().name() : "UNKNOWN";
-                            println(" " + (i + 1) + ") " + name + " [" + diff + "]");
+                            String name = d.getName() != null ? d.getName() : ("Dungeon " + (i + 1));
+                            String diff = d.getDifficulty() != null ? d.getDifficulty().name() : "UNKNOWN";
+                            println(" " + (i + 1) + ") " + name + " [" + diff + "]  id=" + d.getUUID());
                         }
                     }
                 }
                 case 3 -> {
-                    List<Dungeon> ds = DungeonList.getInstance().getAll();
-                    if (ds.isEmpty()) {
-
-                        facade.startDungeon(null);
-                        ds = DungeonList.getInstance().getAll();
-                        if (ds.isEmpty()) {
-                            println("No dungeons available. Check rooms.json.");
-                            break;
-                        }
-
-                        facade.exitDungeon();
+                    List<Dungeon> ds = facade.listDungeons();
+                    if (ds == null || ds.isEmpty()) {
+                        println("No dungeons available; check rooms.json");
+                        break;
                     }
                     int idx = askInt(in, "Enter dungeon number (1.." + ds.size() + "): ");
-                    if (idx < 1 || idx > ds.size()) { println("Invalid selection."); break; }
+                    if (idx < 1 || idx > ds.size()) { println("Invalid selection"); break; }
                     Dungeon chosen = ds.get(idx - 1);
-                    UUID started = facade.enterDungeon(chosen.getUUID());
-                    println(started != null ? "Started: " + chosen.getName() : "Failed to start dungeon.");
+                    boolean started = facade.startDungeon(chosen.getUUID());
+                    if (!started) { println("Failed to select dungeon."); break; }
+                    boolean entered = facade.enterDungeon();
+                    println(entered ? "Started: " + chosen.getName() : "Failed to enter dungeon");
                 }
-                case 4 -> {
-                    facade.exitDungeon();
-                    println("Exited current dungeon.");
-                }
+                case 4 -> { facade.exitDungeon(); println("Exited current dungeon"); }
                 case 0 -> back = true;
-                default -> println("Invalid selection.");
+                default -> println("Invalid selection");
             }
         }
     }
@@ -138,9 +127,9 @@ public class Driver {
         boolean back = false;
         while (!back) {
             println("");
-            println("— Rooms —");
-            println("1) Room count");
-            println("2) Current room");
+            println("= Rooms =");
+            println("1) List rooms");
+            println("2) Show current room ID");
             println("3) Enter room by number");
             println("4) Next room");
             println("0) Back");
@@ -148,23 +137,32 @@ public class Driver {
             switch (ch) {
                 case 1 -> {
                     var rooms = facade.viewRooms();
-                    println("Rooms available: " + (rooms == null ? 0 : rooms.size()));
+                    if (rooms == null || rooms.isEmpty()) {
+                        println("No rooms; Start a dungeon first");
+                    } else {
+                        println("Rooms:");
+                        for (int i = 0; i < rooms.size(); i++) {
+                            Room r = rooms.get(i);
+                            println(" " + (i + 1) + ") id=" + r.getRoomID()
+                                    + " puzzles=" + (r.getPuzzles() == null ? 0 : r.getPuzzles().size()));
+                        }
+                    }
                 }
                 case 2 -> {
-                    UUID id = facade.enterRoom(null);
-                    println(id != null ? "Current room ID: " + id : "No current room.");
+                    UUID id = facade.getCurrentRoomId();   // ensure Facade has this helper
+                    println(id != null ? "Current room ID: " + id : "No current room");
                 }
                 case 3 -> {
                     var rooms = facade.viewRooms();
-                    if (rooms == null || rooms.isEmpty()) { println("No rooms. Start a dungeon first."); break; }
+                    if (rooms == null || rooms.isEmpty()) { println("No rooms. Start a dungeon first"); break; }
                     int r = askInt(in, "Room number (1.." + rooms.size() + "): ");
-                    if (r < 1 || r > rooms.size()) { println("Invalid room number."); break; }
-                    UUID rid = facade.enterRoom(rooms.get(r - 1).getRoomID());
-                    println(rid != null ? "Entered room: " + rid : "Failed to enter room.");
+                    if (r < 1 || r > rooms.size()) { println("Invalid room number"); break; }
+                    boolean ok = facade.enterRoom(rooms.get(r - 1).getRoomID());
+                    println(ok ? "Entered room" : "Failed to enter room");
                 }
                 case 4 -> {
                     boolean moved = facade.nextRoom();
-                    println(moved ? "Moved to next room." : "No next room.");
+                    println(moved ? "Moved to next room" : "No next room");
                 }
                 case 0 -> back = true;
                 default -> println("Invalid selection.");
@@ -177,14 +175,63 @@ public class Driver {
         while (!back) {
             println("");
             println("— Puzzles —");
-            println("1) Attempt generic solve(s) in current room");
+            println("1) Attempt first unsolved puzzle in CURRENT room");
             println("0) Back");
             int ch = askInt(in, "Select: ");
             switch (ch) {
                 case 1 -> {
-                    boolean a = facade.attemptCodePuzzle("auto");
-                    boolean b = facade.attemptCodePuzzle("auto-2");
-                    println((a || b) ? "Attempted puzzle solve(s)." : "No puzzle attempt available.");
+
+                    var rooms = facade.viewRooms();
+                    if (rooms == null || rooms.isEmpty()) {
+                        println("No rooms. Start a dungeon (Dungeon > Start) first");
+                        break;
+                    }
+                    if (facade.getCurrentRoomId() == null) {
+                        boolean ok = facade.enterRoom(rooms.get(0).getRoomID());
+                        if (!ok) { println("Could not enter the first room"); break; }
+                    }
+
+                    Room cur = null;
+                    for (Room r : rooms) {
+                        if (r.getRoomID().equals(facade.getCurrentRoomId())) { cur = r; break; }
+                    }
+                    if (cur == null) { println("Current room not found"); break; }
+                    var puzzles = cur.getPuzzles();
+                    if (puzzles == null || puzzles.isEmpty()) { println("This room has 0 puzzles"); break; }
+
+                    println("Puzzles in current room:");
+                    Puzzle firstUnsolved = null;
+                    for (int i = 0; i < puzzles.size(); i++) {
+                        Puzzle p = puzzles.get(i);
+                        println(" " + (i + 1) + ") id=" + p.getPuzzleID()
+                                + "  title=\"" + p.getTitle() + "\"  state=" + p.getState());
+                        if (firstUnsolved == null && p.getState() != PuzzleState.SOLVED) {
+                            firstUnsolved = p;
+                        }
+                    }
+                    if (firstUnsolved == null) { println("All puzzles already solved in this room"); break; }
+
+                    String q = facade.getCurrentPuzzleQuestion();
+                    if (q != null && !q.isBlank()) {
+                        println("");
+                        println("Question: " + q);
+                    }
+
+                    String input = ask(in, "Type your answer (or 'H' for hint): ");
+                    if (input.equalsIgnoreCase("h")) {
+                        String hint = facade.getCurrentPuzzleHint();
+                        println(hint == null ? "No hint available" : ("Hint: " + hint));
+                        
+                        input = ask(in, "Your answer: ");
+                    }
+
+                    ValidationResult res = facade.attemptCodePuzzle(input);
+                    if (res == null) {
+                        println("No puzzle available in this room");
+                    } else {
+                        println((res.isValid() ? "[✓] " : "[x] ") + res.getMessage()
+                                + "  New state: " + res.getNewState());
+                    }
                 }
                 case 0 -> back = true;
                 default -> println("Invalid selection.");
@@ -196,39 +243,36 @@ public class Driver {
         boolean back = false;
         while (!back) {
             println("");
-            println("— Timer —");
+            println("= Timer =");
             println("1) Pause");
             println("2) Resume");
             println("0) Back");
             int ch = askInt(in, "Select: ");
             switch (ch) {
-                case 1 -> { facade.pauseTimer(); println("Timer paused."); }
-                case 2 -> { facade.resumeTimer(); println("Timer resumed."); }
+                case 1 -> { facade.pauseTimer(); println("Timer paused"); }
+                case 2 -> { facade.resumeTimer(); println("Timer resumed"); }
                 case 0 -> back = true;
-                default -> println("Invalid selection.");
+                default -> println("Invalid selection");
             }
         }
     }
 
-    private static void saveMenu(Scanner in, Facade facade) {
+    private static void saveMenu(Scanner in, @SuppressWarnings("unused") Facade facadeUnused) {
         boolean back = false;
         while (!back) {
             println("");
             println("— Save —");
-            println("1) Save users (triggered by signUp automatically)");
+            println("1) Info");
             println("0) Back");
             int ch = askInt(in, "Select: ");
             switch (ch) {
-                case 1 -> {
-
-                    println("Users are saved when signing up. No additional action implemented.");
-                }
+                case 1 -> println("Users are saved when signing up. No manual save implemented.")
+                ;
                 case 0 -> back = true;
                 default -> println("Invalid selection.");
             }
         }
     }
-
 
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);

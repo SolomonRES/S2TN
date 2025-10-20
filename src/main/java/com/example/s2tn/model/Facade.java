@@ -13,27 +13,25 @@ public class Facade {
 
 // --------Account---------------------------------------------------------------------------------------
 
-    public Account signUp(String username, String password) {
-        if (username == null || password == null) return null;
-        UserList ul = UserList.getInstance();
-        if (ul.getUser(username) != null) return null;
-        Account a = new Account(username, password);
-        a.setScore(0);
-        a.setRank(0);
-        if (!ul.addUser(a)) return null;
-        new DataWriter().saveUsers();
-        this.user = a;
-        return a;
+    public boolean signUp(String username, String password) {
+        ensureUsersLoadedOnce();
+        if (username == null || username.isBlank() || password == null) return false;
+        Account a = new Account();
+        a.setUserName(username.trim());
+        a.setPasswordHash(password);     
+        return new UserService().addUser(a); 
     }
 
     public boolean login(String username, String password) {
-    UserList ul = UserList.getInstance();
-    Account a = ul.getUser(username);
-    if (a != null && a.login(username, password)) {
-        this.user = a;
-        return true;
-    }
-    return false;
+        ensureUsersLoadedOnce();
+        Account found = new UserService().getByUserName(username);
+        if (found == null) return false;
+
+        if (found.login(username, password)) {
+            this.user = found;
+            return true;
+        }
+        return false;
     }
 
     public void logout() {
@@ -91,6 +89,11 @@ public class Facade {
         return null;
     }
 
+    public java.util.List<Dungeon> listDungeons() {
+        ensureDungeonsLoadedOnce();
+        return DungeonList.getInstance().getAll();
+    }
+
     public void chooseDifficulty(String level) {
     if (dungeon == null || level == null) return;
     switch (level.toLowerCase()) {
@@ -101,16 +104,25 @@ public class Facade {
     }
     }
 
-    public UUID enterDungeon(UUID dungeonId) {
-    Dungeon picked = selectDungeon(dungeonId);
-    if (picked == null) return null;
-    if (picked.getTimer() != null) picked.getTimer().start();
-    return picked.getUUID();
+    public boolean enterDungeon() {
+        if (this.dungeon == null) return false;
+        if (dungeon.getTimer() != null) dungeon.getTimer().start();
+        if (dungeon.getCurrentRoom() == null) {
+            Room start = dungeon.getStartingRoom();
+            if (start != null) dungeon.changeRoom(start);
+        }
+        return true;
     }
 
-
-    public void startDungeon(UUID dungeonId) {
-        enterDungeon(dungeonId);
+    public boolean startDungeon(java.util.UUID id) {
+        ensureDungeonsLoadedOnce();
+        java.util.List<Dungeon> ds = DungeonList.getInstance().getAll();
+        if (ds.isEmpty()) return false;
+        Dungeon pick = (id == null) ? ds.get(0)
+                : ds.stream().filter(d -> id.equals(d.getUUID())).findFirst().orElse(null);
+        if (pick == null) return false;
+        this.dungeon = pick;
+        return true;
     }
 
     public void restartDungeon() {
@@ -118,9 +130,7 @@ public class Facade {
     }
 
     public void exitDungeon() {
-        if (dungeon != null && dungeon.getTimer() != null && dungeon.getTimer().isRunning()) {
-        dungeon.getTimer().stop();
-    }
+        this.dungeon = null;
     }
 
     public void completeDungeon() {
@@ -130,24 +140,20 @@ public class Facade {
         return dungeon == null ? null : dungeon.getMap();
     }
 
-    public java.util.UUID enterRoom(java.util.UUID roomId) {
-    if (dungeon == null) return null;
-    if (roomId == null) {
-        Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-        return (cur == null) ? null : cur.getRoomID();
-    }
-    for (Room r : dungeon.getRooms()) {
-        if (roomId.equals(r.getRoomID())) {
-            dungeon.changeRoom(r);
-            return roomId;
+    public boolean enterRoom(java.util.UUID roomId) {
+        if (dungeon == null || roomId == null) return false;
+        for (Room r : dungeon.getRooms()) {
+            if (roomId.equals(r.getRoomID())) {
+                dungeon.changeRoom(r);
+                return true;
+            }
         }
-    }
-    return null;
+        return false;
     }
 
 
-    public List<Room> viewRooms() {
-        return dungeon == null ? new ArrayList<>() : dungeon.getRooms();
+    public java.util.List<Room> viewRooms() {
+        return dungeon == null ? new java.util.ArrayList<>() : dungeon.getRooms();
     }
 
     public void changeRoom(java.util.UUID roomID) {
@@ -160,17 +166,15 @@ public class Facade {
     }
 
     public boolean nextRoom() {
-    if (dungeon == null) return false;
-    ArrayList<Room> rooms = dungeon.getRooms();
-    if (rooms == null || rooms.isEmpty()) return false;
-    Room current = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-    if (current == null) return false;
-    int idx = rooms.indexOf(current);
-    if (idx >= 0 && idx + 1 < rooms.size()) {
-        dungeon.changeRoom(rooms.get(idx + 1));
+        if (dungeon == null) return false;
+        java.util.List<Room> rooms = dungeon.getRooms();
+        if (rooms == null || rooms.isEmpty()) return false;
+        Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+        if (cur == null) { dungeon.changeRoom(rooms.get(0)); return true; }
+        int idx = rooms.indexOf(cur);
+        int nxt = (idx < 0 || idx + 1 >= rooms.size()) ? 0 : idx + 1;
+        dungeon.changeRoom(rooms.get(nxt));
         return true;
-    }
-    return false;
     }
 
 
@@ -197,7 +201,7 @@ public class Facade {
     }
 
     public void submitCode(UUID puzzleId, String code) {
-        attemptCodePuzzle(code);
+        attemptCodePuzzle(puzzleId, code);
     }
 
     public void moveInMaze(UUID puzzleId, String direction) {
@@ -210,10 +214,27 @@ public class Facade {
     public void alignShapes(UUID puzzleId, List<Object> shapes) {
     }
 
+    public ValidationResult attemptCodePuzzle(String input) {
+        if (dungeon == null) {
+            return ValidationResult.invalidFormat("No active dungeon.", PuzzleState.INIT);
+        }
+        Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+        if (cur == null || cur.getPuzzles() == null || cur.getPuzzles().isEmpty()) {
+            return ValidationResult.invalidFormat("No puzzle in this room.", PuzzleState.INIT);
+        }
+        for (Puzzle p : cur.getPuzzles()) {
+            if (p.getState() != PuzzleState.SOLVED) {
+                return p.enterInput(input);
+            }
+        }
+        return ValidationResult.invalidFormat("All puzzles solved in this room.", PuzzleState.SOLVED);
+    }
+
     public boolean answerRiddle(UUID puzzleId, String answer) {
-        Riddle riddle = new Riddle();
-        riddle.displayRiddle();
-        return riddle.checkAnswer(answer);
+        Puzzle p = findPuzzleInActiveDungeon(puzzleId);
+        if (!(p instanceof Riddle)) return false;
+        ValidationResult res = p.enterInput(answer);
+        return res != null && res.isValid();
     }
 
     public boolean answerScramble(UUID puzzleId, String answer) {
@@ -222,9 +243,22 @@ public class Facade {
         return scramble.checkAnswer(answer);
     }
 
-    public boolean attemptCodePuzzle(String code) {
-        CodePuzzle cp = new CodePuzzle();
-        return cp.submit(code);
+    public boolean attemptCodePuzzle(UUID puzzleId, String code) {
+        Puzzle p = findPuzzleInActiveDungeon(puzzleId);
+        if (!(p instanceof CodePuzzle)) return false;
+        ValidationResult res = p.enterInput(code);
+        return res != null && res.isValid();
+    }
+
+    private Puzzle findPuzzleInActiveDungeon(UUID puzzleId) {
+    if (dungeon == null || puzzleId == null) return null;
+    for (Room r : dungeon.getRooms()) {
+        if (r.getPuzzles() == null) continue;
+        for (Puzzle p : r.getPuzzles()) {
+            if (puzzleId.equals(p.getPuzzleID())) return p;
+        }
+    }
+    return null;
     }
 
 // -----------------------Start/Stop Time-------------------------------------------------------
@@ -243,6 +277,7 @@ public class Facade {
 
 // ------------------also progress/leaderboard/map? unsure------------------------------
 
+    @SuppressWarnings("unused")
     private void unlockExit(UUID fromRoom, UUID toRoom) {
     for (Room findRoom : dungeon.getRooms()) {
         if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
@@ -255,6 +290,7 @@ public class Facade {
     }
     }
 
+    @SuppressWarnings("unused")
     private void markRoomExplored(UUID fromRoom, UUID toRoom) {
     for (Room findRoom : dungeon.getRooms()) {
         if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
@@ -267,6 +303,7 @@ public class Facade {
     }
     }
 
+    @SuppressWarnings("unused")
     private void markRoomComplete(UUID roomId) {
     for (Room findRoom : dungeon.getRooms()) {
         if (roomId != null && roomId.equals(findRoom.getRoomID())) {
@@ -275,6 +312,7 @@ public class Facade {
     }
     }
 
+    @SuppressWarnings("unused")
     private void submitScore(String userName, int score, long elapsedTime) {
     }
 
@@ -294,4 +332,87 @@ private void ensureDungeonsLoaded() {
         dungeonsLoaded = true;
     }
 }
+
+private void ensureDungeonsLoadedOnce() {
+    if (dungeonsLoaded) return;
+    synchronized (Facade.class) {
+        if (dungeonsLoaded) return;
+        DataLoader loader = new DataLoader();
+        loader.loadDungeons();                     
+        java.util.List<Dungeon> loaded = loader.getDungeons();
+        if (loaded != null && !loaded.isEmpty()) {
+            DungeonList.getInstance().replaceAll(loaded);
+        }
+        dungeonsLoaded = true;
+    }
+}
+
+private static volatile boolean usersLoaded = false;
+private void ensureUsersLoadedOnce() {
+    if (usersLoaded) return;
+    synchronized (Facade.class) {
+        if (usersLoaded) return;
+        DataLoader loader = new DataLoader();
+        loader.loadUsers();                 
+        usersLoaded = true;
+    }
+}
+
+public java.util.UUID getCurrentRoomId() {
+    if (dungeon == null) return null;
+    Room cur = dungeon.getCurrentRoom() != null ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+    return cur == null ? null : cur.getRoomID();
+}
+
+public java.util.List<String> debugListLoadedDungeons() {
+    ensureDungeonsLoadedOnce();
+    java.util.List<String> rows = new java.util.ArrayList<>();
+    for (Dungeon d : DungeonList.getInstance().getAll()) {
+        int rc = d.getRooms() == null ? 0 : d.getRooms().size();
+        rows.add(d.getUUID() + " :: " + d.getName() + " (rooms: " + rc + ")");
+    }
+    return rows;
+}
+
+public String getCurrentPuzzleQuestion() {
+    if (dungeon == null) return null;
+    Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+    if (cur == null || cur.getPuzzles() == null) return null;
+    for (Puzzle p : cur.getPuzzles()) {
+        if (p.getState() != PuzzleState.SOLVED) {
+            if (p instanceof Riddle r) return r.getQuestion();
+            return null;
+        }
+    }
+    return null;
+}
+
+    @SuppressWarnings("UseSpecificCatch")
+    public String getCurrentPuzzleHint() {
+    if (dungeon == null) return null;
+    Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+    if (cur == null || cur.getPuzzles() == null) return null;
+
+    for (Puzzle p : cur.getPuzzles()) {
+        if (p.getState() != PuzzleState.SOLVED) {
+
+            if (p instanceof Riddle r && r.getHint() != null && !r.getHint().isBlank()) {
+                return r.getHint();
+            }
+
+            try {
+                java.lang.reflect.Method m = p.getClass().getMethod("getHints");
+                Object res = m.invoke(p);
+                if (res instanceof java.util.List<?> list && !list.isEmpty()) {
+                    Object maybeHint = list.get(0);
+                    if (maybeHint instanceof Hint h) return h.getText();
+                    return String.valueOf(maybeHint);
+                }
+            } catch (Throwable ignored) {}
+            return "No hint available for this puzzle.";
+        }
+    }
+    return null;
+}
+
 }

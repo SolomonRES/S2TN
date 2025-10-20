@@ -9,6 +9,7 @@ import java.util.List;
 
 public class DataWriter extends DataConstants {
 
+    @SuppressWarnings("UseSpecificCatch")
     public void saveUsers() {
         Path path = usersPath();
         List<Account> currentUsers = UserList.getInstance().getAll();
@@ -61,6 +62,7 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     public void saveDungeons(List<Dungeon> dungeons) {
         Path path = dungeonPath();
 
@@ -141,6 +143,7 @@ public class DataWriter extends DataConstants {
         return sb.toString();
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     private static String safeDungeonName(Dungeon d) {
         try {
             var m = d.getClass().getMethod("getName");
@@ -151,6 +154,7 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     private static String safeDifficulty(Dungeon d) {
         try {
             var m = d.getClass().getMethod("getDifficulty");
@@ -177,16 +181,17 @@ public class DataWriter extends DataConstants {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             switch (c) {
-                case '\"': out.append("\\\""); break;
-                case '\\': out.append("\\\\"); break;
-                case '\b': out.append("\\b");  break;
-                case '\f': out.append("\\f");  break;
-                case '\n': out.append("\\n");  break;
-                case '\r': out.append("\\r");  break;
-                case '\t': out.append("\\t");  break;
-                default:
+                case '\"' -> out.append("\\\"");
+                case '\\' -> out.append("\\\\");
+                case '\b' -> out.append("\\b");
+                case '\f' -> out.append("\\f");
+                case '\n' -> out.append("\\n");
+                case '\r' -> out.append("\\r");
+                case '\t' -> out.append("\\t");
+                default -> {
                     if (c < 0x20) out.append(String.format("\\u%04x", (int) c));
                     else out.append(c);
+                }
             }
         }
         return out.toString();

@@ -15,9 +15,9 @@ public class Dungeon {
     private Room startingRoom;
     private Room previousRoom;
     private Map map;
-    public Dungeon(Dungeon dungeon, Difficulty difficulty){
 
-    }
+    public java.util.UUID getUUID() { return uuid; }
+
     public Dungeon(String name, ArrayList<Room> rooms, double baseMaxAllowedTime, Difficulty difficulty, Room startingRoom){
         this.name = name;
         this.rooms = rooms;
@@ -28,7 +28,7 @@ public class Dungeon {
         this.startingRoom = startingRoom;
         this.currentRoom = startingRoom;
         this.uuid = UUID.randomUUID();
-        map = new Map(this);
+        this.map = new Map(this);
     }
 
     public void setDifficulty(Difficulty difficulty) {
@@ -38,29 +38,28 @@ public class Dungeon {
 
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
         switch (difficulty){
-            case EASY -> {
-                return baseMaxAllowedTime * 2;
-            }
-            case NORMAL -> {
-                return baseMaxAllowedTime;
-            }
-            case HARD -> {
-                return baseMaxAllowedTime * 0.5;
-            }
+            case EASY -> { return baseMaxAllowedTime * 2; }
+            case NORMAL -> { return baseMaxAllowedTime; }
+            case HARD -> { return baseMaxAllowedTime * 0.5; }
         }
-        return  baseMaxAllowedTime;
+        return baseMaxAllowedTime;
     }
+
     public void addTimePenalty(Timer timer){
         timer.addPenalty(15000);
     }
+
     public void changeRoom(Room room){
         boolean isUnlocked = true;
-        for(Room checkLock : room.getLockedExits()){
-            if(checkLock == room){
-                isUnlocked = false;
+        if (currentRoom != null) {
+            for (Room locked : currentRoom.getLockedExits()) {
+                if (locked == room) {
+                    isUnlocked = false;
+                    break;
+                }
             }
         }
-        if(isUnlocked){
+        if (isUnlocked){
             previousRoom = currentRoom;
             this.currentRoom = room;
         }
@@ -82,7 +81,19 @@ public class Dungeon {
         return previousRoom;
     }
 
+    public Room getCurrentRoom() {
+        return currentRoom != null ? currentRoom : getStartingRoom();
+    }
+
     public Room getStartingRoom() {
-        return startingRoom;
+        return startingRoom != null ? startingRoom : (rooms == null || rooms.isEmpty() ? null : rooms.get(0));
+    }
+
+    public Difficulty getDifficulty() {
+    return difficulty;
+    }
+
+    public String getName() {
+        return name;
     }
 }

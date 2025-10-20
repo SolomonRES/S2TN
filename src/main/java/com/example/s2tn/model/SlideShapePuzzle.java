@@ -148,7 +148,19 @@ public class SlideShapePuzzle extends Puzzle {
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
+        // block moves if we've already exceeded the cap (hard-like)
+        if (movesMade > maxMoves && !isSolved()) {
+            hint = "move limit reached for difficulty";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
         String in = s.trim();
+        if ("reset".equalsIgnoreCase(in)) {
+            resetToStart();
+            return new ValidationResult(false, "reset", PuzzleState.IN_PROGRESS);
+        }
+
         if ("solved".equalsIgnoreCase(in)) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
@@ -174,14 +186,27 @@ public class SlideShapePuzzle extends Puzzle {
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
-        boolean moved = slide(tile, dir);
+        // extra checks for nicer errors
+        if (!board.contains(tile)) {
+            hint = "unknown tile: " + tile;
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+        String d = dir.toLowerCase();
+        if (!(d.equals("up") || d.equals("down") || d.equals("left") || d.equals("right"))) {
+            hint = "direction must be up/down/left/right";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        boolean moved = slide(tile, d);
         if (moved) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
                 return new ValidationResult(true, "Solved in " + movesMade + " moves.", PuzzleState.SOLVED);
             }
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, "Moved " + tile + " " + dir, PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, "Moved " + tile + " " + d, PuzzleState.IN_PROGRESS);
         } else {
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);

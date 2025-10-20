@@ -18,54 +18,89 @@ public class ShapeMatchPuzzle extends Puzzle {
 
     public ShapeMatchPuzzle() {
         applyDifficulty(); // keep existing defaults if difficulty is null
-        setState(PuzzleState.IN_PROGRESS); // add this
+        setState(PuzzleState.IN_PROGRESS);
+    }
+
+    // quick reset for UX (keeps targets; clears placements)
+    public void resetToStart() {
+        placed.clear();
+        movesHint("reset");
+        setState(PuzzleState.IN_PROGRESS);
     }
 
     // setup: e.g. setTarget("A", 10, 20, 0)
     public void setTarget(String id, int x, int y, int deg) {
-        target.put(id, new Pose(x, y, deg));
+        target.put(id, new Pose(x, y, normDeg(deg)));
         placed.putIfAbsent(id, null);
     }
 
     // player action
     public void place(String id, int x, int y, int deg) {
         if (!target.containsKey(id)) {
-            hint = "No such shape";
+            movesHint("No such shape");
             return;
         }
-        placed.put(id, new Pose(x, y, deg));
-        hint = id + " placed";
+        placed.put(id, new Pose(x, y, normDeg(deg)));
+        movesHint(id + " placed");
     }
 
     // ONLY abstract in Puzzle: must return ValidationResult
     @Override
     public ValidationResult enterInput(String s) {
         // accept "A:10,20,0"
-        if (s == null || s.isBlank()) {
-            hint = "no input";
+        if (s == null) {
+            movesHint("no input");
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
-        String[] parts = s.split(":");
-        if (parts.length != 2) {
-            hint = "use id:x,y,deg";
+
+        String in = s.trim();
+        if (in.isEmpty()) {
+            movesHint("no input");
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
-        String id = parts[0].trim();
-        String[] nums = parts[1].split(",");
+
+        // allow a simple reset command
+        if (in.equalsIgnoreCase("reset")) {
+            resetToStart();
+            return new ValidationResult(false, "reset", PuzzleState.IN_PROGRESS);
+        }
+
+        int colon = in.indexOf(':');
+        if (colon <= 0 || colon == in.length() - 1) {
+            movesHint("use id:x,y,deg");
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        String id = in.substring(0, colon).trim();
+        String numsPart = in.substring(colon + 1).trim();
+
+        if (!target.containsKey(id)) {
+            movesHint("unknown id: " + id);
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        String[] nums = numsPart.split(",");
         if (nums.length < 3) {
-            hint = "need 3 numbers";
+            movesHint("need 3 numbers");
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
+
         try {
             int x = Integer.parseInt(nums[0].trim());
             int y = Integer.parseInt(nums[1].trim());
             int d = Integer.parseInt(nums[2].trim());
+
+            // keep degree sane (0..359)
+            d = normDeg(d);
+
             place(id, x, y, d);
         } catch (NumberFormatException e) {
-            hint = "bad numbers";
+            movesHint("bad numbers");
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
@@ -105,7 +140,7 @@ public class ShapeMatchPuzzle extends Puzzle {
             Pose p = placed.get(id);
 
             if (p == null) {
-                hint = "Place " + id;
+                movesHint("Place " + id);
                 return false;
             }
 
@@ -114,17 +149,15 @@ public class ShapeMatchPuzzle extends Puzzle {
             int dd = Math.abs(t.deg - p.deg);
 
             if (dx > tolPx || dy > tolPx || dd > tolDeg) {
-                hint = id + " off by (" + dx + "," + dy + "," + dd + ")";
+                movesHint(id + " off by (" + dx + "," + dy + "," + dd + ")");
                 return false;
             }
         }
-        hint = "All shapes match!";
+        movesHint("All shapes match!");
         return true;
     }
 
-    public String getHint() {
-        return hint;
-    }
+    public String getHint() { return hint; }
 
     // --- Difficulty wiring (no dependency on enum constants) ---
 
@@ -150,6 +183,16 @@ public class ShapeMatchPuzzle extends Puzzle {
             case "HARD" -> { tolPx = 4;  tolDeg = 5;  }
             default     -> { tolPx = 8;  tolDeg = 10; } // MEDIUM or anything else
         }
+    }
+
+    // helpers
+    private static int normDeg(int d) {
+        int r = d % 360;
+        return (r < 0) ? r + 360 : r;
+    }
+
+    private void movesHint(String h) {
+        this.hint = h;
     }
 
     // tiny holder for a pose

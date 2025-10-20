@@ -1,138 +1,117 @@
 package com.example.s2tn.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-/** Puzzle where user must place shapes to match target poses within a tolerance. */
+// user places shapes near target spots; keep it simple
 public class ShapeMatchPuzzle extends Puzzle {
 
-    private List<String> targetShapes;   // e.g., ["A:10,20,0", "B:30,40,90"]
-    private double tolerance;            // pixels/deg tolerance
+    // fully qualify to avoid clash with com.example.s2tn.model.Map
+    private final java.util.Map<String, Pose> target = new java.util.HashMap<>();
+    private final java.util.Map<String, Pose> placed = new java.util.HashMap<>();
 
-    // ---- constructors ----
-    public ShapeMatchPuzzle(List<String> targetShapes, double tolerance) {
-        this.targetShapes = new ArrayList<>(targetShapes == null ? List.of() : targetShapes);
-        this.tolerance = tolerance;
+    private int tolPx = 8;   // pixels
+    private int tolDeg = 10; // degrees
+    private String hint = "";
+
+    public ShapeMatchPuzzle() {}
+
+    // setup: e.g. setTarget("A", 10, 20, 0)
+    public void setTarget(String id, int x, int y, int deg) {
+        target.put(id, new Pose(x, y, deg));
+        placed.putIfAbsent(id, null);
     }
 
-    public ShapeMatchPuzzle() {
-        this.targetShapes = new ArrayList<>();
-        this.tolerance = 0.0;
+    // player action
+    public void place(String id, int x, int y, int deg) {
+        if (!target.containsKey(id)) {
+            hint = "No such shape";
+            return;
+        }
+        placed.put(id, new Pose(x, y, deg));
+        hint = id + " placed";
     }
 
-    // ---- getters / setters ----
-    public List<String> getTargetShapes() {
-        return Collections.unmodifiableList(targetShapes);
-    }
-
-    public void setTargetShapes(List<String> targetShapes) {
-        this.targetShapes = new ArrayList<>(targetShapes == null ? List.of() : targetShapes);
-    }
-
-    public double getTolerance() {
-        return tolerance;
-    }
-
-    public void setTolerance(double tolerance) {
-        this.tolerance = tolerance;
-    }
-
-    // ---- tiny model for a shape pose ----
-    private static final class ShapePose {
-        final String id;
-        final double x, y, rot;
-
-        ShapePose(String id, double x, double y, double rot) {
-            this.id = id == null ? "" : id.trim();
-            this.x = x;
-            this.y = y;
-            this.rot = rot;
+    // ONLY abstract in Puzzle: must return ValidationResult
+    @Override
+    public ValidationResult enterInput(String s) {
+        // accept "A:10,20,0"
+        if (s == null || s.isBlank()) {
+            hint = "no input";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+        String[] parts = s.split(":");
+        if (parts.length != 2) {
+            hint = "use id:x,y,deg";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+        String id = parts[0].trim();
+        String[] nums = parts[1].split(",");
+        if (nums.length < 3) {
+            hint = "need 3 numbers";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+        try {
+            int x = Integer.parseInt(nums[0].trim());
+            int y = Integer.parseInt(nums[1].trim());
+            int d = Integer.parseInt(nums[2].trim());
+            place(id, x, y, d);
+        } catch (NumberFormatException e) {
+            hint = "bad numbers";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
-        /** Accepts: "id:x,y,rot" | "id:x,y" | "id" */
-        static ShapePose parse(String raw) {
-            if (raw == null || raw.isBlank()) return new ShapePose("", 0, 0, 0);
-            String s = raw.trim();
-            String[] idAndRest = s.split(":", 2);
-            String id = idAndRest[0].trim();
-            double x = 0, y = 0, r = 0;
-            if (idAndRest.length == 2) {
-                String[] parts = idAndRest[1].split(",");
-                try { if (parts.length > 0) x = Double.parseDouble(parts[0].trim()); } catch (Exception ignore) {}
-                try { if (parts.length > 1) y = Double.parseDouble(parts[1].trim()); } catch (Exception ignore) {}
-                try { if (parts.length > 2) r = Double.parseDouble(parts[2].trim()); } catch (Exception ignore) {}
+        boolean solved = checkAnswer(""); // just re-check after placing
+        if (solved) {
+            setState(PuzzleState.SOLVED);
+            return new ValidationResult(true, "All shapes match!", PuzzleState.SOLVED);
+        } else {
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+    }
+
+    // helper display (not abstract in Puzzle)
+    public void displayPuzzle() {
+        System.out.println("-- ShapeMatchPuzzle --");
+        System.out.println("targets: " + target);
+        System.out.println("placed : " + placed);
+    }
+
+    // simple solved check (not abstract in Puzzle)
+    public boolean checkAnswer(String userInput) {
+        for (java.util.Map.Entry<String, Pose> e : target.entrySet()) {
+            String id = e.getKey();
+            Pose t = e.getValue();
+            Pose p = placed.get(id);
+
+            if (p == null) {
+                hint = "Place " + id;
+                return false;
             }
-            return new ShapePose(id, x, y, r);
+
+            int dx = Math.abs(t.x - p.x);
+            int dy = Math.abs(t.y - p.y);
+            int dd = Math.abs(t.deg - p.deg);
+
+            if (dx > tolPx || dy > tolPx || dd > tolDeg) {
+                hint = id + " off by (" + dx + "," + dy + "," + dd + ")";
+                return false;
+            }
         }
-    }
-
-    private List<ShapePose> toPoses(List<String> raw) {
-        List<ShapePose> out = new ArrayList<>();
-        if (raw == null) return out;
-        for (String s : raw) out.add(ShapePose.parse(s));
-        return out;
-    }
-
-    private static boolean withinTol(ShapePose a, ShapePose b, double tol) {
-        return Math.abs(a.x - b.x) <= tol
-            && Math.abs(a.y - b.y) <= tol
-            && Math.abs(a.rot - b.rot) <= tol;
-    }
-
-    /** True if every target id has a user pose within tolerance (size must match). */
-    private boolean aligned(List<String> userShapesRaw) {
-        List<ShapePose> targets = toPoses(this.targetShapes);
-        List<ShapePose> users   = toPoses(userShapesRaw);
-        if (targets.size() != users.size()) return false;
-
-        Map<String, ShapePose> byId = new HashMap<>();
-        for (ShapePose u : users) byId.put(u.id, u);
-
-        for (ShapePose t : targets) {
-            ShapePose u = byId.get(t.id);
-            if (u == null || !withinTol(t, u, this.tolerance)) return false;
-        }
+        hint = "All shapes match!";
         return true;
     }
 
-    /** Provided for callers that want to “apply” alignment; currently stateless. */
-    public void align(List<String> shapes) {
-        // no state kept here; alignment is evaluated via isSolved()
+    public String getHint() {
+        return hint;
     }
 
-    /** Public solved check for the puzzle engine. */
-    public boolean isSolved(List<String> userShapes) {
-        return aligned(userShapes);
-    }
-
-    // ---- UML-required: integrate PuzzleState transitions ----
-    @Override
-    public ValidationResult enterInput(String input) {
-        // Step 1: if puzzle hasn’t started yet, start it
-        if (getState() == PuzzleState.NOT_STARTED) {
-            start(); // NOT_STARTED -> IN_PROGRESS
-        }
-
-        // Step 2: parse user shapes (semicolon-separated string)
-        List<String> userShapes = new ArrayList<>();
-        if (input != null && !input.isBlank()) {
-            String[] parts = input.split(";");
-            for (String p : parts) userShapes.add(p.trim());
-        }
-
-        // Step 3: check correctness
-        boolean correct = isSolved(userShapes);
-
-        // Step 4: set PuzzleState transitions accordingly
-        if (correct) {
-            markSolved(); // IN_PROGRESS -> SOLVED
-            return new ValidationResult(true, "Shapes aligned correctly!", PuzzleState.SOLVED);
-        } else {
-            markFailed(); // IN_PROGRESS -> FAILED
-            return new ValidationResult(false, "Alignment incorrect, try again.", PuzzleState.FAILED);
-        }
+    // tiny holder for a pose
+    private static class Pose {
+        int x, y, deg;
+        Pose(int x, int y, int deg) { this.x = x; this.y = y; this.deg = deg; }
+        public String toString() { return x + "," + y + "," + deg; }
     }
 }

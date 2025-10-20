@@ -41,6 +41,10 @@ public class Room {
         return lockedExits;
     }
 
+    public UUID getRoomID(){
+        return roomID;
+    }
+
     public boolean addPuzzle(Puzzle puzzle){
         boolean isPresent = false;
         for(Puzzle exists : this.puzzles){
@@ -67,5 +71,12 @@ public class Room {
             return true;
         }
         return false;
+    }
+    public void unlock(Room locked){
+        for(int i = 0; i < lockedExits.length; i++){
+            if (locked == lockedExits[i]){
+                lockedExits[i] = null;
+            }
+        }
     }
 }

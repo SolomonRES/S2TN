@@ -158,9 +158,15 @@ public class Facade {
 // -----------------------Start/Stop Time-------------------------------------------------------
 
     public void pauseTimer() {
+        if(dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().stop();
+        }
     }
 
     public void resumeTimer() {
+        if(!dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().unPause();
+        }
     }
     // probably get rid of this one
     public void openLeaderboard(Account user) {
@@ -169,12 +175,35 @@ public class Facade {
 // ------------------also progress/leaderboard/map? unsure------------------------------
 
     private void unlockExit(UUID fromRoom, UUID toRoom) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == fromRoom){
+                for(Room isLocked : findRoom.getExits()){
+                    if(isLocked.getRoomID() == toRoom){
+                     isLocked.unlock(isLocked);
+                    }
+                }
+            }
+        }
     }
 
     private void markRoomExplored(UUID fromRoom, UUID toRoom) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == fromRoom){
+                for(Room unexplored : findRoom.getExits()){
+                    if(unexplored.getRoomID() == toRoom){
+                        dungeon.getMap().markExplored(unexplored);
+                    }
+                }
+            }
+        }
     }
 
     private void markRoomComplete(UUID roomId) {
+        for(Room findRoom : dungeon.getRooms()){
+           if(findRoom.getRoomID() == roomId){
+               dungeon.getMap().markComplete(findRoom);
+           }
+        }
     }
 
     private void submitScore(String userName, int score, long elapsedTime) {

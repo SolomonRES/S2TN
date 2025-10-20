@@ -1,5 +1,7 @@
 package com.example.s2tn.model;
 
+import java.time.Duration;
+
 // user places shapes near target spots; keep it simple
 public class ShapeMatchPuzzle extends Puzzle {
 
@@ -70,6 +72,11 @@ public class ShapeMatchPuzzle extends Puzzle {
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
+    }
+
+    @Override
+    protected boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed, int currentScore) {
+        return false;
     }
 
     // helper display (not abstract in Puzzle)

@@ -1,5 +1,6 @@
 package com.example.s2tn.model;
 
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -22,8 +23,8 @@ public class SlideShapePuzzle extends Puzzle {
     }
 
     // --------- State ---------
-    private final Map<String, Pos> current = new HashMap<>();
-    private final Map<String, Pos> target  = new HashMap<>();
+    private final java.util.Map<String, Pos> current = new HashMap<>();
+    private final java.util.Map<String, Pos> target  = new HashMap<>();
 
     private int width  = 10;  // default board size; tweak if your game uses different dims
     private int height = 10;
@@ -31,6 +32,16 @@ public class SlideShapePuzzle extends Puzzle {
 
     // --------- Ctors ---------
     public SlideShapePuzzle() {}
+
+    @Override
+    public ValidationResult enterInput(String input) {
+        return null;
+    }
+
+    @Override
+    protected boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed, int currentScore) {
+        return false;
+    }
 
     /** Example input: start=["A:0,0","B:1,0"], end=["A:2,0","B:1,2"] */
     public SlideShapePuzzle(List<String> startConfiguration, List<String> endConfiguration) {
@@ -45,7 +56,7 @@ public class SlideShapePuzzle extends Puzzle {
     }
 
     // --------- Helpers ---------
-    private static void loadConfig(List<String> list, Map<String, Pos> into){
+    private static void loadConfig(List<String> list, java.util.Map<String, Pos> into){
         if (list == null) return;
         for (String s : list) {
             // "A:10,20"
@@ -65,7 +76,7 @@ public class SlideShapePuzzle extends Puzzle {
     }
 
     private boolean occupiedExcept(String ignoreId, int x, int y){
-        for (Map.Entry<String, Pos> e : current.entrySet()){
+        for (java.util.Map.Entry<String, Pos> e : current.entrySet()){
             if (e.getKey().equals(ignoreId)) continue;
             Pos q = e.getValue();
             if (q.x == x && q.y == y) return true;
@@ -163,9 +174,9 @@ public class SlideShapePuzzle extends Puzzle {
 
     // --------- Accessors for tests / UI ---------
     public int getMovesMade() { return movesMade; }
-    public Map<String, int[]> getCurrentPositions(){
-        Map<String, int[]> out = new HashMap<>();
-        for (Map.Entry<String, Pos> e : current.entrySet()){
+    public java.util.Map<String, int[]> getCurrentPositions(){
+        java.util.Map<String, int[]> out = new HashMap<>();
+        for (java.util.Map.Entry<String, Pos> e : current.entrySet()){
             out.put(e.getKey(), new int[]{e.getValue().x, e.getValue().y});
         }
         return Collections.unmodifiableMap(out);

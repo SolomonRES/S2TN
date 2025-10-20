@@ -126,7 +126,8 @@ public class Facade {
     }
 
     public void restartDungeon() {
-
+        // Set progress to null
+        // Reload dungeonID and roomID
     }
 
     public void exitDungeon() {

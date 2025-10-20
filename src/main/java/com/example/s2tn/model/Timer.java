@@ -18,10 +18,18 @@ public class Timer {
         this.stopTime = System.currentTimeMillis();
         this.running = false;
     }
+    public void unPause(){
+        this.stopTime = 0;
+        this.running = true;
+    }
     public void addPenalty(long penalty){
         this.startTime -= penalty;
     }
     public long elapsedTime(){
         return stopTime - startTime;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

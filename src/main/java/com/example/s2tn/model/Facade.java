@@ -78,15 +78,28 @@ public class Facade {
     }
 
     public void chooseDifficulty(String level) {
+        switch (level.toLowerCase()){
+            case "easy":
+                dungeon.setDifficulty(Difficulty.EASY);
+                break;
+            case "normal":
+                dungeon.setDifficulty(Difficulty.NORMAL);
+                break;
+            case "hard":
+                dungeon.setDifficulty(Difficulty.HARD);
+                break;
+        }
     }
 
     public void startDungeon(UUID dungeonId) {
     }
 
     public void restartDungeon() {
+
     }
 
     public void exitDungeon() {
+        dungeon.getTimer().stop();
     }
 
     public void completeDungeon() {
@@ -101,12 +114,19 @@ public class Facade {
     }
 
     public void changeRoom(UUID roomID) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == roomID){
+                dungeon.changeRoom(findRoom);
+            }
+        }
     }
 
     public void nextRoom() {
+        //I'm not sure what this would ever mean as there is likely no "next" vaild room, just a list of rooms to pick from
     }
 
     public void previousRoom() {
+        dungeon.changeRoom(dungeon.getPreviousRoom());
     }
 
 // -------------------Puzzle(s)-------------------------------------------------------------------------
@@ -158,9 +178,15 @@ public class Facade {
 // -----------------------Start/Stop Time-------------------------------------------------------
 
     public void pauseTimer() {
+        if(dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().stop();
+        }
     }
 
     public void resumeTimer() {
+        if(!dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().unPause();
+        }
     }
     // probably get rid of this one
     public void openLeaderboard(Account user) {
@@ -169,12 +195,35 @@ public class Facade {
 // ------------------also progress/leaderboard/map? unsure------------------------------
 
     private void unlockExit(UUID fromRoom, UUID toRoom) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == fromRoom){
+                for(Room isLocked : findRoom.getExits()){
+                    if(isLocked.getRoomID() == toRoom){
+                     isLocked.unlock(isLocked);
+                    }
+                }
+            }
+        }
     }
 
     private void markRoomExplored(UUID fromRoom, UUID toRoom) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == fromRoom){
+                for(Room unexplored : findRoom.getExits()){
+                    if(unexplored.getRoomID() == toRoom){
+                        dungeon.getMap().markExplored(unexplored);
+                    }
+                }
+            }
+        }
     }
 
     private void markRoomComplete(UUID roomId) {
+        for(Room findRoom : dungeon.getRooms()){
+           if(findRoom.getRoomID() == roomId){
+               dungeon.getMap().markComplete(findRoom);
+           }
+        }
     }
 
     private void submitScore(String userName, int score, long elapsedTime) {

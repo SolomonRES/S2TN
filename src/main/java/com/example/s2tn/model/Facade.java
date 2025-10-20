@@ -78,15 +78,28 @@ public class Facade {
     }
 
     public void chooseDifficulty(String level) {
+        switch (level.toLowerCase()){
+            case "easy":
+                dungeon.setDifficulty(Difficulty.EASY);
+                break;
+            case "normal":
+                dungeon.setDifficulty(Difficulty.NORMAL);
+                break;
+            case "hard":
+                dungeon.setDifficulty(Difficulty.HARD);
+                break;
+        }
     }
 
     public void startDungeon(UUID dungeonId) {
     }
 
     public void restartDungeon() {
+
     }
 
     public void exitDungeon() {
+        dungeon.getTimer().stop();
     }
 
     public void completeDungeon() {
@@ -101,12 +114,19 @@ public class Facade {
     }
 
     public void changeRoom(UUID roomID) {
+        for(Room findRoom : dungeon.getRooms()){
+            if(findRoom.getRoomID() == roomID){
+                dungeon.changeRoom(findRoom);
+            }
+        }
     }
 
     public void nextRoom() {
+        //I'm not sure what this would ever mean as there is likely no "next" vaild room, just a list of rooms to pick from
     }
 
     public void previousRoom() {
+        dungeon.changeRoom(dungeon.getPreviousRoom());
     }
 
 // -------------------Puzzle(s)-------------------------------------------------------------------------

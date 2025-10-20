@@ -13,6 +13,7 @@ public class Dungeon {
     private UUID uuid;
     private Room currentRoom;
     private Room startingRoom;
+    private Room previousRoom;
     private Map map;
     public Dungeon(Dungeon dungeon, Difficulty difficulty){
 
@@ -29,6 +30,12 @@ public class Dungeon {
         this.uuid = UUID.randomUUID();
         map = new Map(this);
     }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        this.maxTimeAllowed = setMaxTimeAllowed(difficulty, baseMaxAllowedTime);
+    }
+
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
         switch (difficulty){
             case EASY -> {
@@ -54,6 +61,7 @@ public class Dungeon {
             }
         }
         if(isUnlocked){
+            previousRoom = currentRoom;
             this.currentRoom = room;
         }
     }
@@ -68,5 +76,13 @@ public class Dungeon {
 
     public Map getMap() {
         return map;
+    }
+
+    public Room getPreviousRoom() {
+        return previousRoom;
+    }
+
+    public Room getStartingRoom() {
+        return startingRoom;
     }
 }

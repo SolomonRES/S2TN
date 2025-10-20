@@ -1,6 +1,8 @@
 package com.example.s2tn.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Map {
     private ArrayList<Room> exploredRooms;

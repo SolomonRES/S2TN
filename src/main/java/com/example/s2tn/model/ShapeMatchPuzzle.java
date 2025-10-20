@@ -13,7 +13,12 @@ public class ShapeMatchPuzzle extends Puzzle {
     private int tolDeg = 10; // degrees
     private String hint = "";
 
-    public ShapeMatchPuzzle() {}
+    // we won't assume enum constants exist; null means "default/medium-like"
+    private Difficulty difficulty;
+
+    public ShapeMatchPuzzle() {
+        applyDifficulty(); // keep existing defaults if difficulty is null
+    }
 
     // setup: e.g. setTarget("A", 10, 20, 0)
     public void setTarget(String id, int x, int y, int deg) {
@@ -74,9 +79,14 @@ public class ShapeMatchPuzzle extends Puzzle {
         }
     }
 
+    // required by Puzzle now
     @Override
-    protected boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed, int currentScore) {
-        return false;
+    public boolean checkSpecificAchievementCondition(Achievement achievement,
+                                                     Duration duration,
+                                                     int hintsUsed,
+                                                     int currentScore) {
+        // keep it simple: only award if solved
+        return checkAnswer("");
     }
 
     // helper display (not abstract in Puzzle)
@@ -113,6 +123,32 @@ public class ShapeMatchPuzzle extends Puzzle {
 
     public String getHint() {
         return hint;
+    }
+
+    // --- Difficulty wiring (no dependency on enum constants) ---
+
+    public void setDifficulty(Difficulty d) {
+        this.difficulty = d; // may be null; that's fine (defaults apply)
+        applyDifficulty();
+    }
+
+    private void applyDifficulty() {
+        if (difficulty == null) {
+            // default (medium-like)
+            tolPx = 8;
+            tolDeg = 10;
+            return;
+        }
+
+        // Compare by name/text, so it works whether Difficulty is enum or class.
+        String level = difficulty.toString();
+        level = (level == null) ? "" : level.trim().toUpperCase();
+
+        switch (level) {
+            case "EASY" -> { tolPx = 12; tolDeg = 15; }
+            case "HARD" -> { tolPx = 4;  tolDeg = 5;  }
+            default     -> { tolPx = 8;  tolDeg = 10; } // MEDIUM or anything else
+        }
     }
 
     // tiny holder for a pose

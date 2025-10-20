@@ -10,71 +10,53 @@ public class Room {
     private Room[] exits;
     private Room[] lockedExits;
 
-    public Room(ArrayList<Puzzle> puzzles, ArrayList<Hint> hints, ArrayList<Room> exits, ArrayList<Room> lockedExits){
-        this.puzzles = puzzles;
-        this.hints = hints;
+    public Room(ArrayList<Puzzle> puzzles, ArrayList<Hint> hints, ArrayList<Room> exits, ArrayList<Room> lockedExits) {
+        this.roomID = UUID.randomUUID();
+        this.puzzles = (puzzles != null) ? puzzles : new ArrayList<>();
+        this.hints = (hints != null) ? hints : new ArrayList<>();
         this.exits = new Room[10];
         this.lockedExits = new Room[10];
-        for(int i = 0; i< this.exits.length; i++){
-            if(i < exits.size()){
-                this.exits[i] = exits.get(i);
-            }
-            if(i < lockedExits.size()){
-                this.lockedExits[i] = lockedExits.get(i);
-            }
+
+        ArrayList<Room> ex = (exits != null) ? exits : new ArrayList<>();
+        ArrayList<Room> lex = (lockedExits != null) ? lockedExits : new ArrayList<>();
+
+        for (int i = 0; i < this.exits.length; i++) {
+            if (i < ex.size()) this.exits[i] = ex.get(i);
+            if (i < lex.size()) this.lockedExits[i] = lex.get(i);
         }
     }
 
-    public ArrayList<Puzzle> getPuzzles(){
-        return puzzles;
+    public Room(String roomName) {
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
-    public ArrayList<Hint> getHints() {
-        return hints;
-    }
+    public ArrayList<Puzzle> getPuzzles() { return puzzles; }
+    public ArrayList<Hint> getHints() { return hints; }
+    public Room[] getExits() { return exits; }
+    public Room[] getLockedExits() { return lockedExits; }
+    public UUID getRoomID() { return roomID; }
 
-    public Room[] getExits() {
-        return exits;
-    }
-
-    public Room[] getLockedExits() {
-        return lockedExits;
-    }
-
-    public UUID getRoomID(){
-        return roomID;
-    }
-
-    public boolean addPuzzle(Puzzle puzzle){
-        boolean isPresent = false;
-        for(Puzzle exists : this.puzzles){
-            if(exists == puzzle){
-                isPresent = true;
-            }
+    public boolean addPuzzle(Puzzle puzzle) {
+        if (puzzle == null) return false;
+        for (Puzzle exists : this.puzzles) {
+            if (exists == puzzle) return false;
         }
-        if(!isPresent){
-            puzzles.add(puzzle);
-            return true;
-        }
-        return false;
+        puzzles.add(puzzle);
+        return true;
     }
 
-    public boolean addHint(Hint hint){
-        boolean isPresent = false;
-        for(Hint exists : this.hints){
-            if(exists == hint){
-                isPresent = true;
-            }
+    public boolean addHint(Hint hint) {
+        if (hint == null) return false;
+        for (Hint exists : this.hints) {
+            if (exists == hint) return false;
         }
-        if(!isPresent){
-            hints.add(hint);
-            return true;
-        }
-        return false;
+        hints.add(hint);
+        return true;
     }
-    public void unlock(Room locked){
-        for(int i = 0; i < lockedExits.length; i++){
-            if (locked == lockedExits[i]){
+
+    public void unlock(Room locked) {
+        for (int i = 0; i < lockedExits.length; i++) {
+            if (locked == lockedExits[i]) {
                 lockedExits[i] = null;
             }
         }

@@ -74,11 +74,11 @@ public class Account {
         this.userName = userName == null ? "" : userName.trim();
     }
 
-    public String getPasswordHash() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public void setPassword(String password) {
         this.password = password == null ? "" : password.trim();
     }
 

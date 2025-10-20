@@ -135,7 +135,7 @@ public class DataWriter extends DataConstants {
         sb.append("{");
         sb.append("\"accountID\":").append(toJsonString(a.getAccountID()));
         sb.append(",\"userName\":").append(toJsonString(a.getUserName()));
-        sb.append(",\"password\":").append(toJsonString(a.getPasswordHash()));
+        sb.append(",\"password\":").append(toJsonString(a.getPassword()));
         sb.append(",\"score\":").append(a.getScore());
         sb.append(",\"rank\":").append(a.getRank());
         sb.append(",\"achievements\":[]");

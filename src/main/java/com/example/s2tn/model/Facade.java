@@ -18,7 +18,7 @@ public class Facade {
         if (username == null || username.isBlank() || password == null) return false;
         Account a = new Account();
         a.setUserName(username.trim());
-        a.setPasswordHash(password);     
+        a.setPassword(password);     
         return new UserService().addUser(a); 
     }
 

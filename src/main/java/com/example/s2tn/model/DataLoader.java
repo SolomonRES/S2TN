@@ -43,8 +43,8 @@ public class DataLoader extends DataConstants {
 
                     
                     String pass = asString(u.get("password"));
-                    if (pass == null || pass.isEmpty()) pass = asString(u.get("passwordHash"));
-                    a.setPasswordHash(pass); 
+                    if (pass == null || pass.isEmpty()) pass = asString(u.get("password"));
+                    a.setPassword(pass); 
                     a.setScore(asInt(u.get("score")));
                     a.setRank(asInt(u.get("rank")));
 

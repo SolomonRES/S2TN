@@ -1,190 +1,172 @@
 package com.example.s2tn.model;
 
-import java.time.Duration;
-import java.util.*;
-
 /**
- * Sliding puzzle where shapes move one grid cell at a time.
- * Positions are provided like "A:3,5" (id:x,y). Order does not matter.
+ * Sliding puzzle with one empty slot "_".
+ * Board is a flat list (row-major). You slide a tile into the empty slot.
+ * Solved when the current board equals the goal board.
  *
- * Notes:
- * - Uses a simple grid with bounds [0..width-1] × [0..height-1].
- * - Prevents overlapping two shapes in the same cell.
- * - checkAnswer() succeeds when current == target layout.
- * - getHint() nudges one shape toward its target using Manhattan distance.
+ * enterInput examples:
+ *   "A up"        (also accepts "slide A up")
+ *   "B left"
+ *   "solved"
  */
 public class SlideShapePuzzle extends Puzzle {
 
-    // --------- Types ---------
-    private static final class Pos {
-        int x, y;
-        Pos(int x, int y){ this.x = x; this.y = y; }
-        Pos copy(){ return new Pos(x, y); }
-    }
+    // fully qualify to avoid clash with com.example.s2tn.model.Map
+    private final java.util.List<String> startConfiguration;
+    private final java.util.List<String> endConfiguration;
+    private final java.util.List<String> board;
 
-    // --------- State ---------
-    private final java.util.Map<String, Pos> current = new HashMap<>();
-    private final java.util.Map<String, Pos> target  = new HashMap<>();
+    private final int rows;
+    private final int cols;
 
-    private int width  = 10;  // default board size; tweak if your game uses different dims
-    private int height = 10;
     private int movesMade = 0;
+    private String hint = "";
 
-    // --------- Ctors ---------
-    public SlideShapePuzzle() {}
+    public SlideShapePuzzle(java.util.List<String> start,
+                            java.util.List<String> end,
+                            int rows,
+                            int cols) {
+        if (rows <= 0 || cols <= 0) throw new IllegalArgumentException("rows/cols must be > 0");
+        if (start == null || end == null) throw new IllegalArgumentException("configs cannot be null");
+        if (start.size() != rows * cols || end.size() != rows * cols)
+            throw new IllegalArgumentException("configs must be rows*cols long");
 
-    @Override
-    public ValidationResult enterInput(String input) {
-        return null;
+        this.rows = rows;
+        this.cols = cols;
+
+        this.startConfiguration = new java.util.ArrayList<>(start);
+        this.endConfiguration   = new java.util.ArrayList<>(end);
+        this.board              = new java.util.ArrayList<>(start);
+
+        setState(PuzzleState.IN_PROGRESS);
     }
 
-    @Override
-    protected boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed, int currentScore) {
-        return false;
+    /** simple default 3x3 */
+    public SlideShapePuzzle() {
+        this(
+            java.util.Arrays.asList("A","B","C","D","E","F","G","_","H"),
+            java.util.Arrays.asList("A","B","C","D","E","F","G","H","_"),
+            3, 3
+        );
     }
 
-    /** Example input: start=["A:0,0","B:1,0"], end=["A:2,0","B:1,2"] */
-    public SlideShapePuzzle(List<String> startConfiguration, List<String> endConfiguration) {
-        loadConfig(startConfiguration, current);
-        loadConfig(endConfiguration,  target);
-    }
+    // -------- basics --------
 
-    public SlideShapePuzzle(List<String> startConfiguration, List<String> endConfiguration, int width, int height) {
-        this(startConfiguration, endConfiguration);
-        this.width = Math.max(1, width);
-        this.height = Math.max(1, height);
-    }
-
-    // --------- Helpers ---------
-    private static void loadConfig(List<String> list, java.util.Map<String, Pos> into){
-        if (list == null) return;
-        for (String s : list) {
-            // "A:10,20"
-            String[] p = s.split(":");
-            if (p.length != 2) continue;
-            String id = p[0].trim();
-            String[] xy = p[1].split(",");
-            if (xy.length != 2) continue;
-            int x = Integer.parseInt(xy[0].trim());
-            int y = Integer.parseInt(xy[1].trim());
-            into.put(id, new Pos(x, y));
-        }
-    }
-
-    private boolean inBounds(int x, int y){
-        return x >= 0 && y >= 0 && x < width && y < height;
-    }
-
-    private boolean occupiedExcept(String ignoreId, int x, int y){
-        for (java.util.Map.Entry<String, Pos> e : current.entrySet()){
-            if (e.getKey().equals(ignoreId)) continue;
-            Pos q = e.getValue();
-            if (q.x == x && q.y == y) return true;
-        }
-        return false;
-    }
-
-    private static int sgn(int v){ return (v == 0) ? 0 : (v > 0 ? 1 : -1); }
-
-    // --------- API required by UML / game ---------
-
-    /** Optional visual; keep simple. */
-    public void displayPuzzle() { /* UI handled elsewhere */ }
-
-    /**
-     * Slide a shape one step in the given direction.
-     * @param shapeId  id like "A"
-     * @param direction one of {"up","down","left","right"}
-     * @return true if a legal move occurred
-     */
-    public boolean slide(String shapeId, String direction) {
-        if (shapeId == null || direction == null) return false;
-        Pos p = current.get(shapeId);
-        if (p == null) return false;
-
-        int dx = 0, dy = 0;
-        switch (direction.toLowerCase(Locale.ROOT)) {
-            case "up":    dy = -1; break;
-            case "down":  dy =  1; break;
-            case "left":  dx = -1; break;
-            case "right": dx =  1; break;
-            default: return false;
-        }
-
-        int nx = p.x + dx, ny = p.y + dy;
-        if (!inBounds(nx, ny)) return false;
-        if (occupiedExcept(shapeId, nx, ny)) return false;
-
-        p.x = nx; p.y = ny;
-        movesMade++;
-        return true;
-    }
-
-    /**
-     * Overload: slide multiple steps (Facade calls may pass steps).
-     */
-    public boolean slide(String shapeId, String direction, int steps){
-        if (steps <= 0) return false;
-        boolean moved = false;
-        for (int i = 0; i < steps; i++){
-            if (!slide(shapeId, direction)) break;
-            moved = true;
-        }
-        return moved;
-    }
-
-    /** True iff all shapes match target positions exactly. */
-    public boolean checkAnswer(String ignoredUserInput) {
-        if (current.size() != target.size()) return false;
-        for (String id : target.keySet()) {
-            Pos t = target.get(id);
-            Pos c = current.get(id);
-            if (c == null || c.x != t.x || c.y != t.y) return false;
-        }
-        return true;
-    }
-
-    /**
-     * Provide a minimal, safe hint:
-     * Pick one shape not in place and suggest the axis that reduces Manhattan distance.
-     */
-    public String getHint() {
-        for (String id : target.keySet()) {
-            Pos t = target.get(id);
-            Pos c = current.get(id);
-            if (c == null) continue;
-            if (c.x == t.x && c.y == t.y) continue;
-
-            int dx = t.x - c.x, dy = t.y - c.y;
-            String dir;
-            if (Math.abs(dx) >= Math.abs(dy)) dir = (sgn(dx) > 0) ? "right" : "left";
-            else                              dir = (sgn(dy) > 0) ? "down"  : "up";
-
-            // If blocked or out-of-bounds, try the other axis.
-            int tryX = c.x + (dir.equals("right") ? 1 : dir.equals("left") ? -1 : 0);
-            int tryY = c.y + (dir.equals("down")  ? 1 : dir.equals("up")   ? -1 : 0);
-            if (!inBounds(tryX, tryY) || occupiedExcept(id, tryX, tryY)) {
-                dir = (Math.abs(dx) >= Math.abs(dy)) ? ((sgn(dy) > 0) ? "down" : "up")
-                                                      : ((sgn(dx) > 0) ? "right" : "left");
-            }
-            return "Try moving " + id + " one step " + dir + ".";
-        }
-        return "Looks solved—submit!";
-    }
-
-    // --------- Accessors for tests / UI ---------
+    public java.util.List<String> getBoard() { return new java.util.ArrayList<>(board); }
     public int getMovesMade() { return movesMade; }
-    public java.util.Map<String, int[]> getCurrentPositions(){
-        java.util.Map<String, int[]> out = new HashMap<>();
-        for (java.util.Map.Entry<String, Pos> e : current.entrySet()){
-            out.put(e.getKey(), new int[]{e.getValue().x, e.getValue().y});
+    public String getHint() { return hint; }
+    public boolean isSolved() { return board.equals(endConfiguration); }
+
+    /** reset board back to the original start config */
+    public void resetToStart() {
+        board.clear();
+        board.addAll(startConfiguration);
+        movesMade = 0;
+        hint = "reset";
+        setState(PuzzleState.IN_PROGRESS);
+    }
+
+    /** tiny console display for quick checks */
+    public void displayPuzzle() {
+        for (int r = 0; r < rows; r++) {
+            int s = r * cols, e = s + cols;
+            System.out.println(board.subList(s, e));
         }
-        return Collections.unmodifiableMap(out);
     }
-    public void setBoardSize(int width, int height){
-        this.width = Math.max(1, width);
-        this.height = Math.max(1, height);
+
+    // -------- core slide logic --------
+
+    private boolean slide(String tile, String dir) {
+        if (tile == null || dir == null || "_".equals(tile)) return false;
+
+        int emptyIdx = board.indexOf("_");
+        int tileIdx  = board.indexOf(tile);
+        if (emptyIdx < 0 || tileIdx < 0) return false;
+
+        int er = emptyIdx / cols, ec = emptyIdx % cols;
+        int tr = tileIdx  / cols, tc = tileIdx  % cols;
+
+        switch (dir.toLowerCase()) {
+            case "up":    if (tr - 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
+            case "down":  if (tr + 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
+            case "left":  if (tr == er && tc - 1 == ec) return swap(tileIdx, emptyIdx); break;
+            case "right": if (tr == er && tc + 1 == ec) return swap(tileIdx, emptyIdx); break;
+            default: hint = "direction must be up/down/left/right"; return false;
+        }
+        hint = "that tile isn't next to the empty in that direction";
+        return false;
     }
-    public void setStart(List<String> start){ current.clear(); loadConfig(start, current); }
-    public void setTarget(List<String> end){ target.clear(); loadConfig(end, target); }
+
+    private boolean swap(int a, int b) {
+        java.util.Collections.swap(board, a, b);
+        movesMade++;
+        hint = "moved";
+        return true;
+    }
+
+    // -------- required by Puzzle --------
+
+    @Override
+    public ValidationResult enterInput(String s) {
+        if (s == null || s.isBlank()) {
+            hint = "give input like: A up";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        String in = s.trim();
+        if ("solved".equalsIgnoreCase(in)) {
+            if (isSolved()) {
+                setState(PuzzleState.SOLVED);
+                return new ValidationResult(true, "Puzzle solved!", PuzzleState.SOLVED);
+            }
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, "Not solved yet", PuzzleState.IN_PROGRESS);
+        }
+
+        // accept "slide A up" or "A up"
+        String[] parts = in.split("\\s+");
+        String tile;
+        String dir;
+        if (parts.length == 3 && parts[0].equalsIgnoreCase("slide")) {
+            tile = parts[1].toUpperCase();
+            dir  = parts[2];
+        } else if (parts.length == 2) {
+            tile = parts[0].toUpperCase();
+            dir  = parts[1];
+        } else {
+            hint = "format: slide <tile> <dir>";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        boolean moved = slide(tile, dir);
+        if (moved) {
+            if (isSolved()) {
+                setState(PuzzleState.SOLVED);
+                return new ValidationResult(true, "Solved in " + movesMade + " moves.", PuzzleState.SOLVED);
+            }
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, "Moved " + tile + " " + dir, PuzzleState.IN_PROGRESS);
+        } else {
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+    }
+
+    /** required by the current Puzzle abstract class */
+    @Override
+    public boolean checkSpecificAchievementCondition(Achievement achievement,
+                                                     java.time.Duration timeTaken,
+                                                     int moves,
+                                                     int extra) {
+        // Keep it simple for now: unlock only if solved.
+        return isSolved();
+    }
+
+    @Override
+    public String toString() {
+        return "SlideShapePuzzle{moves=" + movesMade + ", board=" + board + "}";
+    }
 }

@@ -1,5 +1,4 @@
 package com.example.s2tn.model;
-
 public class Riddle {
 
     private String question;

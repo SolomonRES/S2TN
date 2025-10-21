@@ -8,6 +8,7 @@ public class Facade {
 
     private Account user;
     private Dungeon dungeon;
+    private Progress progress;
     private static volatile boolean dungeonsLoaded = false;
 
 
@@ -111,6 +112,7 @@ public class Facade {
             Room start = dungeon.getStartingRoom();
             if (start != null) dungeon.changeRoom(start);
         }
+        progress = new Progress();
         return true;
     }
 
@@ -125,16 +127,31 @@ public class Facade {
         return true;
     }
 
-    public void restartDungeon() {
+    public boolean restartDungeon() {
         // Set progress to null
         // Reload dungeonID and roomID
+        if(dungeon == null || progress == null){
+            return false;
+        }
+        UUID id = dungeon.getUUID();
+        dungeon = null;
+        progress = null;
+        startDungeon(id);
+        enterRoom(id);
+        return true;
     }
 
     public void exitDungeon() {
         this.dungeon = null;
     }
 
-    public void completeDungeon() {
+    public boolean completeDungeon() {
+        if(dungeon == null){
+            return false;
+        }
+        if(dungeon.getRooms().size() == dungeon.getMap().getCompletedRooms().size()){
+            return true;
+        }
     }
 
     public com.example.s2tn.model.Map getMap() {

@@ -39,4 +39,8 @@ public class Map {
         // 9 = up, 10 = down though I think the last two will likely go unused
         return dungeon;
     }
+
+    public ArrayList<Room> getCompletedRooms() {
+        return completedRooms;
+    }
 }

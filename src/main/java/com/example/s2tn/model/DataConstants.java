@@ -14,7 +14,7 @@ public class DataConstants {
     }
 
     public static Path dungeonPath() {
-        return Paths.get("S2TN","json", "room.json");
+        return Paths.get("S2TN","json", "rooms.json");
     }
 
     public static Path lbPath() {

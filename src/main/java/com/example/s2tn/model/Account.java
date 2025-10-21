@@ -8,7 +8,7 @@ public class Account {
 
     private UUID accountID;
     private String userName;
-    private String passwordHash;
+    private String password;
     private int score;
     private int rank;
     private List<Achievement> achievements;
@@ -16,7 +16,7 @@ public class Account {
     public Account() {
         this.accountID = UUID.randomUUID();
         this.userName = "";
-        this.passwordHash = "";
+        this.password = "";
         this.score = 0;
         this.rank = 0;
         this.achievements = new ArrayList<>();
@@ -25,7 +25,7 @@ public class Account {
     public Account(String userName, String password) {
         this.accountID = UUID.randomUUID();
         this.userName = userName == null ? "" : userName.trim();
-        this.passwordHash = password == null ? "" : password.trim();
+        this.password = password == null ? "" : password.trim();
         this.score = 0;
         this.rank = 0;
         this.achievements = new ArrayList<>();
@@ -45,9 +45,9 @@ public class Account {
 
     public boolean login(String user, String pass) {
         if (user == null || pass == null) return false;
-        if (this.userName == null || this.passwordHash == null) return false;
+        if (this.userName == null || this.password == null) return false;
         if (!this.userName.equalsIgnoreCase(user)) return false;
-        return pass.equals(this.passwordHash);
+        return pass.equals(this.password);
     }
 
     public void updateScore(int points) {
@@ -74,12 +74,12 @@ public class Account {
         this.userName = userName == null ? "" : userName.trim();
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash == null ? "" : passwordHash.trim();
+    public void setPassword(String password) {
+        this.password = password == null ? "" : password.trim();
     }
 
     public int getScore() {

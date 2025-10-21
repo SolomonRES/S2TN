@@ -300,9 +300,9 @@ public class Facade {
     private void unlockExit(UUID fromRoom, UUID toRoom) {
     for (Room findRoom : dungeon.getRooms()) {
         if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
-            for (Room isLocked : findRoom.getExits()) {
-                if (toRoom != null && toRoom.equals(isLocked.getRoomID())) {
-                    isLocked.unlock(isLocked);
+            for (Exit isLocked : findRoom.getExits()) {
+                if (toRoom != null && toRoom.equals(isLocked.getExitTo().getRoomID())) {
+                    isLocked.unlock();
                 }
             }
         }
@@ -313,9 +313,9 @@ public class Facade {
     private void markRoomExplored(UUID fromRoom, UUID toRoom) {
     for (Room findRoom : dungeon.getRooms()) {
         if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
-            for (Room unexplored : findRoom.getExits()) {
-                if (toRoom != null && toRoom.equals(unexplored.getRoomID())) {
-                    dungeon.getMap().markExplored(unexplored);
+            for (Exit unexplored : findRoom.getExits()) {
+                if (toRoom != null && toRoom.equals(unexplored.getExitTo().getRoomID())) {
+                    dungeon.getMap().markExplored(unexplored.getExitTo());
                 }
             }
         }

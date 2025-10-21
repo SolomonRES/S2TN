@@ -8,6 +8,7 @@ public class Exit {
     private Room exitTo;
     private boolean isLocked;
     private ArrayList<Puzzle> requiredPuzzles;
+    private Item key;
     private Hint hint;
     private String lockText;
 

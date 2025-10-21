@@ -13,6 +13,9 @@ public class Dungeon {
     private UUID uuid;
     private Room currentRoom;
     private Room startingRoom;
+    private Room previousRoom;
+    private Map map;
+    private ArrayList<Interactable> inventory;
     public Dungeon(Dungeon dungeon, Difficulty difficulty){
 
     }
@@ -26,6 +29,7 @@ public class Dungeon {
         this.startingRoom = startingRoom;
         this.currentRoom = startingRoom;
         this.uuid = UUID.randomUUID();
+        inventory = new ArrayList<>();
     }
     public double setMaxTimeAllowed(Difficulty difficulty, double baseMaxAllowedTime){
         switch (difficulty){
@@ -52,6 +56,7 @@ public class Dungeon {
             }
         }
         if(isUnlocked){
+            previousRoom = currentRoom;
             this.currentRoom = room;
         }
     }
@@ -62,5 +67,38 @@ public class Dungeon {
 
     public Room getCurrentRoom() {
         return this.currentRoom;
+    }
+
+    public Map getMap() {
+        return this.map;
+    }
+
+    public Room getStartingRoom() {
+        return startingRoom;
+    }
+
+    public Room getPreviousRoom() {
+        return previousRoom;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+        setMaxTimeAllowed(difficulty, baseMaxAllowedTime);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 }

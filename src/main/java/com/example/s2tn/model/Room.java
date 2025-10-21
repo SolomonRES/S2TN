@@ -9,7 +9,7 @@ public class Room {
     private ArrayList<Hint> hints;
     private ArrayList<Exit> exits;
     private ArrayList<Object> items;
-    public Room(ArrayList<Puzzle> puzzles,ArrayList<Hint> hints,ArrayList<Exit> exits){
+    public Room(ArrayList<Puzzle> puzzles,ArrayList<Hint> hints,ArrayList<Exit> exits, ArrayList<Object> items){
         this.roomID = UUID.randomUUID();
         this.puzzles = puzzles;
         this.hints = hints;
@@ -58,5 +58,9 @@ public class Room {
 
     public Room[] getLockedExits() {
         return new Room[10];
+    }
+
+    public UUID getRoomID() {
+        return roomID;
     }
 }

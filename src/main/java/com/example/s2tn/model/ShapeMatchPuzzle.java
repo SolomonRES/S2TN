@@ -13,15 +13,15 @@ public class ShapeMatchPuzzle extends Puzzle {
     private int tolDeg = 10; // degrees
     private String hint = "";
 
-    // we won't assume enum constants exist; null means "default/medium-like"
+    // we won’t assume enum constants exist; null means “default/medium-like”
     private Difficulty difficulty;
 
     public ShapeMatchPuzzle() {
-        applyDifficulty(); // keep existing defaults if difficulty is null
+        applyDifficulty();                // default tolerances
         setState(PuzzleState.IN_PROGRESS);
     }
 
-    // quick reset for UX (keeps targets; clears placements)
+    // quick reset (keeps targets; clears placements)
     public void resetToStart() {
         placed.clear();
         movesHint("reset");
@@ -47,21 +47,14 @@ public class ShapeMatchPuzzle extends Puzzle {
     // ONLY abstract in Puzzle: must return ValidationResult
     @Override
     public ValidationResult enterInput(String s) {
-        // accept "A:10,20,0"
-        if (s == null) {
+        // accept "A:10,20,0" and "reset"
+        if (s == null || s.trim().isEmpty()) {
             movesHint("no input");
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
         String in = s.trim();
-        if (in.isEmpty()) {
-            movesHint("no input");
-            setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
-        }
-
-        // allow a simple reset command
         if (in.equalsIgnoreCase("reset")) {
             resetToStart();
             return new ValidationResult(false, "reset", PuzzleState.IN_PROGRESS);
@@ -94,10 +87,6 @@ public class ShapeMatchPuzzle extends Puzzle {
             int x = Integer.parseInt(nums[0].trim());
             int y = Integer.parseInt(nums[1].trim());
             int d = Integer.parseInt(nums[2].trim());
-
-            // keep degree sane (0..359)
-            d = normDeg(d);
-
             place(id, x, y, d);
         } catch (NumberFormatException e) {
             movesHint("bad numbers");
@@ -160,9 +149,8 @@ public class ShapeMatchPuzzle extends Puzzle {
     public String getHint() { return hint; }
 
     // --- Difficulty wiring (no dependency on enum constants) ---
-
     public void setDifficulty(Difficulty d) {
-        this.difficulty = d; // may be null; that's fine (defaults apply)
+        this.difficulty = d; // may be null; that’s fine (defaults apply)
         applyDifficulty();
     }
 
@@ -173,8 +161,6 @@ public class ShapeMatchPuzzle extends Puzzle {
             tolDeg = 10;
             return;
         }
-
-        // Compare by name/text, so it works whether Difficulty is enum or class.
         String level = difficulty.toString();
         level = (level == null) ? "" : level.trim().toUpperCase();
 

@@ -152,6 +152,7 @@ public class Facade {
         if(dungeon.getRooms().size() == dungeon.getMap().getCompletedRooms().size()){
             return true;
         }
+        return false;
     }
 
     public com.example.s2tn.model.Map getMap() {

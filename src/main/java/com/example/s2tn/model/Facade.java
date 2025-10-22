@@ -416,7 +416,11 @@ public String getCurrentPuzzleQuestion() {
         if (p.getState() != PuzzleState.SOLVED) {
 
             if (p instanceof Riddle r && r.getHint() != null && !r.getHint().isBlank()) {
-                return r.getHint();
+            return r.getHint();
+            }
+
+            if (p instanceof CodePuzzle cp && cp.getHint() != null && !cp.getHint().isBlank()) {
+            return cp.getHint();
             }
 
             try {

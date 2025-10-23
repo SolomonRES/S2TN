@@ -1,5 +1,5 @@
 [
-{
+  {
     "dungeonId": "c6275f70-c80f-42c8-8d46-6b9ec5794186",
     "name": "Hall of Torches",
     "difficulty": 3,
@@ -13,13 +13,13 @@
         "puzzles": [
           {
             "puzzleId": "9f96a37d-28ab-4456-80e4-67e9e76f6799",
-            "title": "Torchlight Riddle",
+            "title": "Riddle",
             "status": "INIT",
             "maxTries": 3,
             "hints": [
               {
                 "level": 1,
-                "text": "Think about burning more than one torch at once",
+                "text": "Think about something that follows you.",
                 "cost": 1.0
               }
             ],
@@ -27,15 +27,15 @@
             "versionSeed": 123456789,
             "scoreValue": 150,
             "startTime": "00:00:00",
-            "question": "You are in a dark dungeon corridor You have one match and three unlit torches Lighting any torch takes exactly 1 minute and a torch burns for 2 minutes How can you measure exactly 3 minutes of time",
-            "answer": "TORCH",
-            "hint": "Think about burning multiple torches together to create a timer"
+            "question": "I follow you all the time and copy your every move, but you can’t touch me or catch me. What am I?",
+            "answer": "shadow",
+            "hint": "You see it when the sun is out."
           }
         ],
         "hints": [
           {
             "level": 1,
-            "text": "Check the wall carvings about torch usage",
+            "text": "Look for patterns that mirror your movements.",
             "cost": 0.5
           }
         ],
@@ -60,28 +60,31 @@
         "puzzles": [
           {
             "puzzleId": "4f3c1c78-153a-422f-8a83-6721fc5a5056",
-            "title": "Laboratory Door Code",
+            "title": "Word Scramble",
             "status": "INIT",
             "maxTries": 5,
-            "hints": [
-              {
-                "level": 1,
-                "text": "It is a precious metal",
-                "cost": 1.0
-              },
-              {
-                "level": 2,
-                "text": "Symbol Au",
-                "cost": 1.5
-              }
-            ],
             "allowedTime": "00:03:00",
             "versionSeed": 987654321,
             "scoreValue": 120,
             "startTime": "00:00:00",
-            "scrambledWord": "DLOG",
-            "solution": "GOLD",
-            "hint": "Rearrange the letters"
+
+            "scrambledWord": "ESACEP",
+            "solution": "escape",
+            "hint": "Think about what players do when the clock is ticking."
+          },
+          {
+            "puzzleId": "e1b2c3d4-55aa-4666-8899-001122334455",
+            "title": "Vault Console Code",
+            "status": "INIT",
+            "maxTries": 3,
+            "hints": [],
+            "allowedTime": "00:02:00",
+            "versionSeed": 24681012,
+            "scoreValue": 180,
+            "startTime": "00:00:00",
+
+            "acceptedCodes": ["victory"],
+            "hint": "A single triumphant word will open the console."
           }
         ],
         "hints": [

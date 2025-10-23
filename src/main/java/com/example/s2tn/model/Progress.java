@@ -11,26 +11,25 @@ public class Progress {
     private String userName;
     private String dungeonID;
     private String currentRoomID;
-    private Map<String, String> puzzleState; // Using Map for puzzle states
+    private Map<String, String> puzzleState; 
     private long elapsedTime;
-    private String slot; // Stores the slot name this progress was last saved/loaded from
+    private String slot; // Name of the save slot
 
     // --- Static storage for all saved progress objects ---
     private static final Map<String, Progress> savedProgress = new HashMap<>();
 
     /**
-     * Default constructor for a new game progress.
+     * Default constructor for new game progress.
      */
     public Progress() {
         this.userName = "";
         this.dungeonID = "";
         this.currentRoomID = "";
-        this.puzzleState = new HashMap<>(); // Initialize to an empty map
+        this.puzzleState = new HashMap<>(); 
         this.elapsedTime = 0L;
         this.slot = "";
     }
 
-    // --- Getters ---
     public String getUserName() {
         return userName;
     }
@@ -43,7 +42,6 @@ public class Progress {
         return currentRoomID;
     }
 
-    // Returns a defensive copy to prevent external modification of the map
     public Map<String, String> getPuzzleState() {
         return new HashMap<>(puzzleState);
     }
@@ -56,7 +54,6 @@ public class Progress {
         return slot;
     }
 
-    // --- Setters ---
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -85,13 +82,13 @@ public class Progress {
 
     /**
      * Saves the current state of this Progress object to the specified slot.
-     * @param slot The unique name of the save slot.
+     * @param slot The name of the save slot.
      */
     public void progress(String slot) {
         // Update the slot name within the object being saved
         this.setSlot(slot);
 
-        // Create a defensive copy of the current Progress object to save
+        // Create a copy of the current Progress object to store
         Progress progressToSave = new Progress();
         progressToSave.setUserName(this.getUserName());
         progressToSave.setDungeonID(this.getDungeonID());
@@ -104,11 +101,6 @@ public class Progress {
         System.out.println("Progress saved to slot: '" + slot + "' for user: " + this.userName);
     }
 
-    /**
-     * Loads a Progress object from the specified slot.
-     * @param slot The name of the slot to load from.
-     * @return A new Progress object with the loaded state, or null if no progress is found for the slot.
-     */
     public static Progress load(String slot) {
         Progress storedProgress = savedProgress.get(slot);
         if (storedProgress != null) {
@@ -124,13 +116,14 @@ public class Progress {
             return loadedProgress;
         }
         System.out.println("No progress found for slot: '" + slot + "'.");
-        return null; // Or throw an exception like SlotNotFoundException
+        return null; 
     }
 
     /**
      * Lists all available save slots.
      * @return An unmodifiable list of slot names.
      */
+
     public static List<String> listSlots() {
         if (savedProgress.isEmpty()) {
             System.out.println("No saved progress slots found.");
@@ -145,6 +138,7 @@ public class Progress {
      * Deletes the progress saved in the specified slot.
      * @param slot The name of the slot to delete.
      */
+
     public static void delete(String slot) {
         if (savedProgress.remove(slot) != null) {
             System.out.println("Progress deleted for slot: '" + slot + "'.");
@@ -156,6 +150,7 @@ public class Progress {
     /**
      * Overrides the default toString method to provide a meaningful string representation of the Progress object.
      */
+    
     @Override
     public String toString() {
         return "Progress{" +

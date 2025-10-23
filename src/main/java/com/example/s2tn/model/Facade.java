@@ -9,6 +9,7 @@ public class Facade {
     private Account user;
     private Dungeon dungeon;
     private Progress progress;
+    private Leaderboard leaderboard;
     private static volatile boolean dungeonsLoaded = false;
 
 
@@ -150,6 +151,15 @@ public class Facade {
             return false;
         }
         if(dungeon.getRooms().size() == dungeon.getMap().getCompletedRooms().size()){
+            dungeon.getTimer().stop();
+            int pointsAwarded = (int) (dungeon.getMaxTimeAllowed() - dungeon.getTimer().elapsedTime()) / 10;
+            switch (dungeon.getDifficulty()){
+                case EASY -> pointsAwarded *= 2;
+                case NORMAL -> pointsAwarded *= 4;
+                case HARD -> pointsAwarded *= 6;
+            }
+            user.updateScore(pointsAwarded);
+
             return true;
         }
         return false;
@@ -333,6 +343,7 @@ public class Facade {
 
     @SuppressWarnings("unused")
     private void submitScore(String userName, int score, long elapsedTime) {
+        
     }
 
 // -----------------------------helper methods-------------------------------------------------------------------------

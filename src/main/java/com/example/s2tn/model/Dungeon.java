@@ -96,4 +96,8 @@ public class Dungeon {
     public String getName() {
         return name;
     }
+
+    public double getMaxTimeAllowed() {
+        return maxTimeAllowed;
+    }
 }

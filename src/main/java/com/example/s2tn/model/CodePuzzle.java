@@ -4,15 +4,15 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class CodePuzzle extends Puzzle {
     private final Set<String> acceptedCodes = new HashSet<>();
+    private String hint = "A single triumphant word will open the console.";
 
     public CodePuzzle() {
         setTitle("Code Puzzle");
         setState(PuzzleState.INIT);
         setMaxHints(0);
-        // acceptedCodes.add("victory"); 
+        acceptedCodes.add("victory");
     }
 
     public CodePuzzle(String title, Set<String> codes) {
@@ -30,7 +30,15 @@ public class CodePuzzle extends Puzzle {
         if (code != null) acceptedCodes.add(code.trim().toLowerCase());
     }
 
-    // this is for the facade/driver
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = (hint == null) ? "" : hint;
+    }
+
+// this is for the facade/driver
     @Override
     public ValidationResult enterInput(String input) {
         if (input == null || input.isBlank()) {
@@ -46,7 +54,7 @@ public class CodePuzzle extends Puzzle {
         }
     }
 
-    // this is for abstract puzzle 
+// This is for the abstract puzzle
     @Override
     protected boolean checkSpecificAchievementCondition(
             Achievement achievement, Duration duration, int hintsUsed, int currentScore) {

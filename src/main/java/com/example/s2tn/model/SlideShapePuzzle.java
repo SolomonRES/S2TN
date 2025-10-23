@@ -23,6 +23,10 @@ public class SlideShapePuzzle extends Puzzle {
     private int movesMade = 0;
     private String hint = "";
 
+    // difficulty (kept flexible — no enum constants assumed)
+    private Difficulty difficulty;                 // null -> default behavior (no cap)
+    private int maxMoves = Integer.MAX_VALUE;      // cap only on HARD-like
+
     public SlideShapePuzzle(java.util.List<String> start,
                             java.util.List<String> end,
                             int rows,
@@ -40,6 +44,7 @@ public class SlideShapePuzzle extends Puzzle {
         this.board              = new java.util.ArrayList<>(start);
 
         setState(PuzzleState.IN_PROGRESS);
+        applyDifficulty(); // set defaults for whatever the current difficulty is (may be null)
     }
 
     /** simple default 3x3 */
@@ -75,6 +80,28 @@ public class SlideShapePuzzle extends Puzzle {
         }
     }
 
+    // -------- difficulty wiring --------
+
+    public void setDifficulty(Difficulty d) {
+        this.difficulty = d; // can be null
+        applyDifficulty();
+    }
+
+    private void applyDifficulty() {
+        if (difficulty == null) {
+            maxMoves = Integer.MAX_VALUE; // default: no cap
+            return;
+        }
+        String level = difficulty.toString();
+        level = (level == null) ? "" : level.trim().toUpperCase();
+
+        switch (level) {
+            case "HARD" -> maxMoves = 60;            // simple cap for harder mode
+            case "EASY" -> maxMoves = Integer.MAX_VALUE;
+            default     -> maxMoves = Integer.MAX_VALUE; // MEDIUM/unknown -> no cap
+        }
+    }
+
     // -------- core slide logic --------
 
     private boolean slide(String tile, String dir) {
@@ -102,6 +129,12 @@ public class SlideShapePuzzle extends Puzzle {
         java.util.Collections.swap(board, a, b);
         movesMade++;
         hint = "moved";
+
+        // enforce simple move cap only for hard-like difficulty
+        if (movesMade > maxMoves && !isSolved()) {
+            hint = "move limit reached for difficulty";
+            // we don't mark FAILED to avoid breaking flows; just warn
+        }
         return true;
     }
 
@@ -115,7 +148,19 @@ public class SlideShapePuzzle extends Puzzle {
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
+        // block moves if we've already exceeded the cap (hard-like)
+        if (movesMade > maxMoves && !isSolved()) {
+            hint = "move limit reached for difficulty";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
         String in = s.trim();
+        if ("reset".equalsIgnoreCase(in)) {
+            resetToStart();
+            return new ValidationResult(false, "reset", PuzzleState.IN_PROGRESS);
+        }
+
         if ("solved".equalsIgnoreCase(in)) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
@@ -141,14 +186,27 @@ public class SlideShapePuzzle extends Puzzle {
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
         }
 
-        boolean moved = slide(tile, dir);
+        // extra checks for nicer errors
+        if (!board.contains(tile)) {
+            hint = "unknown tile: " + tile;
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+        String d = dir.toLowerCase();
+        if (!(d.equals("up") || d.equals("down") || d.equals("left") || d.equals("right"))) {
+            hint = "direction must be up/down/left/right";
+            setState(PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+        }
+
+        boolean moved = slide(tile, d);
         if (moved) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
                 return new ValidationResult(true, "Solved in " + movesMade + " moves.", PuzzleState.SOLVED);
             }
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, "Moved " + tile + " " + dir, PuzzleState.IN_PROGRESS);
+            return new ValidationResult(false, "Moved " + tile + " " + d, PuzzleState.IN_PROGRESS);
         } else {
             setState(PuzzleState.IN_PROGRESS);
             return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);

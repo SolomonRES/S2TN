@@ -10,7 +10,7 @@ public class ProgressManager {
     private static final Map<String, Progress> savedProgress = new HashMap<>();
 
     public void save(String slot, Progress progress) {
-        // Here, this will make a defensive copy to make sure that modifications to the
+        // This will make a defensive copy to make sure that modifications to the
         // original progress object don't affect the saved one.
         Progress copy = new Progress();
         copy.setUserName(progress.getUserName());
@@ -39,7 +39,7 @@ public class ProgressManager {
             return copy;
         }
         System.out.println("No progress found for slot: " + slot);
-        return null; // Or throw an exception
+        return null;
     }
 
     public List<String> listSlots() {

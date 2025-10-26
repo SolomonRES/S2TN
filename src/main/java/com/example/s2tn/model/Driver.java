@@ -87,7 +87,6 @@ public class Driver {
                     String p = ask(in, "Password: ");
                     boolean ok = facade.login(u, p);
                     println(ok ? "Login successful." : "Login failed");
-                    println(UserList.getInstance().getAll().toString());
                 }
                 case 3 ->  {
                     facade.logout();

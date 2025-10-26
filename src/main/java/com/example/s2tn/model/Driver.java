@@ -1,12 +1,12 @@
 package com.example.s2tn.model;
 
-import com.example.s2tn.Speak;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
+
+import com.example.s2tn.Speak;
 
 public class Driver {
     private static Puzzle selectedPuzzle = null;
@@ -28,6 +28,10 @@ public class Driver {
                         progressMenu(facade);
                     case 8 -> // Leaderboard
                         leaderboardMenu(facade);
+                    case 9 -> {
+                        Speak.toggle();
+                        println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
+                    }
                     case 0 -> {
                         println("Goodbye");
                         running = false;
@@ -49,6 +53,7 @@ public class Driver {
         println("6) Inventory");
         println("7) Progress");
         println("8) Leaderboard");
+        println("9) Voice (On/Off)");  
         println("0) Quit");
         return askInt(in, "Select: ");
     }

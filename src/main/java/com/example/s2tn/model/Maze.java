@@ -2,6 +2,8 @@ package com.example.s2tn.model;
 
 public class Maze {
 
+    // This will be implemented in the GUI
+
     private String startPosition;
     private String endPosition;
     private String playerPosition;

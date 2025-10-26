@@ -1,8 +1,8 @@
 package com.example.s2tn.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+
+// This will be implemented in the GUI, visual map
 
 public class Map {
     private ArrayList<Room> exploredRooms;

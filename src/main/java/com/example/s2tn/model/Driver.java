@@ -1,5 +1,7 @@
 package com.example.s2tn.model;
 
+import com.example.s2tn.Speak;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
@@ -542,6 +544,7 @@ public class Driver {
     /** Prompts for a line of text and returns the trimmed input (never null). */
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
+        Speak.speak(prompt);
         String s = in.nextLine();
         return (s == null) ? "" : s.trim();
     }
@@ -550,6 +553,7 @@ public class Driver {
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
+            Speak.speak(prompt);
             String s = in.nextLine();
             if (s == null) return -1;
             try {
@@ -560,9 +564,13 @@ public class Driver {
         }
     }
 
+<<<<<<< HEAD
     /** Prints a line to stdout, safely handling nulls. */
     private static void println(String s) { System.out.println(s == null ? "" : s); }
 
     /** Returns a non-null string; empty string if input is null. */
+=======
+    private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s);}
+>>>>>>> 53995f64194f558b7da8c521a2cc54ac7e79da01
     private static String safe(String s) { return s == null ? "" : s; }
 }

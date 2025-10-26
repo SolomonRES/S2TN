@@ -1,5 +1,7 @@
 package com.example.s2tn.model;
 
+import com.example.s2tn.Speak;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
@@ -523,6 +525,7 @@ public class Driver {
 
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
+        Speak.speak(prompt);
         String s = in.nextLine();
         return (s == null) ? "" : s.trim();
     }
@@ -530,6 +533,7 @@ public class Driver {
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
+            Speak.speak(prompt);
             String s = in.nextLine();
             if (s == null) return -1;
             try {
@@ -540,6 +544,6 @@ public class Driver {
         }
     }
 
-    private static void println(String s) { System.out.println(s == null ? "" : s); }
+    private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s);}
     private static String safe(String s) { return s == null ? "" : s; }
 }

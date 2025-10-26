@@ -4,6 +4,7 @@ module com.example.s2tn {
     requires javafx.web;
     requires json.simple;
     requires freetts;
+    requires com.google.gson;
 
     requires org.controlsfx.controls;
     requires net.synedra.validatorfx;
@@ -11,6 +12,8 @@ module com.example.s2tn {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
 
+    opens com.example.s2tn.model to com.google.gson;
     opens com.example.s2tn to javafx.fxml;
     exports com.example.s2tn;
+
 }

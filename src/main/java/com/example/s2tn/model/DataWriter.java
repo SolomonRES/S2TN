@@ -1,5 +1,8 @@
 package com.example.s2tn.model;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +22,7 @@ public class DataWriter extends DataConstants {
      * Saves all users from {@link UserList} to the users.json file.
      * Appends only new users that are not already in the file.
      */
+    Gson gson = new Gson();
     @SuppressWarnings("UseSpecificCatch")
     public void saveUsers() {
         Path path = usersPath();
@@ -42,7 +46,7 @@ public class DataWriter extends DataConstants {
                 String uname = a.getUserName() == null ? "" : a.getUserName();
                 if (uname.isEmpty() || seenUsernames.contains(uname)) continue;
 
-                String obj = userToJson(a);
+                String obj = gson.toJson(a);
                 if (!firstAppend) appended.append(",");
                 appended.append(obj);
                 firstAppend = false;
@@ -70,6 +74,7 @@ public class DataWriter extends DataConstants {
         } catch (Exception e) {
             System.err.println("Failed to append users at " + path.toAbsolutePath() + ": " + e.getMessage());
         }
+
     }
 
     /**

@@ -19,6 +19,11 @@ public class Facade {
 
     private final Set<String> inventory = new HashSet<>();
 
+    public Facade(){
+        DataLoader loader = new DataLoader();
+        loader.loadUsers();
+    }
+
     /** Registers a new user with username and password. */
     public boolean register(String userName, String password) {
         if (userName == null || userName.isBlank() || password == null) return false;

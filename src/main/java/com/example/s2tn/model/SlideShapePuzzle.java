@@ -126,11 +126,21 @@ public class SlideShapePuzzle extends Puzzle {
         int tr = tileIdx  / cols, tc = tileIdx  % cols;
 
         switch (dir.toLowerCase()) {
-            case "up":    if (tr - 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
-            case "down":  if (tr + 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
-            case "left":  if (tr == er && tc - 1 == ec) return swap(tileIdx, emptyIdx); break;
-            case "right": if (tr == er && tc + 1 == ec) return swap(tileIdx, emptyIdx); break;
-            default: hint = "direction must be up/down/left/right"; return false;
+            case "up" -> {
+                if (tr - 1 == er && tc == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "down" -> {
+                if (tr + 1 == er && tc == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "left" -> {
+                if (tr == er && tc - 1 == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "right" -> {
+                if (tr == er && tc + 1 == ec) return swap(tileIdx, emptyIdx);
+            }
+            default -> {
+                hint = "direction must be up/down/left/right"; return false;
+            }
         }
         hint = "that tile isn't next to the empty in that direction";
         return false;

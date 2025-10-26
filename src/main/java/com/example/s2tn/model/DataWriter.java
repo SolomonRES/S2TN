@@ -9,8 +9,16 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Handles writing user, dungeon, leaderboard, and game data to JSON files.
+ * Extends {@link DataConstants} for consistent file path references.
+ */
 public class DataWriter extends DataConstants {
 
+    /**
+     * Saves all users from {@link UserList} to the users.json file.
+     * Appends only new users that are not already in the file.
+     */
     @SuppressWarnings("UseSpecificCatch")
     public void saveUsers() {
         Path path = usersPath();
@@ -64,6 +72,12 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    /**
+     * Saves a list of dungeons to the rooms.json file.
+     * Converts dungeons and their rooms into a JSON array format.
+     *
+     * @param dungeons list of dungeons to save
+     */
     @SuppressWarnings("UseSpecificCatch")
     public void saveDungeons(List<Dungeon> dungeons) {
         Path path = dungeonPath();
@@ -105,16 +119,29 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    /**
+     * Placeholder for future game save logic.
+     */
     public void saveGame() {
         // placeholder for game save logic
     }
 
+    /**
+     * Saves leaderboard data to the leaderboard JSON file.
+     *
+     * @param lb the leaderboard to save
+     */
     public void saveLeaderboard(Leaderboard lb) {
         Path path = lbPath();
         writeJson(path, lb);
     }
 
-
+    /**
+     * Collects existing usernames from a JSON array string and adds them to a set.
+     *
+     * @param jsonArray JSON string containing user data
+     * @param out set to populate with usernames
+     */
     private static void collectExistingUsernames(String jsonArray, HashSet<String> out) {
         int idx = 0;
         while (idx >= 0) {
@@ -132,6 +159,12 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    /**
+     * Converts an {@link Account} object to a JSON string.
+     *
+     * @param a the account to convert
+     * @return JSON string representation of the account
+     */
     private static String userToJson(Account a) {
         StringBuilder sb = new StringBuilder(128);
         sb.append("{");
@@ -145,6 +178,12 @@ public class DataWriter extends DataConstants {
         return sb.toString();
     }
 
+    /**
+     * Safely retrieves a dungeon's name using reflection.
+     *
+     * @param d the dungeon to inspect
+     * @return the dungeon name or "Dungeon" if unavailable
+     */
     @SuppressWarnings("UseSpecificCatch")
     private static String safeDungeonName(Dungeon d) {
         try {
@@ -156,6 +195,12 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    /**
+     * Safely retrieves a dungeon's difficulty using reflection.
+     *
+     * @param d the dungeon to inspect
+     * @return the difficulty as a lowercase string or "normal"
+     */
     @SuppressWarnings("UseSpecificCatch")
     private static String safeDifficulty(Dungeon d) {
         try {
@@ -167,17 +212,35 @@ public class DataWriter extends DataConstants {
         }
     }
 
+    /**
+     * Writes JSON data to the given file path.
+     *
+     * @param path the target file path
+     * @param obj the object to write
+     */
     private void writeJson(Path path, Object obj) {
         if (path != null && obj != null) {
             System.out.println("JSON file path: " + path.toAbsolutePath());
         }
     }
 
+    /**
+     * Converts an object to a JSON-safe string.
+     *
+     * @param v object to convert
+     * @return JSON string value or "null"
+     */
     private static String toJsonString(Object v) {
         if (v == null) return "null";
         return "\"" + jsonEscape(String.valueOf(v)) + "\"";
     }
 
+    /**
+     * Escapes special characters in a string for JSON formatting.
+     *
+     * @param s input string
+     * @return escaped JSON-safe string
+     */
     private static String jsonEscape(String s) {
         StringBuilder out = new StringBuilder(s.length() + 16);
         for (int i = 0; i < s.length(); i++) {
@@ -199,10 +262,25 @@ public class DataWriter extends DataConstants {
         return out.toString();
     }
 
+    /**
+     * Reverses basic JSON string escaping.
+     *
+     * @param s JSON string
+     * @return unescaped version
+     */
     private static String unescapeJson(String s) {
         return s.replace("\\\"", "\"").replace("\\\\", "\\");
     }
 
+    /**
+     * Writes a text certificate file for a completed game session.
+     *
+     * @param account player account
+     * @param gameName name of the game
+     * @param hintsUsed number of hints used
+     * @param difficulty difficulty level
+     * @param score final score
+     */
     public static void writeCertificate(Account account, String gameName, int hintsUsed, String difficulty, int score) {
         try (PrintWriter writer = new PrintWriter("Certificate_" + account.getUserName() + ".txt")) {
             writer.println("===== Escape Room Certificate =====");

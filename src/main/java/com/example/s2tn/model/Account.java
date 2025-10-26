@@ -6,32 +6,17 @@ import java.util.UUID;
 
 /**
  * Represents a user account in the system.
- * Each account has a unique ID, username, password, score, rank, and a list of achievements.
  */
 public class Account {
 
-    /** Unique ID for the account */
     private UUID accountID;
-
-    /** Username of the account */
     private String userName;
-
-    /** Password of the account */
     private String password;
-
-    /** Total score for the user */
     private int score;
-
-    /** Rank of the user */
     private int rank;
-
-    /** List of achievements earned by the user */
     private List<Achievement> achievements;
 
-    /**
-     * Default constructor.
-     * Creates an empty account with default values.
-     */
+    /** Creates an empty account with default values. */
     public Account() {
         this.accountID = UUID.randomUUID();
         this.userName = "";
@@ -41,11 +26,7 @@ public class Account {
         this.achievements = new ArrayList<>();
     }
 
-    /**
-     * Creates an account with a username and password.
-     * @param userName the username for the account
-     * @param password the password for the account
-     */
+    /** Creates an account with a username and password. */
     public Account(String userName, String password) {
         this.accountID = UUID.randomUUID();
         this.userName = userName == null ? "" : userName.trim();
@@ -55,19 +36,12 @@ public class Account {
         this.achievements = new ArrayList<>();
     }
 
-    /**
-     * Gets the account ID as a string.
-     * @return account ID
-     */
+    /** Returns the account ID as a string. */
     public String getAccountID() {
         return accountID == null ? "" : accountID.toString();
     }
 
-    /**
-     * Sets the account ID from a string.
-     * If invalid, generates a new random ID.
-     * @param id the ID string
-     */
+    /** Sets the account ID from a string (generates a new one if invalid). */
     public void setAccountID(String id) {
         try {
             this.accountID = UUID.fromString(id);
@@ -76,12 +50,7 @@ public class Account {
         }
     }
 
-    /**
-     * Checks if the given username and password match this account.
-     * @param user the username to check
-     * @param pass the password to check
-     * @return true if login is successful, false otherwise
-     */
+    /** Checks if the provided username and password match this account. */
     public boolean login(String user, String pass) {
         if (user == null || pass == null) return false;
         if (this.userName == null || this.password == null) return false;
@@ -89,95 +58,61 @@ public class Account {
         return pass.equals(this.password);
     }
 
-    /**
-     * Updates the user's score by adding or subtracting points.
-     * Ensures score stays within valid range.
-     * @param points the points to add or subtract
-     */
+    /** Updates the user's score by adding or subtracting points. */
     public void updateScore(int points) {
         if (points == 0) return;
         long updated = (long) this.score + points;
         this.score = (int) Math.max(0, Math.min(Integer.MAX_VALUE, updated));
     }
 
-    /**
-     * Adds an achievement to the user's list if not already present.
-     * @param a the achievement to add
-     */
+    /** Adds an achievement if it’s not already earned. */
     public void addAchievements(Achievement a) {
         if (a == null) return;
         if (achievements == null) achievements = new ArrayList<>();
         if (!achievements.contains(a)) achievements.add(a);
     }
 
-    /**
-     * Gets a copy of the user's achievements list.
-     * @return list of achievements
-     */
+    /** Returns a copy of the user's achievements. */
     public List<Achievement> getAchievements() {
         return new ArrayList<>(achievements);
     }
 
-    /**
-     * Gets the username.
-     * @return username
-     */
+    /** Returns the username. */
     public String getUserName() {
         return userName;
     }
 
-    /**
-     * Sets the username.
-     * @param userName the username to set
-     */
+    /** Sets the username. */
     public void setUserName(String userName) {
         this.userName = userName == null ? "" : userName.trim();
     }
 
-    /**
-     * Gets the password.
-     * @return password
-     */
+    /** Returns the password. */
     public String getPassword() {
         return password;
     }
 
-    /**
-     * Sets the password.
-     * @param password the password to set
-     */
+    /** Sets the password. */
     public void setPassword(String password) {
         this.password = password == null ? "" : password.trim();
     }
 
-    /**
-     * Gets the current score.
-     * @return score
-     */
+    /** Returns the current score. */
     public int getScore() {
         return score;
     }
 
-    /**
-     * Sets the score.
-     * @param score the score to set
-     */
+    /** Sets the score (must be non-negative). */
     public void setScore(int score) {
         this.score = Math.max(0, score);
     }
 
-    /**
-     * Gets the user's rank.
-     * @return rank
-     */
+    /** Returns the user's rank. */
     public int getRank() {
         return rank;
     }
 
-    /**
-     * Sets the user's rank.
-     * @param rank the rank to set
-     */
+    /** Sets the user's rank (must be non-negative). */
     public void setRank(int rank) {
         this.rank = Math.max(0, rank);
     }

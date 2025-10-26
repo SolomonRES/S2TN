@@ -6,9 +6,14 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Console driver for interacting with the escape-room system via menus.
+ * Handles account, dungeon, rooms, puzzles, timer, inventory, progress, and leaderboard flows.
+ */
 public class Driver {
     private static Puzzle selectedPuzzle = null;
 
+    /** Entry point: runs the interactive menu loop. */
     public static void main(String[] args) {
         Facade facade = new Facade();
         try (Scanner in = new Scanner(System.in)) {
@@ -36,6 +41,7 @@ public class Driver {
         }
     }
 
+    /** Shows the main menu and returns the user's selection. */
     private static int mainMenu(Scanner in) {
         println("");
         println("==== Virtual Escape Room ====");
@@ -51,7 +57,7 @@ public class Driver {
         return askInt(in, "Select: ");
     }
 
-    // Account
+    /** Handles account actions: sign up, login, logout. */
     private static void accountMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -85,7 +91,7 @@ public class Driver {
         }
     }
 
-    // Dungeon
+    /** Handles dungeon operations: choose difficulty, list/start/exit dungeons. */
     private static void dungeonMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -144,7 +150,7 @@ public class Driver {
         }
     }
 
-    // Rooms
+    /** Handles room navigation: list rooms, show current, enter by number, or move to next. */
     private static void roomsMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -197,7 +203,7 @@ public class Driver {
         }
     }
 
-    // Puzzles 
+    /** Handles puzzle operations: list/select puzzles, show question/hint, and answer. */
     private static void puzzlesMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -222,6 +228,7 @@ public class Driver {
         }
     }
 
+    /** Lists the puzzles available in the current room. */
     private static void listPuzzles(Facade facade) {
         Room cur = ensureCurrentRoomEntered(facade);
         if (cur == null) return;
@@ -238,6 +245,7 @@ public class Driver {
         }
     }
 
+    /** Prompts the user to select a puzzle by number and marks it as selected. */
     private static void selectPuzzleByNumber(Scanner in, Facade facade) {
         Room cur = ensureCurrentRoomEntered(facade);
         if (cur == null) return;
@@ -259,6 +267,7 @@ public class Driver {
         println("Selected: " + safe(selectedPuzzle.getTitle()));
     }
 
+    /** Prints the question or prompt for the currently selected puzzle. */
     private static void showSelectedQuestion() {
         if (selectedPuzzle == null) {
             println("No puzzle selected.");
@@ -268,6 +277,7 @@ public class Driver {
         println((q == null || q.trim().isEmpty()) ? "No question available." : ("Question: " + q));
     }
 
+    /** Prints a hint for the currently selected puzzle, if available. */
     private static void showSelectedHint() {
         if (selectedPuzzle == null) {
             println("No puzzle selected.");
@@ -277,6 +287,7 @@ public class Driver {
         println(hint == null ? "No hint available." : ("Hint: " + hint));
     }
 
+    /** Accepts input for the selected puzzle, dispatching to the appropriate facade method. */
     private static void answerSelected(Scanner in, Facade facade) {
         if (selectedPuzzle == null) {
             println("No puzzle selected.");
@@ -311,7 +322,7 @@ public class Driver {
         }
     }
 
-    // Inventory
+    /** Inventory menu for listing and using items. */
     private static void inventoryMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -338,7 +349,7 @@ public class Driver {
         }
     }
 
-    // Timer
+    /** Timer menu for pausing and resuming the game timer. */
     private static void timerMenu(Scanner in, Facade facade) {
         boolean back = false;
         while (!back) {
@@ -363,7 +374,7 @@ public class Driver {
         }
     }
 
-    // Progress
+    /** Prints a summary of progress (puzzles solved vs total) in the current dungeon. */
     private static void progressMenu(Facade facade) {
         List<Room> rooms = facade.viewRooms();
         if (rooms == null || rooms.isEmpty()) {
@@ -386,7 +397,7 @@ public class Driver {
         println(String.format(Locale.US, "Progress: %d/%d solved (%.1f%%)", solved, total, pct));
     }
 
-    // Leaderboard 
+    /** Displays the leaderboard via the facade, showing top players and scores. */
     private static void leaderboardMenu(Facade facade) {
         List<?> top;
         try {
@@ -411,7 +422,10 @@ public class Driver {
         }
     }
 
-    // helpers
+    /**
+     * Ensures a current room is entered; if none, attempts to enter the first room.
+     * Returns the current room or null if unavailable.
+     */
     private static Room ensureCurrentRoomEntered(Facade facade) {
         List<Room> rooms = facade.viewRooms();
         if (rooms == null || rooms.isEmpty()) {
@@ -433,6 +447,7 @@ public class Driver {
         return null;
     }
 
+    /** Builds a human-readable question/prompt string for a puzzle via reflection. */
     @SuppressWarnings("UseSpecificCatch")
     private static String buildQuestion(Puzzle p) {
         if (p == null) return null;
@@ -469,6 +484,7 @@ public class Driver {
         return t.isEmpty() ? "Solve the puzzle." : t;
     }
 
+    /** Attempts to read a hint from a puzzle using common getter shapes (reflection). */
     @SuppressWarnings("UseSpecificCatch")
     private static String buildHint(Puzzle p) {
         if (p == null) return null;
@@ -501,6 +517,7 @@ public class Driver {
         return null;
     }
 
+    /** Returns true if the given object exposes a method with the specified name. */
     @SuppressWarnings("UseSpecificCatch")
     private static boolean hasMethod(Object obj, String name) {
         try {
@@ -511,6 +528,7 @@ public class Driver {
         }
     }
 
+    /** Invokes a no-arg getter reflectively and returns its String value, or null on failure. */
     private static String tryGet(Object obj, String getter) {
         try {
             Method m = obj.getClass().getMethod(getter);
@@ -521,12 +539,14 @@ public class Driver {
         }
     }
 
+    /** Prompts for a line of text and returns the trimmed input (never null). */
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
         String s = in.nextLine();
         return (s == null) ? "" : s.trim();
     }
 
+    /** Prompts repeatedly until a valid integer is entered; returns -1 if input stream ends. */
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -540,6 +560,9 @@ public class Driver {
         }
     }
 
+    /** Prints a line to stdout, safely handling nulls. */
     private static void println(String s) { System.out.println(s == null ? "" : s); }
+
+    /** Returns a non-null string; empty string if input is null. */
     private static String safe(String s) { return s == null ? "" : s; }
 }

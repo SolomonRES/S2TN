@@ -25,7 +25,7 @@ public class UserList {
 
     /** Returns an unmodifiable snapshot of all users. */
     public List<Account> getAll() {
-        return Collections.unmodifiableList(new ArrayList<>(users));
+        return List.copyOf(users);
     }
 
     /** Replaces the entire user list with a fresh collection (used by DataLoader). */

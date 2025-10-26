@@ -11,11 +11,20 @@ public class UserService {
     // add user validation 
     public boolean addUser(Account a) {
         if (a == null) return false;
+
+        // reject duplicates by userName
+        if (a.getUserName() == null || a.getUserName().isBlank()) return false;
+        if (getByUserName(a.getUserName()) != null) {
+            // duplicate username → reject
+            return false;
+        }
+
         if (a.getAccountID() == null || a.getAccountID().isBlank()) {
             a.setAccountID(UUID.randomUUID().toString());
         }
-        boolean ok = users.addUser(a);
-        if (ok) writer.saveUsers();
+
+        boolean ok = UserList.getInstance().addUser(a);
+        if (ok) new DataWriter().saveUsers();
         return ok;
     }
 

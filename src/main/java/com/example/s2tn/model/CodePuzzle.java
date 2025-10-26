@@ -7,6 +7,15 @@ import java.util.Set;
 
 public class CodePuzzle extends Puzzle {
     private final Set<String> acceptedCodes = new HashSet<>();
+    private String codePrompt; 
+
+    public void setCodePrompt(String text) {
+        this.codePrompt = text;
+    }
+
+    public String getCodePrompt() {
+        return codePrompt;
+    }
 
     public CodePuzzle() {
         setTitle("Code Puzzle");
@@ -39,10 +48,10 @@ public class CodePuzzle extends Puzzle {
         boolean ok = acceptedCodes.contains(input.trim().toLowerCase());
         if (ok) {
             setState(PuzzleState.SOLVED);
-            return ValidationResult.correct("Correct code.", PuzzleState.SOLVED);
+            return ValidationResult.valid("Correct code.", PuzzleState.SOLVED);
         } else {
             setState(PuzzleState.IN_PROGRESS);
-            return ValidationResult.incorrect("Incorrect code.", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Incorrect code.", PuzzleState.IN_PROGRESS);
         }
     }
 

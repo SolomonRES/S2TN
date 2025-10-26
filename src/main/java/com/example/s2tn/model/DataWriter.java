@@ -1,6 +1,8 @@
 package com.example.s2tn.model;
 
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -199,5 +201,18 @@ public class DataWriter extends DataConstants {
 
     private static String unescapeJson(String s) {
         return s.replace("\\\"", "\"").replace("\\\\", "\\");
+    }
+
+    public static void writeCertificate(Account account, String gameName, int hintsUsed, String difficulty, int score) {
+        try (PrintWriter writer = new PrintWriter("Certificate_" + account.getUserName() + ".txt")) {
+            writer.println("===== Escape Room Certificate =====");
+            writer.println("Player: " + account.getUserName());
+            writer.println("Game: " + gameName);
+            writer.println("Difficulty: " + difficulty);
+            writer.println("Hints Used: " + hintsUsed);
+            writer.println("Final Score: " + score);
+            writer.println("Congratulations on escaping!");
+        } catch (IOException e) {
+        }
     }
 }

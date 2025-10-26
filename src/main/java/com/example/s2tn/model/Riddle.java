@@ -41,10 +41,10 @@ public class Riddle extends Puzzle {
         boolean ok = input.trim().equalsIgnoreCase(answer.trim());
         if (ok) {
             setState(PuzzleState.SOLVED);
-            return ValidationResult.correct("You solved the riddle", PuzzleState.SOLVED);
+            return ValidationResult.valid("Correct code.", PuzzleState.SOLVED);
         } else {
             setState(PuzzleState.IN_PROGRESS);
-            return ValidationResult.incorrect("Not quite—try again.", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Incorrect code.", PuzzleState.IN_PROGRESS);
         }
     }
 

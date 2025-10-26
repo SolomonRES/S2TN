@@ -43,17 +43,17 @@ public class ShapeMatchPuzzle extends Puzzle {
     public ValidationResult enterInput(String userInput) {
         if (userInput == null || userInput.isBlank()) {
             lastHint = "no input";
-            return new ValidationResult(false, "Empty input", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Empty input", PuzzleState.IN_PROGRESS);
         }
         if (targets.isEmpty()) {
             lastHint = "no targets";
-            return new ValidationResult(false, "No targets set", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("No targets set", PuzzleState.IN_PROGRESS);
         }
 
         Map<String, Pose> observed = parse(userInput);
         if (observed.isEmpty()) {
             lastHint = "bad format (use A:x,y,deg; B:x,y,deg)";
-            return new ValidationResult(false, "Bad format", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Bad format", PuzzleState.IN_PROGRESS);
         }
 
         for (Map.Entry<String, Pose> e : targets.entrySet()) {
@@ -62,7 +62,7 @@ public class ShapeMatchPuzzle extends Puzzle {
             Pose got = observed.get(lbl);
             if (got == null) {
                 lastHint = "missing shape: " + lbl;
-                return new ValidationResult(false, "Missing " + lbl, PuzzleState.IN_PROGRESS);
+                return ValidationResult.invalidFormat("Missing " + lbl, PuzzleState.IN_PROGRESS);
             }
 
             double dx = got.x - tgt.x;
@@ -72,17 +72,18 @@ public class ShapeMatchPuzzle extends Puzzle {
 
             if (dist > posTol) {
                 lastHint = lbl + " off by " + round1(dist) + "px";
-                return new ValidationResult(false, lastHint, PuzzleState.IN_PROGRESS);
+                return ValidationResult.invalidFormat(lastHint, PuzzleState.IN_PROGRESS);
             }
             if (Math.abs(dAng) > angTol) {
                 lastHint = lbl + " angle off by " + round1(Math.abs(dAng)) + "°";
-                return new ValidationResult(false, lastHint, PuzzleState.IN_PROGRESS);
+                return ValidationResult.invalidFormat(lastHint, PuzzleState.IN_PROGRESS);
             }
         }
 
         lastHint = "aligned";
-        return new ValidationResult(true, "Solved", PuzzleState.SOLVED);
+        return ValidationResult.valid("Solved", PuzzleState.SOLVED);
     }
+
 
     // ---- helpers ----
 

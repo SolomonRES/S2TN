@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class Achievement {
 
-    private UUID achievementId;
     private String name;
     private String description;
     private UUID dungeonId; // ID of the dungeon this achievement is related to
@@ -14,7 +13,6 @@ public class Achievement {
 
     // Constructor
     public Achievement(String name, String description, UUID dungeonId, UUID puzzleId, int points) {
-        this.achievementId = UUID.randomUUID(); // Generate a unique ID for the achievement
         this.name = name;
         this.description = description;
         this.dungeonId = dungeonId;
@@ -32,7 +30,6 @@ public class Achievement {
     }
 
     // Getters and Setters for all fields
-    public UUID getAchievementId() { return achievementId; }
     // public void setAchievementId(UUID achievementId) { this.achievementId = achievementId; }
 
     public String getName() { return name; }

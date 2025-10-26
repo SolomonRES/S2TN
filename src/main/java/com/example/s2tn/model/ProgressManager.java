@@ -6,40 +6,53 @@ import java.util.List;
 import java.util.Map;
 
 public class ProgressManager {
-    // This is made to store and save loading from the progress class.
+
     private static final Map<String, Progress> savedProgress = new HashMap<>();
 
+    public void saveProgress(Progress progress) {
+        if (progress == null) return;
+        String slot = (progress.getSlot() == null || progress.getSlot().isBlank())
+                ? "autosave" : progress.getSlot();
+        save(slot, progress);
+    }
+
+    public Progress loadProgress(String userName) {
+        return load("autosave");
+    }
+
     public void save(String slot, Progress progress) {
-        // Here, this will make a defensive copy to make sure that modifications to the
-        // original progress object don't affect the saved one.
+        if (slot == null || slot.isBlank() || progress == null) return;
+
         Progress copy = new Progress();
         copy.setUserName(progress.getUserName());
         copy.setDungeonID(progress.getDungeonID());
         copy.setCurrentRoomID(progress.getCurrentRoomID());
-        copy.setPuzzleState(new HashMap<>(progress.getPuzzleState())); // Deep copy of map
+        copy.setPuzzleState(new HashMap<>(progress.getPuzzleState()));  // shallow copy OK (values are enums)
         copy.setElapsedTime(progress.getElapsedTime());
-        copy.setSlot(slot); // Make the slot name saved with the progress
+        copy.setSlot(slot);
 
         savedProgress.put(slot, copy);
         System.out.println("Progress saved to slot: " + slot);
     }
 
     public Progress load(String slot) {
-        Progress loadedProgress = savedProgress.get(slot);
-        if (loadedProgress != null) {
-    
-            Progress copy = new Progress();
-            copy.setUserName(loadedProgress.getUserName());
-            copy.setDungeonID(loadedProgress.getDungeonID());
-            copy.setCurrentRoomID(loadedProgress.getCurrentRoomID());
-            copy.setPuzzleState(new HashMap<>(loadedProgress.getPuzzleState()));
-            copy.setElapsedTime(loadedProgress.getElapsedTime());
-            copy.setSlot(loadedProgress.getSlot());
-            System.out.println("Progress loaded from slot: " + slot);
-            return copy;
+        if (slot == null || slot.isBlank()) return null;
+        Progress saved = savedProgress.get(slot);
+        if (saved == null) {
+            System.out.println("No progress found for slot: " + slot);
+            return null;
         }
-        System.out.println("No progress found for slot: " + slot);
-        return null; // Or throw an exception
+        
+        Progress copy = new Progress();
+        copy.setUserName(saved.getUserName());
+        copy.setDungeonID(saved.getDungeonID());
+        copy.setCurrentRoomID(saved.getCurrentRoomID());
+        copy.setPuzzleState(new HashMap<>(saved.getPuzzleState()));
+        copy.setElapsedTime(saved.getElapsedTime());
+        copy.setSlot(saved.getSlot());
+
+        System.out.println("Progress loaded from slot: " + slot);
+        return copy;
     }
 
     public List<String> listSlots() {
@@ -47,6 +60,7 @@ public class ProgressManager {
     }
 
     public void delete(String slot) {
+        if (slot == null || slot.isBlank()) return;
         if (savedProgress.remove(slot) != null) {
             System.out.println("Progress deleted for slot: " + slot);
         } else {

@@ -1,170 +1,35 @@
 package com.example.s2tn.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Progress {
 
     private String userName;
-    private String dungeonID;
-    private String currentRoomID;
-    private Map<String, String> puzzleState; // Using Map for puzzle states
-    private long elapsedTime;
-    private String slot; // Stores the slot name this progress was last saved/loaded from
+    private UUID dungeonID;
+    private UUID currentRoomID;
+    private Map<String, PuzzleState> puzzleState = new HashMap<>();
+    private long elapsedTime;  // milli
+    private String slot;
 
-    // --- Static storage for all saved progress objects ---
-    private static final Map<String, Progress> savedProgress = new HashMap<>();
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    /**
-     * Default constructor for a new game progress.
-     */
-    public Progress() {
-        this.userName = "";
-        this.dungeonID = "";
-        this.currentRoomID = "";
-        this.puzzleState = new HashMap<>(); // Initialize to an empty map
-        this.elapsedTime = 0L;
-        this.slot = "";
+    public UUID getDungeonID() { return dungeonID; }
+    public void setDungeonID(UUID dungeonID) { this.dungeonID = dungeonID; }
+
+    public UUID getCurrentRoomID() { return currentRoomID; }
+    public void setCurrentRoomID(UUID currentRoomID) { this.currentRoomID = currentRoomID; }
+
+    public Map<String, PuzzleState> getPuzzleState() { return puzzleState; }
+    public void setPuzzleState(Map<String, PuzzleState> puzzleState) {
+        this.puzzleState = (puzzleState == null) ? new HashMap<>() : puzzleState;
     }
 
-    // --- Getters ---
-    public String getUserName() {
-        return userName;
-    }
+    public long getElapsedTime() { return elapsedTime; }
+    public void setElapsedTime(long elapsedTime) { this.elapsedTime = elapsedTime; }
 
-    public String getDungeonID() {
-        return dungeonID;
-    }
-
-    public String getCurrentRoomID() {
-        return currentRoomID;
-    }
-
-    // Returns a defensive copy to prevent external modification of the map
-    public Map<String, String> getPuzzleState() {
-        return new HashMap<>(puzzleState);
-    }
-
-    public long getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public String getSlot() {
-        return slot;
-    }
-
-    // --- Setters ---
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setDungeonID(String dungeonID) {
-        this.dungeonID = dungeonID;
-    }
-
-    public void setCurrentRoomID(String currentRoomID) {
-        this.currentRoomID = currentRoomID;
-    }
-
-    public void setPuzzleState(Map<String, String> puzzleState) {
-        this.puzzleState = new HashMap<>(puzzleState);
-    }
-
-    public void setElapsedTime(long elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
-    public void setSlot(String slot) {
-        this.slot = slot;
-    }
-
-    // --- Core Persistence Methods ---
-
-    /**
-     * Saves the current state of this Progress object to the specified slot.
-     * @param slot The unique name of the save slot.
-     */
-    public void progress(String slot) {
-        // Update the slot name within the object being saved
-        this.setSlot(slot);
-
-        // Create a defensive copy of the current Progress object to save
-        Progress progressToSave = new Progress();
-        progressToSave.setUserName(this.getUserName());
-        progressToSave.setDungeonID(this.getDungeonID());
-        progressToSave.setCurrentRoomID(this.getCurrentRoomID());
-        progressToSave.setPuzzleState(this.getPuzzleState()); // getPuzzleState returns a copy
-        progressToSave.setElapsedTime(this.getElapsedTime());
-        progressToSave.setSlot(slot); // Ensure the slot name is consistent
-
-        savedProgress.put(slot, progressToSave);
-        System.out.println("Progress saved to slot: '" + slot + "' for user: " + this.userName);
-    }
-
-    /**
-     * Loads a Progress object from the specified slot.
-     * @param slot The name of the slot to load from.
-     * @return A new Progress object with the loaded state, or null if no progress is found for the slot.
-     */
-    public static Progress load(String slot) {
-        Progress storedProgress = savedProgress.get(slot);
-        if (storedProgress != null) {
-            Progress loadedProgress = new Progress();
-            loadedProgress.setUserName(storedProgress.getUserName());
-            loadedProgress.setDungeonID(storedProgress.getDungeonID());
-            loadedProgress.setCurrentRoomID(storedProgress.getCurrentRoomID());
-            loadedProgress.setPuzzleState(storedProgress.getPuzzleState()); // getPuzzleState returns a copy
-            loadedProgress.setElapsedTime(storedProgress.getElapsedTime());
-            loadedProgress.setSlot(storedProgress.getSlot()); // Set the slot name to what was loaded
-
-            System.out.println("Progress loaded from slot: '" + slot + "' for user: " + loadedProgress.getUserName());
-            return loadedProgress;
-        }
-        System.out.println("No progress found for slot: '" + slot + "'.");
-        return null; // Or throw an exception like SlotNotFoundException
-    }
-
-    /**
-     * Lists all available save slots.
-     * @return An unmodifiable list of slot names.
-     */
-    public static List<String> listSlots() {
-        if (savedProgress.isEmpty()) {
-            System.out.println("No saved progress slots found.");
-            return Collections.emptyList();
-        }
-        List<String> slots = new ArrayList<>(savedProgress.keySet());
-        System.out.println("Available slots: " + slots);
-        return Collections.unmodifiableList(slots); // Return an unmodifiable list
-    }
-
-    /**
-     * Deletes the progress saved in the specified slot.
-     * @param slot The name of the slot to delete.
-     */
-    public static void delete(String slot) {
-        if (savedProgress.remove(slot) != null) {
-            System.out.println("Progress deleted for slot: '" + slot + "'.");
-        } else {
-            System.out.println("No progress found to delete for slot: '" + slot + "'.");
-        }
-    }
-
-    /**
-     * Overrides the default toString method to provide a meaningful string representation of the Progress object.
-     */
-    @Override
-    public String toString() {
-        return "Progress{" +
-               "userName='" + userName + '\'' +
-               ", dungeonID='" + dungeonID + '\'' +
-               ", currentRoomID='" + currentRoomID + '\'' +
-               ", puzzleState=" + puzzleState +
-               ", elapsedTime=" + elapsedTime +
-               ", slot='" + slot + '\'' +
-               '}';
-    }
+    public String getSlot() { return slot; }
+    public void setSlot(String slot) { this.slot = slot; }
 }

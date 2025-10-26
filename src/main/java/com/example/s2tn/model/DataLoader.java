@@ -38,16 +38,13 @@ public class DataLoader extends DataConstants {
                     if (!(o instanceof JSONObject u)) continue;
 
                     Account a = new Account();
-                    a.setAccountID(asString(u.get("accountID")));   // Account has setAccountID(String)
+                    a.setAccountID(asString(u.get("accountID")));
                     a.setUserName(asString(u.get("userName")));
-
-                    
                     String pass = asString(u.get("password"));
                     if (pass == null || pass.isEmpty()) pass = asString(u.get("password"));
-                    a.setPassword(pass); 
+                    a.setPassword(pass);
                     a.setScore(asInt(u.get("score")));
                     a.setRank(asInt(u.get("rank")));
-
                     loaded.add(a);
                 }
             }
@@ -58,7 +55,7 @@ public class DataLoader extends DataConstants {
         UserList.getInstance().replaceAll(loaded);
     }
 
-    // dungeons 
+    // -------- dungeons --------
 
     @SuppressWarnings("UseSpecificCatch")
     public void loadDungeons() {
@@ -77,9 +74,9 @@ public class DataLoader extends DataConstants {
 
                 JSONArray dungeonArray;
                 if (rootObj instanceof JSONObject root && root.get("dungeons") instanceof JSONArray arr) {
-                    dungeonArray = arr; 
+                    dungeonArray = arr;
                 } else if (rootObj instanceof JSONArray arr) {
-                    dungeonArray = arr; 
+                    dungeonArray = arr;
                 } else {
                     System.err.println("Unexpected dungeon JSON format at: " + path.toAbsolutePath());
                     return;
@@ -93,7 +90,7 @@ public class DataLoader extends DataConstants {
 
                     Difficulty difficulty = parseDifficulty(dungeonJson.get("difficulty"));
 
-                    double baseMaxAllowedTime = 600_000d; // 10 minutes 
+                    double baseMaxAllowedTime = 600_000d; // 10 minutes
                     Object timerObj = dungeonJson.get("timer");
                     if (timerObj instanceof JSONObject tJson) {
                         String allowed = asString(tJson.get("allowedTime"));
@@ -102,7 +99,7 @@ public class DataLoader extends DataConstants {
                         }
                     }
 
-                    // --- Rooms
+                    // Rooms
                     ArrayList<Room> rooms = new ArrayList<>();
                     Object roomsObj = dungeonJson.get("rooms");
                     if (roomsObj instanceof JSONArray roomsArray) {
@@ -194,28 +191,59 @@ public class DataLoader extends DataConstants {
         };
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     private static Puzzle parsePuzzle(JSONObject pJson) {
         String title = asString(pJson.get("title"), "Puzzle");
         Puzzle pz;
 
+        // Riddle (question + answer)
         if (pJson.get("question") != null && pJson.get("answer") != null) {
             String q = asString(pJson.get("question"), "");
             String a = asString(pJson.get("answer"), "");
             String singleHint = asString(pJson.get("hint"), null);
             pz = new Riddle(title, q, a, singleHint);
-        } else {
-            
-            CodePuzzle cp = new CodePuzzle(title, null);
+        }
+        // Scramble (scrambledWord + solution) 
+        else if (pJson.get("scrambledWord") != null) {
+            String scrambled = asString(pJson.get("scrambledWord"), "");
+            String solution  = asString(pJson.get("solution"), "");
+            CodePuzzle cp = new CodePuzzle(); // use your available constructor
+            try { cp.setTitle(title); } catch (Throwable ignore) {}
+            try { cp.setCodePrompt("Unscramble the letters: " + scrambled); }
+            catch (Throwable ignore) {
+                try { CodePuzzle.class.getMethod("setPrompt", String.class).invoke(cp, "Unscramble the letters: " + scrambled); }
+                catch (Throwable ignored) {}
+            }
+            if (solution != null && !solution.isBlank()) cp.addAcceptedCode(solution);
+            pz = cp;
+        }
+        // Code (codePrompt + expectedCode)
+        else if (pJson.get("expectedCode") != null || pJson.get("codePrompt") != null) {
+            String codePrompt = asString(pJson.get("codePrompt"), "");
+            String expected   = asString(pJson.get("expectedCode"), "");
+            CodePuzzle cp = new CodePuzzle();
+            try { cp.setTitle(title); } catch (Throwable ignore) {}
+            if (expected != null && !expected.isBlank()) cp.addAcceptedCode(expected);
+            try { cp.setCodePrompt(codePrompt); }
+            catch (Throwable ignore) {
+                try { CodePuzzle.class.getMethod("setPrompt", String.class).invoke(cp, codePrompt); }
+                catch (Throwable ignored) {}
+            }
+            pz = cp;
+        }
+        // Fallback (acceptedCodes / solution)
+        else {
+            CodePuzzle cp = new CodePuzzle();
+            try { cp.setTitle(title); } catch (Throwable ignore) {}
             Object codes = pJson.get("acceptedCodes");
             if (codes instanceof JSONArray arr) {
                 for (Object o : arr) if (o instanceof String s) cp.addAcceptedCode(s);
             }
-            if (pJson.get("solution") != null) {
-                cp.addAcceptedCode(asString(pJson.get("solution"), ""));
-            }
+            if (pJson.get("solution") != null) cp.addAcceptedCode(asString(pJson.get("solution"), ""));
             pz = cp;
         }
 
+        // Hints
         Object hintsObj = pJson.get("hints");
         if (hintsObj instanceof JSONArray hArr) {
             int count = 0;
@@ -229,6 +257,23 @@ public class DataLoader extends DataConstants {
             }
             try { pz.setMaxHints(count); } catch (Throwable ignore) {}
         }
+
+        // Items, required for puzzle 
+        try {
+            String rewardItem = asString(pJson.get("rewardItem"));
+            if (rewardItem != null && !rewardItem.isBlank()) {
+                try { pz.getClass().getMethod("setRewardItem", String.class).invoke(pz, rewardItem); } catch (Throwable ignored) {}
+            }
+            Object rq = pJson.get("requiresItem");
+            boolean requiresItem = (rq instanceof Boolean b) ? b : (rq != null && "true".equalsIgnoreCase(String.valueOf(rq)));
+            if (requiresItem) {
+                try { pz.getClass().getMethod("setRequiresItem", boolean.class).invoke(pz, true); } catch (Throwable ignored) {}
+                String requiredKey = asString(pJson.get("requiredItemKey"));
+                if (requiredKey != null && !requiredKey.isBlank()) {
+                    try { pz.getClass().getMethod("setRequiredItemKey", String.class).invoke(pz, requiredKey); } catch (Throwable ignored) {}
+                }
+            }
+        } catch (Throwable ignored) {}
 
         return pz;
     }

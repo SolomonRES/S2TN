@@ -6,8 +6,6 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
-import com.example.s2tn.Speak;
-
 /**
  * Console driver for interacting with the escape-room system via menus.
  * Handles account, dungeon, rooms, puzzles, timer, inventory, progress, and leaderboard flows.
@@ -33,10 +31,6 @@ public class Driver {
                         progressMenu(facade);
                     case 8 -> // Leaderboard
                         leaderboardMenu(facade);
-                    case 9 -> {
-                        Speak.toggle();
-                        println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
-                    }
                     case 0 -> {
                         println("Goodbye");
                         running = false;
@@ -59,7 +53,6 @@ public class Driver {
         println("6) Inventory");
         println("7) Progress");
         println("8) Leaderboard");
-        println("9) Voice (On/Off)");  
         println("0) Quit");
         return askInt(in, "Select: ");
     }
@@ -87,7 +80,6 @@ public class Driver {
                     String p = ask(in, "Password: ");
                     boolean ok = facade.login(u, p);
                     println(ok ? "Login successful." : "Login failed");
-                    println(UserList.getInstance().getAll().toString());
                 }
                 case 3 ->  {
                     facade.logout();
@@ -550,7 +542,6 @@ public class Driver {
     /** Prompts for a line of text and returns the trimmed input (never null). */
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
-        Speak.speak(prompt);
         String s = in.nextLine();
         return (s == null) ? "" : s.trim();
     }
@@ -559,7 +550,6 @@ public class Driver {
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
-            Speak.speak(prompt);
             String s = in.nextLine();
             if (s == null) return -1;
             try {
@@ -570,13 +560,9 @@ public class Driver {
         }
     }
 
-<<<<<<< HEAD
-    private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s);}
-=======
     /** Prints a line to stdout, safely handling nulls. */
     private static void println(String s) { System.out.println(s == null ? "" : s); }
 
     /** Returns a non-null string; empty string if input is null. */
->>>>>>> cc49daffc72d0b068d1704fe831bcec8d6ae1022
     private static String safe(String s) { return s == null ? "" : s; }
 }

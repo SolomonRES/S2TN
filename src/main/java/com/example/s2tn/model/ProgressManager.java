@@ -5,10 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages saving, loading, and deleting player progress.
+ * Stores all saved progress in memory using save slots.
+ */
 public class ProgressManager {
 
     private static final Map<String, Progress> savedProgress = new HashMap<>();
 
+    /**
+     * Saves the given progress using its assigned slot or "autosave" if none is set.
+     *
+     * @param progress the progress to save
+     */
     public void saveProgress(Progress progress) {
         if (progress == null) return;
         String slot = (progress.getSlot() == null || progress.getSlot().isBlank())
@@ -16,10 +25,22 @@ public class ProgressManager {
         save(slot, progress);
     }
 
+    /**
+     * Loads the most recent autosave progress for a user.
+     *
+     * @param userName the username to load progress for
+     * @return the loaded progress, or null if none exists
+     */
     public Progress loadProgress(String userName) {
         return load("autosave");
     }
 
+    /**
+     * Saves a copy of the given progress to the specified slot.
+     *
+     * @param slot the save slot name
+     * @param progress the progress data to save
+     */
     public void save(String slot, Progress progress) {
         if (slot == null || slot.isBlank() || progress == null) return;
 
@@ -35,6 +56,12 @@ public class ProgressManager {
         System.out.println("Progress saved to slot: " + slot);
     }
 
+    /**
+     * Loads progress data from a specified slot.
+     *
+     * @param slot the save slot name
+     * @return a copy of the saved progress, or null if not found
+     */
     public Progress load(String slot) {
         if (slot == null || slot.isBlank()) return null;
         Progress saved = savedProgress.get(slot);
@@ -55,10 +82,20 @@ public class ProgressManager {
         return copy;
     }
 
+    /**
+     * Returns a list of all saved slot names.
+     *
+     * @return list of available save slots
+     */
     public List<String> listSlots() {
         return new ArrayList<>(savedProgress.keySet());
     }
 
+    /**
+     * Deletes the progress saved in the specified slot, if it exists.
+     *
+     * @param slot the save slot name
+     */
     public void delete(String slot) {
         if (slot == null || slot.isBlank()) return;
         if (savedProgress.remove(slot) != null) {

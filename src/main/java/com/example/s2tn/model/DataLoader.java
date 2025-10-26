@@ -10,10 +10,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+/**
+ * Handles loading of user and dungeon data from JSON files.
+ * Extends {@link DataConstants} to access predefined file paths.
+ */
 public class DataLoader extends DataConstants {
 
     private final ArrayList<Dungeon> dungeons = new ArrayList<>();
 
+    /**
+     * Loads all user accounts from the users.json file.
+     * Replaces the current {@link UserList} contents with loaded data.
+     */
     @SuppressWarnings("UseSpecificCatch")
     public void loadUsers() {
         Path path = usersPath();
@@ -57,6 +65,10 @@ public class DataLoader extends DataConstants {
 
     // -------- dungeons --------
 
+    /**
+     * Loads all dungeons from the rooms.json file.
+     * Populates the internal dungeon list with parsed data.
+     */
     @SuppressWarnings("UseSpecificCatch")
     public void loadDungeons() {
         dungeons.clear();
@@ -147,25 +159,64 @@ public class DataLoader extends DataConstants {
         }
     }
 
+    /**
+     * Returns a copy of the loaded dungeons.
+     * 
+     * @return list of dungeons
+     */
     public List<Dungeon> getDungeons() {
         return new ArrayList<>(dungeons);
     }
 
+    /**
+     * Converts an object to a string.
+     * 
+     * @param v object to convert
+     * @return string value or null
+     */
     private static String asString(Object v) { return v == null ? null : String.valueOf(v); }
+
+    /**
+     * Converts an object to a string, or returns a default value.
+     * 
+     * @param v object to convert
+     * @param def default value
+     * @return string or default
+     */
     private static String asString(Object v, String def) { return v == null ? def : String.valueOf(v); }
 
+    /**
+     * Converts an object to an integer.
+     * 
+     * @param v object to convert
+     * @return integer value or 0
+     */
     private static int asInt(Object v) {
         if (v instanceof Number n) return n.intValue();
         if (v == null) return 0;
         try { return Integer.parseInt(String.valueOf(v)); } catch (NumberFormatException e) { return 0; }
     }
 
+    /**
+     * Converts an object to a double.
+     * 
+     * @param v object to convert
+     * @param def default value
+     * @return double value or default
+     */
     private static double asDouble(Object v, double def) {
         if (v == null) return def;
         if (v instanceof Number n) return n.doubleValue();
         try { return Double.parseDouble(String.valueOf(v)); } catch (NumberFormatException e) { return def; }
     }
 
+    /**
+     * Converts a time string (HH:MM:SS) to milliseconds.
+     * 
+     * @param hms time string
+     * @param def default value
+     * @return milliseconds or default
+     */
     private static double toMillis(String hms, double def) {
         if (hms == null || !hms.matches("\\d{2}:\\d{2}:\\d{2}")) return def;
         String[] p = hms.split(":");
@@ -173,6 +224,12 @@ public class DataLoader extends DataConstants {
         return (h * 3600 + m * 60 + s) * 1000.0;
     }
 
+    /**
+     * Parses a difficulty value from JSON input.
+     * 
+     * @param raw raw difficulty value
+     * @return parsed Difficulty enum
+     */
     private static Difficulty parseDifficulty(Object raw) {
         if (raw == null) return Difficulty.NORMAL;
         if (raw instanceof Number n) {
@@ -191,6 +248,12 @@ public class DataLoader extends DataConstants {
         };
     }
 
+    /**
+     * Parses a puzzle object from a JSON definition.
+     * 
+     * @param pJson JSON object representing a puzzle
+     * @return constructed Puzzle object or null
+     */
     @SuppressWarnings("UseSpecificCatch")
     private static Puzzle parsePuzzle(JSONObject pJson) {
         String title = asString(pJson.get("title"), "Puzzle");
@@ -203,7 +266,7 @@ public class DataLoader extends DataConstants {
             String singleHint = asString(pJson.get("hint"), null);
             pz = new Riddle(title, q, a, singleHint);
         }
-        // Scramble (scrambledWord + solution) 
+        // Scramble (scrambledWord + solution)
         else if (pJson.get("scrambledWord") != null) {
             String scrambled = asString(pJson.get("scrambledWord"), "");
             String solution  = asString(pJson.get("solution"), "");
@@ -258,7 +321,7 @@ public class DataLoader extends DataConstants {
             try { pz.setMaxHints(count); } catch (Throwable ignore) {}
         }
 
-        // Items, required for puzzle 
+        // Items, required for puzzle
         try {
             String rewardItem = asString(pJson.get("rewardItem"));
             if (rewardItem != null && !rewardItem.isBlank()) {

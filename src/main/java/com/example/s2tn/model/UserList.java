@@ -5,29 +5,36 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Manages all user accounts in memory using a singleton pattern.
+ * Provides lookup, add, remove, and update operations for users.
+ */
 public class UserList {
 
     private static final UserList INSTANCE = new UserList();
 
     private final List<Account> users = new ArrayList<>();
 
+    /** Private constructor to enforce singleton usage. */
     private UserList() {}
 
+    /** Returns the single shared instance of the UserList. */
     public static UserList getInstance() {
         return INSTANCE;
     }
 
-    // snapshot of users (not changeable)
+    /** Returns an unmodifiable snapshot of all users. */
     public List<Account> getAll() {
         return Collections.unmodifiableList(new ArrayList<>(users));
     }
 
-    // used by the DataLoader 
+    /** Replaces the entire user list with a fresh collection (used by DataLoader). */
     public void replaceAll(List<Account> fresh) {
         users.clear();
         if (fresh != null) users.addAll(fresh);
     }
 
+    /** Finds a user by account ID. Returns null if not found or ID is invalid. */
     public Account getId(String accountId) {
         if (accountId == null || accountId.isBlank()) return null;
         for (Account a : users) {
@@ -36,6 +43,7 @@ public class UserList {
         return null;
     }
 
+    /** Finds a user by username. Returns null if not found or input is invalid. */
     public Account getUser(String userName) {
         if (userName == null || userName.isBlank()) return null;
         for (Account user : users) {
@@ -44,6 +52,7 @@ public class UserList {
         return null;
     }
 
+    /** Finds a user by username (alias of getUser). Returns null if not found. */
     public Account getUserName(String userName) {
         if (userName == null || userName.isBlank()) return null;
         for (Account a : users) {
@@ -52,6 +61,7 @@ public class UserList {
         return null;
     }
 
+    /** Adds a new user if their ID and username are unique. Returns true if added. */
     public boolean addUser(Account a) {
         if (a == null) return false;
 
@@ -70,11 +80,16 @@ public class UserList {
         return true;
     }
 
+    /** Removes a user by account ID. Returns true if a matching user was removed. */
     public boolean removeUser(String accountId) {
         if (accountId == null || accountId.isBlank()) return false;
         return users.removeIf(u -> accountId.equals(u.getAccountID()));
     }
 
+    /**
+     * Updates an existing user with new data.
+     * Returns true if successful, false if user not found or username conflicts.
+     */
     public boolean updateUser(Account updated) {
         if (updated == null || updated.getAccountID() == null || updated.getAccountID().isBlank()) return false;
 
@@ -94,4 +109,4 @@ public class UserList {
         return false;
     }
 
-} 
+}

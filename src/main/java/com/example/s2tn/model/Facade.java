@@ -266,10 +266,11 @@ public class Facade {
         return res != null && res.isValid();
     }
 
-    public boolean answerScramble(UUID puzzleId, String answer) {
-        WordScramble scramble = new WordScramble();
-        scramble.displayScramble();
-        return scramble.checkAnswer(answer);
+     public boolean answerScramble(UUID puzzleId, String answer) {
+        Puzzle p = findPuzzleInActiveDungeon(puzzleId);
+        if (!(p instanceof WordScramble)) return false;
+        ValidationResult res = p.enterInput(answer);
+        return res != null && res.isValid();
     }
 
     public boolean attemptCodePuzzle(UUID puzzleId, String code) {

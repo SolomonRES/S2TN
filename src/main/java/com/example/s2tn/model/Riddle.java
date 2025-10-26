@@ -8,16 +8,12 @@ public class Riddle extends Puzzle {
     private String hint;
 
     public Riddle() {
-        // this(
-        //     "Riddle",
-        //     "I follow you all the time and copy your every move, but you can’t touch me or catch me. What am I?",
-        //     "shadow",
-        //     "You see it when the sun is out."
-        // );
-    }
-
-    public Riddle(String title, String question, String answer) {
-        this(title, question, answer, null);
+        this(
+            "Riddle",
+            "I follow you all the time and copy your every move, but you can’t touch me or catch me. What am I?",
+            "shadow",
+            "You see it when the sun is out."
+        );
     }
 
     public Riddle(String title, String question, String answer, String hint) {
@@ -34,14 +30,15 @@ public class Riddle extends Puzzle {
 
     @Override
     public ValidationResult enterInput(String input) {
-        if (input == null) {
+        if (input == null || input.isBlank()) {
             setState(PuzzleState.IN_PROGRESS);
             return ValidationResult.invalidFormat("No answer entered.", PuzzleState.IN_PROGRESS);
         }
+
         boolean ok = input.trim().equalsIgnoreCase(answer.trim());
         if (ok) {
             setState(PuzzleState.SOLVED);
-            return ValidationResult.correct("You solved the riddle", PuzzleState.SOLVED);
+            return ValidationResult.correct("You solved the riddle!", PuzzleState.SOLVED);
         } else {
             setState(PuzzleState.IN_PROGRESS);
             return ValidationResult.incorrect("Not quite—try again.", PuzzleState.IN_PROGRESS);

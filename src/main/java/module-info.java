@@ -3,6 +3,7 @@ module com.example.s2tn {
     requires javafx.fxml;
     requires javafx.web;
     requires json.simple;
+    requires freetts;
 
     requires org.controlsfx.controls;
     requires net.synedra.validatorfx;

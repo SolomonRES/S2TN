@@ -564,13 +564,6 @@ public class Driver {
         }
     }
 
-<<<<<<< HEAD
-    /** Prints a line to stdout, safely handling nulls. */
-    private static void println(String s) { System.out.println(s == null ? "" : s); }
-
-    /** Returns a non-null string; empty string if input is null. */
-=======
     private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s);}
->>>>>>> 53995f64194f558b7da8c521a2cc54ac7e79da01
     private static String safe(String s) { return s == null ? "" : s; }
 }

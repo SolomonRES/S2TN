@@ -18,8 +18,10 @@ public class Driver {
     public static void main(String[] args) {
         Facade facade = new Facade();
         try (Scanner in = new Scanner(System.in)) {
+            
+            // Start speaking immediately when the driver starts
             if (Speak.isEnabled()) {
-                Speak.speak("Welcome to Virtual Escape Room, Voice is on; use the menu to begin.");
+                Speak.speak("Welcome to Virtual Escape Room. Voice is on. Use the menu to begin.");
             }
             boolean running = true;
             while (running) {
@@ -35,10 +37,6 @@ public class Driver {
                         progressMenu(facade);
                     case 8 -> // Leaderboard
                         leaderboardMenu(facade);
-                    case 9 -> {
-                        Speak.toggle();
-                        println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
-                    }
                     case 9 -> {
                         Speak.toggle();
                         println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
@@ -556,7 +554,6 @@ public class Driver {
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
         String s = in.nextLine();
-        Speak.speak(prompt);
         return (s == null) ? "" : s.trim();
     }
 
@@ -564,7 +561,6 @@ public class Driver {
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
-            Speak.speak(prompt);
             String s = in.nextLine();
             if (s == null) return -1;
             try {
@@ -576,7 +572,7 @@ public class Driver {
     }
 
     /** Prints a line to stdout, safely handling nulls. */
-    private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s); }
+    private static void println(String s) { System.out.println(s == null ? "" : s); }
 
     /** Returns a non-null string; empty string if input is null. */
     private static String safe(String s) { return s == null ? "" : s; }

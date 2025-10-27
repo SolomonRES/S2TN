@@ -61,8 +61,6 @@ summary.
 - 🎥 **Video Walkthrough:**  
   [▶️ Watch on YouTube](https://www.youtube.com/watch?v=alsl0cOmVb8)
 
-  [▶️ Watch Inline](https://solomonres.github.io/S2TN/assets/demo.html)
-
 ---
 
 ## 📌 Requirements

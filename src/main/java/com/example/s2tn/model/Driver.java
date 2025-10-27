@@ -39,6 +39,10 @@ public class Driver {
                         Speak.toggle();
                         println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
                     }
+                    case 9 -> {
+                        Speak.toggle();
+                        println("Voice is now " + (Speak.isEnabled() ? "ON" : "OFF"));
+                    }
                     case 0 -> {
                         println("Goodbye");
                         running = false;
@@ -552,6 +556,7 @@ public class Driver {
     private static String ask(Scanner in, String prompt) {
         System.out.print(prompt);
         String s = in.nextLine();
+        Speak.speak(prompt);
         return (s == null) ? "" : s.trim();
     }
 
@@ -559,6 +564,7 @@ public class Driver {
     private static int askInt(Scanner in, String prompt) {
         while (true) {
             System.out.print(prompt);
+            Speak.speak(prompt);
             String s = in.nextLine();
             if (s == null) return -1;
             try {
@@ -570,7 +576,7 @@ public class Driver {
     }
 
     /** Prints a line to stdout, safely handling nulls. */
-    private static void println(String s) { System.out.println(s == null ? "" : s); }
+    private static void println(String s) { System.out.println(s == null ? "" : s); Speak.speak(s); }
 
     /** Returns a non-null string; empty string if input is null. */
     private static String safe(String s) { return s == null ? "" : s; }

@@ -11,7 +11,7 @@ module com.example.s2tn {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
 
-    opens com.example.s2tn to javafx.fxml;
-    exports com.example.s2tn;
+    opens com.s2tn to javafx.fxml;
+    exports com.s2tn;
 
 }

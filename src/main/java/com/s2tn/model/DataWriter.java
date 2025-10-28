@@ -3,6 +3,8 @@ package com.s2tn.model;
 //import com.google.gson.Gson;
 //import com.google.gson.JsonArray;
 
+import com.google.gson.Gson;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +24,7 @@ public class DataWriter extends DataConstants {
      * Saves all users from {@link UserList} to the users.json file.
      * Appends only new users that are not already in the file.
      */
-    //Gson gson = new Gson();
+    Gson gson = new Gson();
     @SuppressWarnings("UseSpecificCatch")
     public void saveUsers() {
         Path path = usersPath();
@@ -46,8 +48,7 @@ public class DataWriter extends DataConstants {
                 String uname = a.getUserName() == null ? "" : a.getUserName();
                 if (uname.isEmpty() || seenUsernames.contains(uname)) continue;
 
-                //String obj = gson.toJson(a);
-                String obj = userToJson(a);
+                String obj = gson.toJson(a);
                 if (!firstAppend) appended.append(",");
                 appended.append(obj);
                 firstAppend = false;
@@ -94,22 +95,23 @@ public class DataWriter extends DataConstants {
         for (int i = 0; i < dungeons.size(); i++) {
             Dungeon d = dungeons.get(i);
 
-            String name = safeDungeonName(d);
-            String diff = safeDifficulty(d);
+            //String name = safeDungeonName(d);
+            //String diff = safeDifficulty(d);
 
-            sb.append("{");
-            sb.append("\"name\":").append(toJsonString(name));
-            sb.append(",\"difficulty\":").append(toJsonString(diff));
-            sb.append(",\"rooms\":[");
+            //sb.append("{");
+            //sb.append("\"name\":").append(toJsonString(name));
+           // sb.append(",\"difficulty\":").append(toJsonString(diff));
+            //sb.append(",\"rooms\":[");
 
-            List<Room> rooms = d.getRooms();
-            for (int j = 0; j < rooms.size(); j++) {
-                sb.append("{\"name\":").append(toJsonString("Room " + (j + 1))).append("}");
-                if (j < rooms.size() - 1) sb.append(",");
-            }
+            //List<Room> rooms = d.getRooms();
+            //for (int j = 0; j < rooms.size(); j++) {
+           //     sb.append("{\"name\":").append(toJsonString("Room " + (j + 1))).append("}");
+           //     if (j < rooms.size() - 1) sb.append(",");
+           //}
 
-            sb.append("]}");
-            if (i < dungeons.size() - 1) sb.append(",");
+           // sb.append("]}");
+           sb.append(gson.toJson(d));
+           if (i < dungeons.size() - 1) sb.append(",");
         }
 
         sb.append("]");

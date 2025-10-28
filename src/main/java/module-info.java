@@ -3,6 +3,7 @@ module com.example.s2tn {
     requires javafx.fxml;
     requires javafx.web;
     requires json.simple;
+    requires com.google.gson;
     requires freetts;
 
     requires org.controlsfx.controls;
@@ -11,6 +12,7 @@ module com.example.s2tn {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
 
+    opens com.s2tn.model to com.google.gson;
     opens com.s2tn to javafx.fxml;
     exports com.s2tn;
 

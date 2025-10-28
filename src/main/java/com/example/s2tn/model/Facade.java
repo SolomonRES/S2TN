@@ -343,7 +343,7 @@ public class Facade {
 
     @SuppressWarnings("unused")
     private void submitScore(String userName, int score, long elapsedTime) {
-        
+
     }
 
 // -----------------------------helper methods-------------------------------------------------------------------------

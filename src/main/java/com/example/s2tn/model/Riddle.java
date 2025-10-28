@@ -2,11 +2,15 @@ package com.example.s2tn.model;
 
 import java.time.Duration;
 
+/**
+ * Represents a riddle puzzle where the player must answer a question correctly.
+ */
 public class Riddle extends Puzzle {
     private String question;
     private String answer;
     private String hint;
 
+    /** Creates an empty riddle with default values. */
     public Riddle() {
         // this(
         //     "Riddle",
@@ -16,10 +20,12 @@ public class Riddle extends Puzzle {
         // );
     }
 
+    /** Creates a riddle with a title, question, and answer. */
     public Riddle(String title, String question, String answer) {
         this(title, question, answer, null);
     }
 
+    /** Creates a riddle with a title, question, answer, and optional hint. */
     public Riddle(String title, String question, String answer, String hint) {
         setTitle(title == null ? "Riddle" : title);
         this.question = question == null ? "" : question;
@@ -29,9 +35,18 @@ public class Riddle extends Puzzle {
         setMaxHints(hint == null ? 0 : 1);
     }
 
+    /** Returns the riddle question. */
     public String getQuestion() { return question; }
+
+    /** Returns the hint for this riddle. */
     public String getHint() { return hint; }
 
+    /**
+     * Validates the player's answer and updates the puzzle state.
+     *
+     * @param input the player's answer
+     * @return a validation result indicating correctness and new state
+     */
     @Override
     public ValidationResult enterInput(String input) {
         if (input == null) {
@@ -41,13 +56,17 @@ public class Riddle extends Puzzle {
         boolean ok = input.trim().equalsIgnoreCase(answer.trim());
         if (ok) {
             setState(PuzzleState.SOLVED);
-            return ValidationResult.correct("You solved the riddle", PuzzleState.SOLVED);
+            return ValidationResult.valid("Correct code.", PuzzleState.SOLVED);
         } else {
             setState(PuzzleState.IN_PROGRESS);
-            return ValidationResult.incorrect("Not quite—try again.", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Incorrect code.", PuzzleState.IN_PROGRESS);
         }
     }
 
+    /**
+     * Checks if the achievement condition is met for this riddle.
+     * The condition is satisfied if solved without using any hints.
+     */
     @Override
     protected boolean checkSpecificAchievementCondition(
             Achievement achievement, Duration duration, int hintsUsed, int currentScore) {

@@ -58,7 +58,8 @@ summary.
 
 ## 🧪 Demonstrations
 
-- 🎥 **Video Walkthrough:**
+- 🎥 **Video Walkthrough:**  
+  [▶️ Watch on YouTube](https://www.youtube.com/watch?v=alsl0cOmVb8)
 
 ---
 

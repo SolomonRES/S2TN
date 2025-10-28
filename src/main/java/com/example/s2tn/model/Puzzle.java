@@ -5,108 +5,89 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Abstract base class representing a puzzle in the game.
+ * Each puzzle has an ID, title, state, hints, and optional item requirements or rewards.
+ */
 public abstract class Puzzle {
-    private UUID puzzleID;
+
+    private final UUID puzzleID = UUID.randomUUID();
     private String title;
-    private PuzzleState state;
-    private int maxHints;
-    private ArrayList<Hint> hints;
-    private int currentHintLevel;
-    private Duration allowedTime;
-    private long variationSeed;
-    private int scoreValue; // Base score for solving the puzzle
-    private double timeToBeat;
-    private double startTime;
-    private List<Achievement> possibleAchievements; // Achievements related to this puzzle
+    private PuzzleState state = PuzzleState.INIT;
 
+    private final ArrayList<Hint> hints = new ArrayList<>();
+    private int maxHints = 0;
 
-    public Puzzle() {
-        this.puzzleID = UUID.randomUUID();
-        this.title = "";
-        // this.state = PuzzleState.NOT_STARTED;
-        this.maxHints = 0;
-        this.hints = new ArrayList<>();
-        this.currentHintLevel = 0;
-        this.allowedTime = Duration.ZERO;
-        this.variationSeed = 0L;
-        this.scoreValue = 0;
-        this.timeToBeat = 0.0;
-        this.startTime = 0.0;
-        this.possibleAchievements = new ArrayList<>();
-    }
+    private String rewardItem;
+    private boolean requiresItem = false;
+    private String requiredItemKey;
 
-    // Abstract method to be used by subclasses
-    public abstract ValidationResult enterInput(String input);
+    /** Returns the unique ID of this puzzle. */
+    public UUID getPuzzleID() { return puzzleID; }
 
-    public Hint requestHint() {
-        if (currentHintLevel < maxHints && currentHintLevel < hints.size()) {
-            Hint requestedHint = hints.get(currentHintLevel);
-            currentHintLevel++;
-            return requestedHint;
-        }
-        return null;
-    }
+    /** Returns the puzzle's title. */
+    public String getTitle() { return title; }
 
-    public Hint requestHint(int level) {
-        if (level >= 0 && level < maxHints && level < hints.size()) {
-            return hints.get(level);
-        }
-        return null;
-    }
+    /** Sets the puzzle's title. */
+    public void setTitle(String title) { this.title = title; }
+
+    /** Returns the current state of the puzzle. */
+    public PuzzleState getState() { return state; }
+
+    /** Sets the current state of the puzzle. */
+    public void setState(PuzzleState state) { this.state = state == null ? PuzzleState.INIT : state; }
+
+    /** Adds a hint to the puzzle. */
+    public void addHint(Hint h) { if (h != null) hints.add(h); }
+
+    /** Returns a list of all hints for this puzzle. */
+    public List<Hint> getHints() { return hints; }
+
+    /** Sets the maximum number of hints available for this puzzle. */
+    public void setMaxHints(int n) { this.maxHints = Math.max(0, n); }
+
+    /** Returns the maximum number of hints allowed. */
+    public int getMaxHints() { return maxHints; }
+
+    /** Returns the item rewarded upon solving this puzzle. */
+    public String getRewardItem() { return rewardItem; }
+
+    /** Sets the item rewarded upon solving this puzzle. */
+    public void setRewardItem(String rewardItem) { this.rewardItem = rewardItem; }
+
+    /** Returns true if the puzzle requires an item to solve. */
+    public boolean isRequiresItem() { return requiresItem; }
+
+    /** Sets whether the puzzle requires an item to solve. */
+    public void setRequiresItem(boolean requiresItem) { this.requiresItem = requiresItem; }
+
+    /** Returns the key of the item required to solve this puzzle. */
+    public String getRequiredItemKey() { return requiredItemKey; }
+
+    /** Sets the key of the item required to solve this puzzle. */
+    public void setRequiredItemKey(String requiredItemKey) { this.requiredItemKey = requiredItemKey; }
 
     /**
-     * Checks for achievements based on the puzzle's performance.
-     * Subclasses override `checkSpecificAchievementCondition` to define achievement.
+     * Handles user input and returns a {@link ValidationResult}.
      *
-     * @param duration The time taken to complete the puzzle.
-     * @param hintsUsed The number of hints used.
-     * @param currentScore The current score of the player for this puzzle.
-     * @return A list of newly unlocked achievements.
+     * @param input the player's input
+     * @return the validation result
      */
+    public abstract ValidationResult enterInput(String input);
 
-    public List<Achievement> checkForAchievement(Duration duration, int hintsUsed, int currentScore) {
-        List<Achievement> newlyUnlocked = new ArrayList<>();
-
-        for (Achievement achievement : possibleAchievements) {
-            if (!achievement.isUnlocked()) { // Only check if not already unlocked
-                if (checkSpecificAchievementCondition(achievement, duration, hintsUsed, currentScore)) {
-                    achievement.unlock(); // Unlock the achievement
-                    newlyUnlocked.add(achievement);
-                }
-            }
-        }
-        return newlyUnlocked;
-    }
-
-    // Abstract method for subclasses to implement achievement logic
-    protected abstract boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed, int currentScore);
-
-    // Getters and Setters
-    public UUID getPuzzleID() { return puzzleID; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public PuzzleState getState() { return state; }
-    public void setState(PuzzleState state) { this.state = state; }
-
-    public int getMaxHints() { return maxHints; }
-    public void setMaxHints(int maxHints) {
-        if (maxHints >= 0) { this.maxHints = maxHints; } else { this.maxHints = 0; }
-    }
-    
-    public void addHint(Hint hint) { if (hint != null) { this.hints.add(hint); } }
-    public int getCurrentHintLevel() { return currentHintLevel; }
-    public void resetHints() { this.currentHintLevel = 0; }
-
-    public List<Achievement> getPossibleAchievements() { return new ArrayList<>(possibleAchievements); }
-    public void addPossibleAchievement(Achievement achievement) {
-        if (achievement != null && achievement.getPuzzleId().equals(this.puzzleID)) { // Ensure achievement matches this puzzle
-            this.possibleAchievements.add(achievement);
-        } else if (achievement != null && achievement.getPuzzleId() == null) {
-            // Option to automatically set puzzleId if not set, for convenience during setup
-            achievement.setPuzzleId(this.puzzleID);
-            this.possibleAchievements.add(achievement);
-        } else {
-            System.err.println("Warning: Attempted to add an achievement for a different puzzle ID. Achievement: " + achievement.getName() + ", Puzzle ID: " + this.puzzleID);
-        }
+    /**
+     * Checks a specific achievement condition related to this puzzle.
+     * (Currently unimplemented.)
+     *
+     * @param achievement the achievement to check
+     * @param duration the time taken
+     * @param hintsUsed number of hints used
+     * @param currentScore player's current score
+     * @return true if condition met, false otherwise
+     */
+    protected boolean checkSpecificAchievementCondition(Achievement achievement, Duration duration, int hintsUsed,
+            int currentScore) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'checkSpecificAchievementCondition'");
     }
 }

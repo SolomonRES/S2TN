@@ -3,100 +3,105 @@
     "dungeonId": "c6275f70-c80f-42c8-8d46-6b9ec5794186",
     "name": "Hall of Torches",
     "difficulty": 3,
-    "timer": {
-      "allowedTime": "00:05:00",
-      "elapsedTime": "00:00:00"
-    },
+    "timer": { "allowedTime": "00:05:00", "elapsedTime": "00:00:00" },
     "rooms": [
       {
         "roomId": "a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2",
         "puzzles": [
           {
             "puzzleId": "9f96a37d-28ab-4456-80e4-67e9e76f6799",
-            "title": "Riddle",
+            "title": "Torchlight Riddle",
             "status": "INIT",
             "maxTries": 3,
-            "hints": [
-              {
-                "level": 1,
-                "text": "Think about something that follows you.",
-                "cost": 1.0
-              }
-            ],
+            "hints": [{ "level": 1, "text": "Think about burning more than one torch at once", "cost": 1.0 }],
             "allowedTime": "00:02:00",
             "versionSeed": 123456789,
             "scoreValue": 150,
             "startTime": "00:00:00",
-            "question": "I follow you all the time and copy your every move, but you can’t touch me or catch me. What am I?",
-            "answer": "shadow",
-            "hint": "You see it when the sun is out."
-          }
-        ],
-        "hints": [
+            "question": "You are in a dark dungeon corridor You have one match and three unlit torches Lighting any torch takes exactly 1 minute and a torch burns for 2 minutes How can you measure exactly 3 minutes of time",
+            "answer": "TORCH",
+            "hint": "Think about burning multiple torches together to create a timer",
+            "rewardItem": "CIPHER"
+          },
           {
-            "level": 1,
-            "text": "Look for patterns that mirror your movements.",
-            "cost": 0.5
+            "puzzleId": "8b2a2a07-ae55-4558-a87e-e2757890e409",
+            "title": "Vault Sigil Scramble",
+            "status": "INIT",
+            "maxTries": 5,
+            "hints": [
+              { "level": 1, "text": "It is a precious metal", "cost": 1.0 },
+              { "level": 2, "text": "Symbol Au", "cost": 1.5 }
+            ],
+            "allowedTime": "00:03:00",
+            "versionSeed": 987654321,
+            "scoreValue": 120,
+            "startTime": "00:00:00",
+            "scrambledWord": "DLOG",
+            "solution": "GOLD",
+            "hint": "Rearrange the letters",
+            "rewardItem": "GOLD_COIN"
+          },
+          {
+            "puzzleId": "f9aa6dfb-81df-4325-93b8-5ef98ae7c8c4",
+            "title": "Sentinels Plaque Order",
+            "type": "CODE",
+            "status": "INIT",
+            "maxTries": 5,
+            "hints": [
+              { "level": 1, "text": "Start by putting III first.", "cost": 1.0 },
+              { "level": 2, "text": "I is third; IV must be after II.", "cost": 1.5 }
+            ],
+            "allowedTime": "00:03:00",
+            "versionSeed": 2025,
+            "scoreValue": 180,
+            "startTime": "00:00:00",
+            "codePrompt": "On the lab door a parchment reads: \"III comes first. I is third. IV appears somewhere after II.\" The four panels are I, II, III, IV. Enter the order as digits 1-4 without spaces.",
+            "expectedCode": "3214",
+            "requiresItem": true,
+            "requiredItemKey": "CIPHER",
+            "rewardItem": "BRASS_KEY"
           }
         ],
-        "exits": [
-          "39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a"
-        ],
+        "hints": [{ "level": 1, "text": "Check the wall carvings about torch usage", "cost": 0.5 }],
+        "exits": ["39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a"],
         "lockedExits": []
       }
-    ]
+    ],
+    "story": {
+      "title": "Hall of Torches The Ember Oath",
+      "text": "When the citadel fell, the last Sentinel hid the Golden Vault away. Only minds bright as flame may pass. Three trials await: a riddle of fire, a scrambled sigil, and a coded lock. Gather what you need, choose your path, and escape before the embers fade.",
+      "tts": true
+    }
   },
   {
     "dungeonId": "9347d0e3-6eeb-42ae-9275-f274cfa13de8",
     "name": "The Golden Vault",
     "difficulty": 4,
-    "timer": {
-      "allowedTime": "00:07:00",
-      "elapsedTime": "00:00:00"
-    },
+    "timer": { "allowedTime": "00:07:00", "elapsedTime": "00:00:00" },
     "rooms": [
       {
         "roomId": "39e67b9f-97f1-4cb7-bcc4-1a2ab3d88a5a",
         "puzzles": [
           {
             "puzzleId": "4f3c1c78-153a-422f-8a83-6721fc5a5056",
-            "title": "Word Scramble",
+            "title": "Antechamber Scramble",
             "status": "INIT",
             "maxTries": 5,
+            "hints": [
+              { "level": 1, "text": "It is a precious metal", "cost": 1.0 },
+              { "level": 2, "text": "Symbol Au", "cost": 1.5 }
+            ],
             "allowedTime": "00:03:00",
             "versionSeed": 987654321,
             "scoreValue": 120,
             "startTime": "00:00:00",
-
-            "scrambledWord": "ESACEP",
-            "solution": "escape",
-            "hint": "Think about what players do when the clock is ticking."
-          },
-          {
-            "puzzleId": "e1b2c3d4-55aa-4666-8899-001122334455",
-            "title": "Vault Console Code",
-            "status": "INIT",
-            "maxTries": 3,
-            "hints": [],
-            "allowedTime": "00:02:00",
-            "versionSeed": 24681012,
-            "scoreValue": 180,
-            "startTime": "00:00:00",
-
-            "acceptedCodes": ["victory"],
-            "hint": "A single triumphant word will open the console."
+            "scrambledWord": "DLOG",
+            "solution": "GOLD",
+            "hint": "Rearrange the letters"
           }
         ],
-        "hints": [
-          {
-            "level": 1,
-            "text": "The keypad accepts letters",
-            "cost": 0.5
-          }
-        ],
-        "exits": [
-          "a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2"
-        ],
+        "hints": [{ "level": 1, "text": "The keypad accepts letters", "cost": 0.5 }],
+        "exits": ["a2e0f1a1-d68f-4f5d-8f78-8cf2e3e4e3e2"],
         "lockedExits": []
       }
     ]

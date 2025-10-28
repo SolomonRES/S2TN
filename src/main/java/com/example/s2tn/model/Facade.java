@@ -1,175 +1,119 @@
 package com.example.s2tn.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Simplified API for user auth, dungeon/room navigation, puzzles, inventory, and timer control.
+ * Wraps lower-level services and models to provide a single entry point for the UI/driver.
+ */
 public class Facade {
 
     private Account user;
     private Dungeon dungeon;
-    private Progress progress;
-    private Leaderboard leaderboard;
+
+    private final Set<String> inventory = new HashSet<>();
+
+    public Facade(){
+        DataLoader loader = new DataLoader();
+        loader.loadUsers();
+    }
+
+    /** Registers a new user with username and password. */
+    public boolean register(String userName, String password) {
+        if (userName == null || userName.isBlank() || password == null) return false;
+        Account a = new Account();
+        a.setUserName(userName);
+        a.setPassword(password);
+        return new UserService().addUser(a);
+    }
+
+    /** Attempts to log in a user by username/password and sets it as current user. */
+    public boolean login(String userName, String password) {
+        Account found = new UserService().getByUserName(userName);
+        if (found == null) return false;
+        if (!Objects.equals(password, found.getPassword())) return false;
+        this.user = found;
+        return true;
+    }
+
+    /** Logs out the current user. */
+    public void logout() { this.user = null; }
+
+    /** Returns the currently logged-in user, or null if none. */
+    public Account getCurrentUser() { return user; }
+
+    /** Returns a list of the top N players from the leaderboard. */
+    public List<Account> getTopPlayers(int n) {
+    return new Leaderboard().getTopPlayers(n);
+    }
+    
+    // Dungeons 
     private static volatile boolean dungeonsLoaded = false;
 
-
-// --------Account---------------------------------------------------------------------------------------
-
-    public boolean signUp(String username, String password) {
-        ensureUsersLoadedOnce();
-        if (username == null || username.isBlank() || password == null) return false;
-        Account a = new Account();
-        a.setUserName(username.trim());
-        a.setPassword(password);     
-        return new UserService().addUser(a); 
-    }
-
-    public boolean login(String username, String password) {
-        ensureUsersLoadedOnce();
-        Account found = new UserService().getByUserName(username);
-        if (found == null) return false;
-
-        if (found.login(username, password)) {
-            this.user = found;
-            return true;
-        }
-        return false;
-    }
-
-    public void logout() {
-        this.user = null;
-    }
-
-    public Account getAccount() {
-        return user;
-    }
-
-// ----------------Progress-----------------------------------------------------------------------------
-
-    public void saveProgress() {
-    }
-
-    public Progress loadProgress(String userId) {
-        return new Progress();
-    }
-
-    public List<String> listSaves() {
-        return new ArrayList<>();
-    }
-
-    public Progress loadSave(String slot) {
-        return new Progress();
-    }
-
-    public void deleteSave(String slot) {
-    }
-
-    public void resetProgress() {
-    }
-
-    public Progress getCurrentStatus() {
-        return new Progress();
-    }
-
-// --------------------Dungeon/Map----------------------------------------------------------------------
-
-    public Dungeon selectDungeon(java.util.UUID dungeonId) {
-        ensureDungeonsLoaded();
-        java.util.List<Dungeon> ds = DungeonList.getInstance().getAll();
-        if (ds.isEmpty()) return null;
-
-        if (dungeonId == null) {
-            dungeon = ds.get(0);
-            return dungeon;
-        }
-        for (Dungeon d : ds) {
-            if (d.getUUID().equals(dungeonId)) {
-                dungeon = d;
-                return dungeon;
-            }
-        }
-        return null;
-    }
-
-    public java.util.List<Dungeon> listDungeons() {
+    /** Lists all available dungeons, loading them once on first access. */
+    public List<Dungeon> listDungeons() {
         ensureDungeonsLoadedOnce();
         return DungeonList.getInstance().getAll();
     }
 
-    public void chooseDifficulty(String level) {
-    if (dungeon == null || level == null) return;
-    switch (level.toLowerCase()) {
-        case "easy" -> dungeon.setDifficulty(Difficulty.EASY);
-        case "normal" -> dungeon.setDifficulty(Difficulty.NORMAL);
-        case "hard" -> dungeon.setDifficulty(Difficulty.HARD);
-        default -> { }
-    }
+    /** Starts (selects) a dungeon by id; if id is null, selects the first available. */
+    public boolean startDungeon(UUID id) {
+        ensureDungeonsLoadedOnce();
+        List<Dungeon> ds = DungeonList.getInstance().getAll();
+        if (ds == null || ds.isEmpty()) return false;
+        Dungeon pick = (id == null) ? ds.get(0)
+                : ds.stream().filter(d -> id.equals(d.getUUID())).findFirst().orElse(null);
+        if (pick == null) return false;
+        dungeon = pick;
+        return true;
     }
 
+    /** Enters the selected dungeon, starting its timer and moving to the starting room if needed. */
     public boolean enterDungeon() {
-        if (this.dungeon == null) return false;
+        if (dungeon == null) return false;
         if (dungeon.getTimer() != null) dungeon.getTimer().start();
         if (dungeon.getCurrentRoom() == null) {
             Room start = dungeon.getStartingRoom();
             if (start != null) dungeon.changeRoom(start);
         }
-        progress = new Progress();
         return true;
     }
 
-    public boolean startDungeon(java.util.UUID id) {
-        ensureDungeonsLoadedOnce();
-        java.util.List<Dungeon> ds = DungeonList.getInstance().getAll();
-        if (ds.isEmpty()) return false;
-        Dungeon pick = (id == null) ? ds.get(0)
-                : ds.stream().filter(d -> id.equals(d.getUUID())).findFirst().orElse(null);
-        if (pick == null) return false;
-        this.dungeon = pick;
-        return true;
-    }
+    /** Exits the current dungeon. */
+    public void exitDungeon() { dungeon = null; }
 
-    public boolean restartDungeon() {
-        // Set progress to null
-        // Reload dungeonID and roomID
-        if(dungeon == null || progress == null){
-            return false;
+    /** Sets the dungeon difficulty from a string level (easy/normal/hard). */
+    public void chooseDifficulty(String level) {
+        if (dungeon == null || level == null) return;
+        switch (level.toLowerCase()) {
+            case "easy"   -> dungeon.setDifficulty(Difficulty.EASY);
+            case "hard"   -> dungeon.setDifficulty(Difficulty.HARD);
+            default       -> dungeon.setDifficulty(Difficulty.NORMAL);
         }
-        UUID id = dungeon.getUUID();
-        dungeon = null;
-        progress = null;
-        startDungeon(id);
-        enterRoom(id);
-        return true;
     }
 
-    public void exitDungeon() {
-        this.dungeon = null;
+    // Rooms 
+
+    /** Returns the list of rooms for the current dungeon, or an empty list if none. */
+    public List<Room> viewRooms() {
+        return dungeon == null ? Collections.emptyList() : dungeon.getRooms();
     }
 
-    public boolean completeDungeon() {
-        if(dungeon == null){
-            return false;
-        }
-        if(dungeon.getRooms().size() == dungeon.getMap().getCompletedRooms().size()){
-            dungeon.getTimer().stop();
-            int pointsAwarded = (int) (dungeon.getMaxTimeAllowed() - dungeon.getTimer().elapsedTime()) / 10;
-            switch (dungeon.getDifficulty()){
-                case EASY -> pointsAwarded *= 2;
-                case NORMAL -> pointsAwarded *= 4;
-                case HARD -> pointsAwarded *= 6;
-            }
-            user.updateScore(pointsAwarded);
-
-            return true;
-        }
-        return false;
+    /** Returns the UUID of the current room (or starting room), or null if not available. */
+    public UUID getCurrentRoomId() {
+        if (dungeon == null) return null;
+        Room cur = dungeon.getCurrentRoom() != null ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
+        return cur == null ? null : cur.getRoomID();
     }
 
-    public com.example.s2tn.model.Map getMap() {
-        return dungeon == null ? null : dungeon.getMap();
-    }
-
-    public boolean enterRoom(java.util.UUID roomId) {
+    /** Enters a room by its UUID within the current dungeon. */
+    public boolean enterRoom(UUID roomId) {
         if (dungeon == null || roomId == null) return false;
         for (Room r : dungeon.getRooms()) {
             if (roomId.equals(r.getRoomID())) {
@@ -180,23 +124,10 @@ public class Facade {
         return false;
     }
 
-
-    public java.util.List<Room> viewRooms() {
-        return dungeon == null ? new java.util.ArrayList<>() : dungeon.getRooms();
-    }
-
-    public void changeRoom(java.util.UUID roomID) {
-    for (Room findRoom : dungeon.getRooms()) {
-        if (roomID != null && roomID.equals(findRoom.getRoomID())) {
-            dungeon.changeRoom(findRoom);
-            break;
-        }
-    }
-    }
-
+    /** Moves to the next room in sequence; wraps to the first if at the end. */
     public boolean nextRoom() {
         if (dungeon == null) return false;
-        java.util.List<Room> rooms = dungeon.getRooms();
+        List<Room> rooms = dungeon.getRooms();
         if (rooms == null || rooms.isEmpty()) return false;
         Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
         if (cur == null) { dungeon.changeRoom(rooms.get(0)); return true; }
@@ -206,247 +137,156 @@ public class Facade {
         return true;
     }
 
+    // Puzzles 
 
-    public void previousRoom() {
-    if (dungeon == null) return;
-    Room prev = dungeon.getPreviousRoom();
-    if (prev != null) dungeon.changeRoom(prev);
+    /** Answers a riddle puzzle by id; grants reward item on success. */
+    public boolean answerRiddle(UUID puzzleId, String answer) {
+        Puzzle p = findPuzzle(puzzleId);
+        if (!(p instanceof Riddle)) return false;
+        ValidationResult res = p.enterInput(answer);
+        if (res != null && res.isValid() && res.getNewState() == PuzzleState.SOLVED) grantRewardItem(p);
+        return res != null && res.isValid();
     }
 
+    /** Answers a word scramble (or generic) puzzle by id; grants reward item on success. */
+    public boolean answerScramble(UUID puzzleId, String answer) {
+        Puzzle p = findPuzzle(puzzleId);
+        if (p == null) return false;
 
-// -------------------Puzzle(s)-------------------------------------------------------------------------
+        if (p.getClass().getSimpleName().toLowerCase().contains("scramble")) {
+            ValidationResult res = p.enterInput(answer);
+            if (res != null && res.isValid() && res.getNewState() == PuzzleState.SOLVED) grantRewardItem(p);
+            return res != null && res.isValid();
+        }
 
-    public void attemptPuzzle(UUID puzzleId, String input) {
+        ValidationResult res = p.enterInput(answer);
+        if (res != null && res.isValid() && res.getNewState() == PuzzleState.SOLVED) grantRewardItem(p);
+        return res != null && res.isValid();
     }
 
-    public Hint requestHint(UUID puzzleId, int level) {
-        return new Hint();
+    /** Attempts a code-based puzzle by id, enforcing required item checks; grants reward on success. */
+    public boolean attemptCodePuzzle(UUID puzzleId, String code) {
+        Puzzle p = findPuzzle(puzzleId);
+        if (p == null) return false;
+        if (!hasRequiredItem(p)) {
+            return false;
+        }
+
+        ValidationResult res = p.enterInput(code);
+        if (res != null && res.isValid() && res.getNewState() == PuzzleState.SOLVED) grantRewardItem(p);
+        return res != null && res.isValid();
     }
 
-    public void skipPuzzle(UUID puzzleId) {
+    /** Finds a puzzle by UUID in the current dungeon, or null if not found. */
+    private Puzzle findPuzzle(UUID puzzleId) {
+        if (dungeon == null || puzzleId == null) return null;
+        for (Room r : dungeon.getRooms()) {
+            if (r.getPuzzles() == null) continue;
+            for (Puzzle p : r.getPuzzles()) {
+                if (puzzleId.equals(p.getPuzzleID())) return p;
+            }
+        }
+        return null;
     }
 
-    public void solvePuzzle(UUID puzzleId) {
-    }
+    // Inventory 
 
-    public void submitCode(UUID puzzleId, String code) {
-        attemptCodePuzzle(puzzleId, code);
-    }
+    /** Returns a snapshot list of inventory keys acquired by the player. */
+    public List<String> getInventoryKeys() { return new ArrayList<>(inventory); }
 
-    public void moveInMaze(UUID puzzleId, String direction) {
-    }
-
-    public boolean slideShape(UUID puzzleId, Object shape, String direction, int steps) {
+    /** Uses an item by key if present in the inventory. */
+    public boolean useItemByKey(String key) {
+        if (key == null) return false;
+        if (inventory.contains(key)) {
+            System.out.println("[Inventory] Used: " + key);
+            return true;
+        }
         return false;
     }
 
-    public void alignShapes(UUID puzzleId, List<Object> shapes) {
-    }
-
-    public ValidationResult attemptCodePuzzle(String input) {
-        if (dungeon == null) {
-            return ValidationResult.invalidFormat("No active dungeon.", PuzzleState.INIT);
-        }
-        Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-        if (cur == null || cur.getPuzzles() == null || cur.getPuzzles().isEmpty()) {
-            return ValidationResult.invalidFormat("No puzzle in this room.", PuzzleState.INIT);
-        }
-        for (Puzzle p : cur.getPuzzles()) {
-            if (p.getState() != PuzzleState.SOLVED) {
-                return p.enterInput(input);
-            }
-        }
-        return ValidationResult.invalidFormat("All puzzles solved in this room.", PuzzleState.SOLVED);
-    }
-
-    public boolean answerRiddle(UUID puzzleId, String answer) {
-        Puzzle p = findPuzzleInActiveDungeon(puzzleId);
-        if (!(p instanceof Riddle)) return false;
-        ValidationResult res = p.enterInput(answer);
-        return res != null && res.isValid();
-    }
-
-    public boolean answerScramble(UUID puzzleId, String answer) {
-        WordScramble scramble = new WordScramble();
-        scramble.displayScramble();
-        return scramble.checkAnswer(answer);
-    }
-
-    public boolean attemptCodePuzzle(UUID puzzleId, String code) {
-        Puzzle p = findPuzzleInActiveDungeon(puzzleId);
-        if (!(p instanceof CodePuzzle)) return false;
-        ValidationResult res = p.enterInput(code);
-        return res != null && res.isValid();
-    }
-
-    private Puzzle findPuzzleInActiveDungeon(UUID puzzleId) {
-    if (dungeon == null || puzzleId == null) return null;
-    for (Room r : dungeon.getRooms()) {
-        if (r.getPuzzles() == null) continue;
-        for (Puzzle p : r.getPuzzles()) {
-            if (puzzleId.equals(p.getPuzzleID())) return p;
-        }
-    }
-    return null;
-    }
-
-// -----------------------Start/Stop Time-------------------------------------------------------
-
-    public void pauseTimer() {
-    if (dungeon != null && dungeon.getTimer() != null && dungeon.getTimer().isRunning()) {
-        dungeon.getTimer().stop();
-    }
-    }
-
-    public void resumeTimer() {
-    if (dungeon != null && dungeon.getTimer() != null && !dungeon.getTimer().isRunning()) {
-        dungeon.getTimer().unPause();
-    }
-    }
-
-// ------------------also progress/leaderboard/map? unsure------------------------------
-
-    @SuppressWarnings("unused")
-    private void unlockExit(UUID fromRoom, UUID toRoom) {
-    for (Room findRoom : dungeon.getRooms()) {
-        if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
-            for (Room isLocked : findRoom.getExits()) {
-                if (toRoom != null && toRoom.equals(isLocked.getRoomID())) {
-                    isLocked.unlock(isLocked);
-                }
-            }
-        }
-    }
-    }
-
-    @SuppressWarnings("unused")
-    private void markRoomExplored(UUID fromRoom, UUID toRoom) {
-    for (Room findRoom : dungeon.getRooms()) {
-        if (fromRoom != null && fromRoom.equals(findRoom.getRoomID())) {
-            for (Room unexplored : findRoom.getExits()) {
-                if (toRoom != null && toRoom.equals(unexplored.getRoomID())) {
-                    dungeon.getMap().markExplored(unexplored);
-                }
-            }
-        }
-    }
-    }
-
-    @SuppressWarnings("unused")
-    private void markRoomComplete(UUID roomId) {
-    for (Room findRoom : dungeon.getRooms()) {
-        if (roomId != null && roomId.equals(findRoom.getRoomID())) {
-            dungeon.getMap().markComplete(findRoom);
-        }
-    }
-    }
-
-    @SuppressWarnings("unused")
-    private void submitScore(String userName, int score, long elapsedTime) {
-
-    }
-
-// -----------------------------helper methods-------------------------------------------------------------------------
-
-private void ensureDungeonsLoaded() {
-    if (dungeonsLoaded) return;
-    synchronized (Facade.class) {
-        if (dungeonsLoaded) return;
-
-        DataLoader loader = new DataLoader();
-        loader.loadDungeons();
-        java.util.List<Dungeon> loaded = loader.getDungeons();
-        if (loaded != null && !loaded.isEmpty()) {
-            DungeonList.getInstance().replaceAll(loaded);
-        }
-        dungeonsLoaded = true;
-    }
-}
-
-private void ensureDungeonsLoadedOnce() {
-    if (dungeonsLoaded) return;
-    synchronized (Facade.class) {
-        if (dungeonsLoaded) return;
-        DataLoader loader = new DataLoader();
-        loader.loadDungeons();                     
-        java.util.List<Dungeon> loaded = loader.getDungeons();
-        if (loaded != null && !loaded.isEmpty()) {
-            DungeonList.getInstance().replaceAll(loaded);
-        }
-        dungeonsLoaded = true;
-    }
-}
-
-private static volatile boolean usersLoaded = false;
-private void ensureUsersLoadedOnce() {
-    if (usersLoaded) return;
-    synchronized (Facade.class) {
-        if (usersLoaded) return;
-        DataLoader loader = new DataLoader();
-        loader.loadUsers();                 
-        usersLoaded = true;
-    }
-}
-
-public java.util.UUID getCurrentRoomId() {
-    if (dungeon == null) return null;
-    Room cur = dungeon.getCurrentRoom() != null ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-    return cur == null ? null : cur.getRoomID();
-}
-
-public java.util.List<String> debugListLoadedDungeons() {
-    ensureDungeonsLoadedOnce();
-    java.util.List<String> rows = new java.util.ArrayList<>();
-    for (Dungeon d : DungeonList.getInstance().getAll()) {
-        int rc = d.getRooms() == null ? 0 : d.getRooms().size();
-        rows.add(d.getUUID() + " :: " + d.getName() + " (rooms: " + rc + ")");
-    }
-    return rows;
-}
-
-public String getCurrentPuzzleQuestion() {
-    if (dungeon == null) return null;
-    Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-    if (cur == null || cur.getPuzzles() == null) return null;
-    for (Puzzle p : cur.getPuzzles()) {
-        if (p.getState() != PuzzleState.SOLVED) {
-            if (p instanceof Riddle r) return r.getQuestion();
-            return null;
-        }
-    }
-    return null;
-}
-
+    /** Grants a reward item to the inventory based on puzzle metadata or title heuristics. */
     @SuppressWarnings("UseSpecificCatch")
-    public String getCurrentPuzzleHint() {
-    if (dungeon == null) return null;
-    Room cur = (dungeon.getCurrentRoom() != null) ? dungeon.getCurrentRoom() : dungeon.getStartingRoom();
-    if (cur == null || cur.getPuzzles() == null) return null;
-
-    for (Puzzle p : cur.getPuzzles()) {
-        if (p.getState() != PuzzleState.SOLVED) {
-
-            if (p instanceof Riddle r && r.getHint() != null && !r.getHint().isBlank()) {
-            return r.getHint();
+    private void grantRewardItem(Puzzle p) {
+        if (p == null) return;
+        try {
+            var m = p.getClass().getMethod("getRewardItem");
+            Object v = m.invoke(p);
+            if (v instanceof String key && !key.isBlank()) {
+                inventory.add(key);
+                System.out.println("[Inventory] You acquired: " + key);
+                return;
             }
+        } catch (Throwable ignored) {}
 
-            if (p instanceof CodePuzzle cp && cp.getHint() != null && !cp.getHint().isBlank()) {
-            return cp.getHint();
-            }
-
-            try {
-                java.lang.reflect.Method m = p.getClass().getMethod("getHints");
-                Object res = m.invoke(p);
-                if (res instanceof java.util.List<?> list && !list.isEmpty()) {
-                    Object maybeHint = list.get(0);
-                    if (maybeHint instanceof Hint h) return h.getText();
-                    return String.valueOf(maybeHint);
-                }
-            } catch (Throwable ignored) {}
-            return "No hint available for this puzzle.";
+        String t = (p.getTitle() == null) ? "" : p.getTitle().toLowerCase();
+        if (t.contains("riddle")) {
+            inventory.add("CIPHER_WHEEL");
+            System.out.println("[Inventory] You acquired: CIPHER_WHEEL");
+        } else if (t.contains("scramble")) {
+            inventory.add("GOLD_COIN");
+            System.out.println("[Inventory] You acquired: GOLD_COIN");
         }
     }
-    return null;
-}
 
+    /** Returns true if any required item for the puzzle is in the inventory. */
+    @SuppressWarnings({"UseSpecificCatch", "UnnecessaryUnboxing"})
+    private boolean hasRequiredItem(Puzzle p) {
+        boolean requires = false;
+        String key = null;
+        try {
+            var m1 = p.getClass().getMethod("isRequiresItem");
+            Object v1 = m1.invoke(p);
+            requires = (v1 instanceof Boolean b) ? b.booleanValue() : false;
+        } catch (Throwable ignored) {}
+        try {
+            var m2 = p.getClass().getMethod("getRequiredItemKey");
+            Object v2 = m2.invoke(p);
+            if (v2 instanceof String s && !s.isBlank()) key = s;
+        } catch (Throwable ignored) {}
+
+        if (!requires && key == null) {
+            String title = p.getTitle() == null ? "" : p.getTitle().toLowerCase();
+            if (title.contains("sentinel") || title.contains("code") || title.contains("keypad")) {
+                requires = true;
+                key = "CIPHER";
+            }
+        }
+
+        if (!requires) return true;
+        if (key == null || key.isBlank()) return true; 
+        return inventory.contains(key);
+    }
+
+    //  Timer 
+
+    /** Pauses the active dungeon timer, if running. */
+    public void pauseTimer() {
+        if (dungeon != null && dungeon.getTimer() != null && dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().stop();
+        }
+    }
+
+    /** Resumes the active dungeon timer, if paused. */
+    public void resumeTimer() {
+        if (dungeon != null && dungeon.getTimer() != null && !dungeon.getTimer().isRunning()) {
+            dungeon.getTimer().unPause();
+        }
+    }
+
+    // Loader helper 
+
+    /** Ensures dungeon data is loaded exactly once for the process lifetime. */
+    private void ensureDungeonsLoadedOnce() {
+        if (dungeonsLoaded) return;
+        synchronized (Facade.class) {
+            if (dungeonsLoaded) return;
+            DataLoader loader = new DataLoader();
+            loader.loadDungeons();
+            List<Dungeon> loaded = loader.getDungeons();
+            if (loaded != null && !loaded.isEmpty()) {
+                DungeonList.getInstance().replaceAll(loaded);
+            }
+            dungeonsLoaded = true;
+        }
+    }
 }

@@ -27,6 +27,7 @@ public class SlideShapePuzzle extends Puzzle {
     private Difficulty difficulty;                 // null -> default behavior (no cap)
     private int maxMoves = Integer.MAX_VALUE;      // cap only on HARD-like
 
+    /** Creates a puzzle with explicit start/end configs and board dimensions. */
     public SlideShapePuzzle(java.util.List<String> start,
                             java.util.List<String> end,
                             int rows,
@@ -47,7 +48,7 @@ public class SlideShapePuzzle extends Puzzle {
         applyDifficulty(); // set defaults for whatever the current difficulty is (may be null)
     }
 
-    /** simple default 3x3 */
+    /** Creates a simple default 3x3 slide puzzle configuration. */
     public SlideShapePuzzle() {
         this(
             java.util.Arrays.asList("A","B","C","D","E","F","G","_","H"),
@@ -58,12 +59,19 @@ public class SlideShapePuzzle extends Puzzle {
 
     // -------- basics --------
 
+    /** Returns a copy of the current board tiles in row-major order. */
     public java.util.List<String> getBoard() { return new java.util.ArrayList<>(board); }
+
+    /** Returns the number of moves made so far. */
     public int getMovesMade() { return movesMade; }
+
+    /** Returns the latest hint/status message. */
     public String getHint() { return hint; }
+
+    /** Returns true if the current board matches the end configuration. */
     public boolean isSolved() { return board.equals(endConfiguration); }
 
-    /** reset board back to the original start config */
+    /** Resets the board back to the original start configuration. */
     public void resetToStart() {
         board.clear();
         board.addAll(startConfiguration);
@@ -72,7 +80,7 @@ public class SlideShapePuzzle extends Puzzle {
         setState(PuzzleState.IN_PROGRESS);
     }
 
-    /** tiny console display for quick checks */
+    /** Prints a simple console view of the board for quick checks. */
     public void displayPuzzle() {
         for (int r = 0; r < rows; r++) {
             int s = r * cols, e = s + cols;
@@ -82,11 +90,13 @@ public class SlideShapePuzzle extends Puzzle {
 
     // -------- difficulty wiring --------
 
+    /** Sets the difficulty level and applies any related move caps. */
     public void setDifficulty(Difficulty d) {
         this.difficulty = d; // can be null
         applyDifficulty();
     }
 
+    /** Applies internal difficulty rules such as move limits. */
     private void applyDifficulty() {
         if (difficulty == null) {
             maxMoves = Integer.MAX_VALUE; // default: no cap
@@ -104,6 +114,7 @@ public class SlideShapePuzzle extends Puzzle {
 
     // -------- core slide logic --------
 
+    /** Attempts to slide a tile into the empty slot in the specified direction. */
     private boolean slide(String tile, String dir) {
         if (tile == null || dir == null || "_".equals(tile)) return false;
 
@@ -115,16 +126,27 @@ public class SlideShapePuzzle extends Puzzle {
         int tr = tileIdx  / cols, tc = tileIdx  % cols;
 
         switch (dir.toLowerCase()) {
-            case "up":    if (tr - 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
-            case "down":  if (tr + 1 == er && tc == ec) return swap(tileIdx, emptyIdx); break;
-            case "left":  if (tr == er && tc - 1 == ec) return swap(tileIdx, emptyIdx); break;
-            case "right": if (tr == er && tc + 1 == ec) return swap(tileIdx, emptyIdx); break;
-            default: hint = "direction must be up/down/left/right"; return false;
+            case "up" -> {
+                if (tr - 1 == er && tc == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "down" -> {
+                if (tr + 1 == er && tc == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "left" -> {
+                if (tr == er && tc - 1 == ec) return swap(tileIdx, emptyIdx);
+            }
+            case "right" -> {
+                if (tr == er && tc + 1 == ec) return swap(tileIdx, emptyIdx);
+            }
+            default -> {
+                hint = "direction must be up/down/left/right"; return false;
+            }
         }
         hint = "that tile isn't next to the empty in that direction";
         return false;
     }
 
+    /** Swaps the tile and empty slot positions and increments the move counter. */
     private boolean swap(int a, int b) {
         java.util.Collections.swap(board, a, b);
         movesMade++;
@@ -140,37 +162,40 @@ public class SlideShapePuzzle extends Puzzle {
 
     // -------- required by Puzzle --------
 
+    /**
+     * Parses user input (e.g., "A up", "slide B left", "solved", "reset") and applies the move or command.
+     * Updates puzzle state and returns a {@link ValidationResult} with feedback.
+     */
     @Override
     public ValidationResult enterInput(String s) {
         if (s == null || s.isBlank()) {
             hint = "give input like: A up";
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
 
-        // block moves if we've already exceeded the cap (hard-like)
         if (movesMade > maxMoves && !isSolved()) {
             hint = "move limit reached for difficulty";
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
 
         String in = s.trim();
         if ("reset".equalsIgnoreCase(in)) {
             resetToStart();
-            return new ValidationResult(false, "reset", PuzzleState.IN_PROGRESS);
+            setState(PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("reset", PuzzleState.IN_PROGRESS);
         }
 
         if ("solved".equalsIgnoreCase(in)) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
-                return new ValidationResult(true, "Puzzle solved!", PuzzleState.SOLVED);
+                return ValidationResult.valid("Puzzle solved!", PuzzleState.SOLVED);
             }
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, "Not solved yet", PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Not solved yet", PuzzleState.IN_PROGRESS);
         }
 
-        // accept "slide A up" or "A up"
         String[] parts = in.split("\\s+");
         String tile;
         String dir;
@@ -183,37 +208,36 @@ public class SlideShapePuzzle extends Puzzle {
         } else {
             hint = "format: slide <tile> <dir>";
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
 
-        // extra checks for nicer errors
         if (!board.contains(tile)) {
             hint = "unknown tile: " + tile;
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
         String d = dir.toLowerCase();
         if (!(d.equals("up") || d.equals("down") || d.equals("left") || d.equals("right"))) {
             hint = "direction must be up/down/left/right";
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
 
         boolean moved = slide(tile, d);
         if (moved) {
             if (isSolved()) {
                 setState(PuzzleState.SOLVED);
-                return new ValidationResult(true, "Solved in " + movesMade + " moves.", PuzzleState.SOLVED);
+                return ValidationResult.valid("Solved in " + movesMade + " moves.", PuzzleState.SOLVED);
             }
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, "Moved " + tile + " " + d, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat("Moved " + tile + " " + d, PuzzleState.IN_PROGRESS);
         } else {
             setState(PuzzleState.IN_PROGRESS);
-            return new ValidationResult(false, hint, PuzzleState.IN_PROGRESS);
+            return ValidationResult.invalidFormat(hint, PuzzleState.IN_PROGRESS);
         }
     }
 
-    /** required by the current Puzzle abstract class */
+    /** Checks a simple achievement condition: returns true only if the puzzle is solved. */
     @Override
     public boolean checkSpecificAchievementCondition(Achievement achievement,
                                                      java.time.Duration timeTaken,
@@ -223,6 +247,7 @@ public class SlideShapePuzzle extends Puzzle {
         return isSolved();
     }
 
+    /** Returns a brief string representation of the puzzle state. */
     @Override
     public String toString() {
         return "SlideShapePuzzle{moves=" + movesMade + ", board=" + board + "}";

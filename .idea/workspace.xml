@@ -5,21 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ec5a6fd0-c293-4aca-95d8-888c3097bd02" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/DungeonTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/S2TN/json/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/S2TN/json/users.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/s2tn/model/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/s2tn/model/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/AccountTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/AccountTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/DungeonListTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/DungeonListTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/FacadeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/FacadeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/InventoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/InventoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/LeaderboardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/LeaderboardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/MapTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/MapTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/RoomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/RoomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/SpeakTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/TimerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/TimerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/UserListTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/UserListTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/UserServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/ValidationResultTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/ValidationResultTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +71,22 @@
       <recent name="com.s2tn.model" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.java in S2TN">
+    <configuration name="TimerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="S2TN" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.s2tn.model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.s2tn.model" />
+      <option name="MAIN_CLASS_NAME" value="com.s2tn.model.TimerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="java in S2TN" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="S2TN" />
       <option name="TEST_OBJECT" value="directory" />
@@ -95,6 +98,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.java in S2TN" />
+        <item itemvalue="JUnit.TimerTest" />
       </list>
     </recent_temporary>
   </component>

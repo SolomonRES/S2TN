@@ -31,11 +31,11 @@ class TimerTest {
         assertTrue(timer.isRunning(), "Timer should be running after start().");
 
         // Restarting the timer should reset the start time
-        long firstStartTime = timer.elapsedTime(); // This will be negative, demonstrating a flaw
+        long firstStartTime = timer.elapsedTime();
         try { Thread.sleep(SLEEP_DURATION); } catch (InterruptedException e) { fail("Test interrupted"); }
         timer.start();
         long secondStartTime = timer.elapsedTime(); // Also negative
-
+        assertTrue(firstStartTime > 0, "Time should not be negative");
         assertTrue(secondStartTime > firstStartTime, "Restarting the timer should reset its start time.");
     }
 

@@ -1,14 +1,17 @@
 package com.s2tn.model;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class AccountTest {
 
@@ -52,8 +55,8 @@ class AccountTest {
     @DisplayName("Constructor should handle null and whitespace inputs")
     void testConstructorWithNullAndWhitespace() {
         Account account1 = new Account(null, null);
-        assertNotEquals("", account1.getUserName());
-        assertNotEquals("", account1.getPassword());
+        assertEquals("", account1.getUserName(), "Null username should result in an empty string.");
+        assertEquals("", account1.getPassword(), "Null password should result in an empty string.");
 
         Account account2 = new Account("  user  ", "  pass  ");
         assertEquals("user", account2.getUserName());

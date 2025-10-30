@@ -34,7 +34,7 @@ class InventoryTest {
     @Test
     @DisplayName("add(String) should ignore null or blank keys")
     void add_shouldIgnoreNullOrBlank() {
-        inventory.add((Item)null);
+        inventory.add((String)null); // Correctly call add(String) with null
         assertEquals(0, inventory.size());
 
         inventory.add("  ");

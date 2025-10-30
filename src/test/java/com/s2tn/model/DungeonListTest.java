@@ -155,4 +155,27 @@ class DungeonListTest {
         dungeonList.addDungeon(null);
         assertEquals(1, dungeonList.getAll().size(), "Null dungeons should not be added.");
     }
+
+    @Test
+    @DisplayName("getDungeon by UUID should return the correct dungeon or null")
+    void getDungeonByUUID() {
+        // Successful retrieval
+        assertEquals(dungeon1, dungeonList.getDungeon(dungeon1Id), "Should return dungeon1 for its UUID.");
+        assertEquals(dungeon2, dungeonList.getDungeon(dungeon2Id), "Should return dungeon2 for its UUID.");
+
+        // Unsuccessful retrieval
+        assertNull(dungeonList.getDungeon(UUID.randomUUID()), "Should return null for a non-existent UUID.");
+        assertNull(dungeonList.getDungeon((UUID) null), "Should return null for a null UUID.");
+    }
+
+    @Test
+    @DisplayName("getDungeon by String ID should return the correct dungeon or null")
+    void getDungeonByStringId() {
+        // Successful retrieval
+        assertEquals(dungeon1, dungeonList.getDungeon(dungeon1Id.toString()), "Should return dungeon1 for its string ID.");
+
+        // Unsuccessful retrieval
+        assertNull(dungeonList.getDungeon("invalid-uuid-string"), "Should return null for an invalid UUID string.");
+        assertNull(dungeonList.getDungeon((String) null), "Should return null for a null string ID.");
+    }
 }

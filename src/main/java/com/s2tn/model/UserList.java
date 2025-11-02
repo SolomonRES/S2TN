@@ -108,4 +108,9 @@ public class UserList {
         return false;
     }
 
+    public List<Account> getUsers() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUsers'");
+    }
+
 }

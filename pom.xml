@@ -11,7 +11,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.9.2</junit.version>  </properties>
+    <!-- JUnit 5 version -->
+    <junit.version>5.10.2</junit.version>
+    <!-- Surefire version that supports JUnit 5 + Java 21 -->
+    <surefire.version>3.2.5</surefire.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -19,6 +23,8 @@
       <artifactId>json-simple</artifactId>
       <version>1.1.1</version>
     </dependency>
+
+    <!-- JavaFX (keep your versions) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -29,7 +35,7 @@
       <artifactId>javafx-fxml</artifactId>
       <version>21-ea+24</version>
     </dependency>
-<dependency>
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
       <version>21-ea+24</version>
@@ -39,6 +45,7 @@
       <artifactId>javafx-media</artifactId>
       <version>21-ea+24</version>
     </dependency>
+
     <dependency>
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
@@ -76,7 +83,9 @@
         </exclusion>
       </exclusions>
     </dependency>
-<dependency>
+
+    <!-- JUnit 5: API + Engine -->
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -88,52 +97,55 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-      <dependency>
-          <groupId>org.mobicents.external.freetts</groupId>
-          <artifactId>freetts</artifactId>
-          <version>1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.mobicents.external.freetts</groupId>
-          <artifactId>en_us</artifactId>
-          <version>1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.mobicents.external.freetts</groupId>
-          <artifactId>cmu_us_kal</artifactId>
-          <version>1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.mobicents.external.freetts</groupId>
-          <artifactId>cmulex</artifactId>
-          <version>1.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.mobicents.external.freetts</groupId>
-          <artifactId>cmudict04</artifactId>
-          <version>1.0</version>
-      </dependency>
+
+    <!-- FreeTTS voice deps -->
+    <dependency>
+      <groupId>org.mobicents.external.freetts</groupId>
+      <artifactId>freetts</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mobicents.external.freetts</groupId>
+      <artifactId>en_us</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mobicents.external.freetts</groupId>
+      <artifactId>cmu_us_kal</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mobicents.external.freetts</groupId>
+      <artifactId>cmulex</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mobicents.external.freetts</groupId>
+      <artifactId>cmudict04</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
 
-    <repositories>
-        <repository>
-            <id>mobicents-public-repository-group</id>
-            <name>Mobicents Public Maven Repository Group</name>
-            <url>https://www.mobicents.org/maven/repositories/public/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
+  <repositories>
+    <repository>
+      <id>mobicents-public-repository-group</id>
+      <name>Mobicents Public Maven Repository Group</name>
+      <url>https://www.mobicents.org/maven/repositories/public/</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
+      <!-- Java 21 compilation -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -143,13 +155,27 @@
           <target>21</target>
         </configuration>
       </plugin>
+
+      <!-- JUnit 5 runner -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire.version}</version>
+        <configuration>
+          <!-- Avoid JPMS/module-path issues with JavaFX/automatic modules in tests -->
+          <useModulePath>false</useModulePath>
+          <!-- Optional: keep running even if no tests (remove if you prefer failure) -->
+          <!-- <failIfNoTests>false</failIfNoTests> -->
+        </configuration>
+      </plugin>
+
+      <!-- JavaFX plugin (unchanged) -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <executions>
           <execution>
-            <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
               <mainClass>com.example.s2tn/com.s2tn.HelloApplication</mainClass>

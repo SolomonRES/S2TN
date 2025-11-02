@@ -86,7 +86,7 @@ class DataWriterTest {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     void saveGame() throws Exception {
         Path p = null;
-        try { p = callPathMethod(writer, "gamePath"); } catch (Throwable ignored) {}
+        try { p = callPathMethod(writer, "gamePath"); } catch (Exception ignored) {}
         if (p != null) assumeTrue(ensureParent(p));
         assertDoesNotThrow(() -> writer.saveGame());
         assertDoesNotThrow(() -> writer.saveGame());
@@ -100,7 +100,7 @@ class DataWriterTest {
     @Timeout(value = 3, unit = TimeUnit.SECONDS)
     void saveLeaderboard() throws Exception {
         Path p = null;
-        try { p = callPathMethod(writer, "lbPath"); } catch (Throwable ignored) {}
+        try { p = callPathMethod(writer, "lbPath"); } catch (Exception ignored) {}
         if (p != null) assumeTrue(ensureParent(p));
         Leaderboard lb = new Leaderboard();
         assertDoesNotThrow(() -> writer.saveLeaderboard(lb));

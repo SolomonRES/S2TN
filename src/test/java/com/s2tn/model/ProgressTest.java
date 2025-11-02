@@ -38,8 +38,8 @@ public class ProgressTest {
         Progress progress = new Progress();
         Map<String, PuzzleState> puzzles = new HashMap<>();
         // Assuming PuzzleState has a default constructor or a suitable way to create it
-        PuzzleState dummyState1 = new PuzzleState();
-        PuzzleState dummyState2 = new PuzzleState();
+        PuzzleState dummyState1 = PuzzleState.INIT;
+        PuzzleState dummyState2 = PuzzleState.IN_PROGRESS;
 
         puzzles.put("puzzle1", dummyState1);
         puzzles.put("puzzle2", dummyState2);

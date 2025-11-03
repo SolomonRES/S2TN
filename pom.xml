@@ -11,10 +11,12 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- JUnit 5 version -->
+    <!-- JUnit 5 + Surefire that supports Java 21 -->
     <junit.version>5.10.2</junit.version>
-    <!-- Surefire version that supports JUnit 5 + Java 21 -->
     <surefire.version>3.2.5</surefire.version>
+    <!-- Java language level -->
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -24,7 +26,7 @@
       <version>1.1.1</version>
     </dependency>
 
-    <!-- JavaFX (keep your versions) -->
+    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -84,7 +86,8 @@
       </exclusions>
     </dependency>
 
-    <!-- JUnit 5: API + Engine -->
+    <!-- JUnit 5 (Jupiter) -->
+    <!-- You can keep api+engine, or just the umbrella 'junit-jupiter' artifact. Keeping your split: -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -151,21 +154,24 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
       </plugin>
 
-      <!-- JUnit 5 runner -->
+      <!-- JUnit 5 runner w/ console output -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire.version}</version>
         <configuration>
-          <!-- Avoid JPMS/module-path issues with JavaFX/automatic modules in tests -->
+          <!-- Keep tests on classpath (helps with JavaFX automatic modules in tests) -->
           <useModulePath>false</useModulePath>
-          <!-- Optional: keep running even if no tests (remove if you prefer failure) -->
-          <!-- <failIfNoTests>false</failIfNoTests> -->
+
+          <!-- Print failures to console instead of only writing files -->
+          <printSummary>true</printSummary>
+          <redirectTestOutputToFile>false</redirectTestOutputToFile>
+          <trimStackTrace>false</trimStackTrace>
         </configuration>
       </plugin>
 

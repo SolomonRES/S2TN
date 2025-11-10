@@ -59,7 +59,8 @@ summary.
 ## 🧪 Demonstrations
 
 - 🎥 **Video Walkthrough:**  
-  [▶️ Watch on YouTube](https://www.youtube.com/watch?v=alsl0cOmVb8)
+  [▶️ Backend Implementation Demo](https://www.youtube.com/watch?v=alsl0cOmVb8)
+  [▶️ Frontend Prototype Demo](https://youtu.be/1OyZo8GrogI) 
 
 ---
 

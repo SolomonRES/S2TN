@@ -9,6 +9,6 @@ public class LandingController {
 
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        welcomeText.setText("Welcome to Virtual Escape Room");
     }
 }

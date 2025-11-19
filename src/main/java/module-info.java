@@ -1,4 +1,4 @@
-module com.example.s2tn {
+module com.s2tn {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -12,6 +12,7 @@ module com.example.s2tn {
     requires com.almasb.fxgl.all;
 
     opens com.s2tn to javafx.fxml;
-    exports com.s2tn;
+    opens com.s2tn.model to javafx.fxml;
 
+    exports com.s2tn;
 }

@@ -1,0 +1,174 @@
+.app-root {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f0f8ff, #e6f2ff);
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Header */
+.header-bar {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-border-color: #e0e0e0;
+}
+
+.header-title {
+    -fx-text-fill: #0067b8;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.header-subtitle {
+    -fx-text-fill: #6b6b6b;
+    -fx-font-size: 11px;
+}
+
+.header-code {
+    -fx-text-fill: #6b6b6b;
+}
+
+/* Hero */
+.hero-title {
+    -fx-font-size: 22px;
+    -fx-text-fill: #1a1a1a;
+}
+
+.hero-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b6b6b;
+}
+
+/* Featured challenge container */
+.featured-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e0e0e0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 16, 0.2, 0, 4);
+}
+
+.featured-header {
+    -fx-background-color: linear-gradient(to right, #f8f8f8, #ffffff);
+}
+
+.online-dot {
+    -fx-fill: #107c10;
+}
+
+.featured-label {
+    -fx-text-fill: #6b6b6b;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+/* Ticker */
+.ticker-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.challenge-card {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 14, 0.25, 0, 4);
+}
+
+.challenge-overlay {
+    -fx-background-color: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2), transparent);
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+    -fx-alignment: bottom-left;
+}
+
+.challenge-overlay-content {
+    -fx-alignment: bottom-left;
+}
+
+.challenge-name {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.challenge-desc {
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-font-size: 11px;
+}
+
+/* Difficulty pills */
+.difficulty-pill {
+    -fx-font-size: 10px;
+    -fx-padding: 3 10;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.pill-beginner {
+    -fx-background-color: #22c55e;
+}
+.pill-intermediate {
+    -fx-background-color: #f97316;
+}
+.pill-advanced {
+    -fx-background-color: #dc2626;
+}
+
+/* Buttons */
+.btn-primary {
+    -fx-background-color: #0067b8;
+    -fx-text-fill: white;
+    -fx-padding: 10 26;
+    -fx-background-radius: 6;
+}
+
+.btn-secondary {
+    -fx-background-color: white;
+    -fx-text-fill: #0067b8;
+    -fx-border-color: #0067b8;
+    -fx-padding: 10 26;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #005399;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: rgba(0,103,184,0.06);
+}
+
+/* Feature cards */
+.feature-card {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.2, 0, 2);
+    -fx-max-width: 280;
+}
+
+.feature-emoji {
+    -fx-font-size: 32px;
+}
+
+.feature-title {
+    -fx-font-size: 16px;
+    -fx-text-fill: #1a1a1a;
+    -fx-font-weight: bold;
+}
+
+.feature-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b6b6b;
+}
+
+/* Footer */
+.footer-bar {
+    -fx-background-color: rgba(255,255,255,0.9);
+    -fx-border-color: #e0e0e0;
+}
+
+.footer-text {
+    -fx-text-fill: #6b6b6b;
+    -fx-font-size: 10px;
+}

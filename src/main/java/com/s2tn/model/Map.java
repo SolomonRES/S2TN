@@ -60,8 +60,13 @@ public class Map {
         return dungeon;
     }
 
+    /** Returns a copy of the list of all explored rooms. */
+    public ArrayList<Room> getExploredRooms() {
+        return new ArrayList<>(exploredRooms);
+    }
+
     /** Returns a list of all completed rooms. */
     public ArrayList<Room> getCompletedRooms() {
-        return completedRooms;
+        return new ArrayList<>(completedRooms);
     }
 }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane fx:id="root"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.s2tn.LandingController"
+            styleClass="app-root">
+
+    <!-- HEADER -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header-bar">
+            <padding>
+                <Insets top="8" right="16" bottom="8" left="16"/>
+            </padding>
+
+            <ImageView fx:id="logoImage" fitHeight="40" fitWidth="40"/>
+
+            <VBox spacing="0">
+                <Label text="Escape Room Software™" styleClass="header-title"/>
+                <Label text="Enterprise Puzzle Platform" styleClass="header-subtitle"/>
+            </VBox>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="S²TN" styleClass="header-code"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                    styleClass="main-scroll">
+            <content>
+                <VBox spacing="24" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="32" right="16" bottom="32" left="16"/>
+                    </padding>
+
+                    <!-- HERO SECTION -->
+                    <VBox spacing="8" alignment="CENTER">
+                        <Label text="Experience Professional Escape Room Challenges"
+                               styleClass="hero-title"/>
+                        <Label wrapText="true"
+                               maxWidth="700"
+                               text="Solve intricate puzzles, unlock ancient secrets, and test your problem-solving skills with our enterprise-grade escape room platform."
+                               styleClass="hero-subtitle"/>
+                    </VBox>
+
+                    <!-- FEATURED CHALLENGES -->
+                    <VBox spacing="0" maxWidth="900" styleClass="featured-card">
+                        <!-- header row -->
+                        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="featured-header">
+                            <padding>
+                                <Insets top="10" right="16" bottom="8" left="16"/>
+                            </padding>
+                            <Circle radius="4" styleClass="online-dot"/>
+                            <Label text="FEATURED CHALLENGES" styleClass="featured-label"/>
+                        </HBox>
+
+                        <!-- ticker area -->
+                        <ScrollPane fx:id="challengeScroll"
+                                    hbarPolicy="NEVER"
+                                    vbarPolicy="NEVER"
+                                    pannable="false"
+                                    fitToHeight="true"
+                                    styleClass="ticker-scroll">
+                            <content>
+                                <HBox fx:id="challengeStrip" spacing="16" alignment="CENTER_LEFT">
+                                    <padding>
+                                        <Insets top="12" right="16" bottom="16" left="16"/>
+                                    </padding>
+                                </HBox>
+                            </content>
+                        </ScrollPane>
+                    </VBox>
+
+                    <!-- ACTION BUTTONS -->
+                    <HBox spacing="16" alignment="CENTER">
+                        <Button fx:id="playGuestButton"
+                                text="Play as Guest"
+                                onAction="#playGuest"
+                                styleClass="btn-primary"/>
+                        <Button fx:id="loginButton"
+                                text="Login"
+                                onAction="#login"
+                                styleClass="btn-secondary"/>
+                        <Button fx:id="signupButton"
+                                text="Sign Up"
+                                onAction="#signup"
+                                styleClass="btn-secondary"/>
+                    </HBox>
+
+                    <!-- FEATURE CARDS -->
+                    <HBox spacing="24" alignment="CENTER" maxWidth="900">
+                        <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
+                            <Label text="🗺️" styleClass="feature-emoji"/>
+                            <Label text="Interactive Maps" styleClass="feature-title"/>
+                            <Label wrapText="true"
+                                   maxWidth="260"
+                                   text="Navigate beautifully designed dungeon maps with real-time progress tracking."
+                                   styleClass="feature-text"/>
+                        </VBox>
+
+                        <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
+                            <Label text="🧩" styleClass="feature-emoji"/>
+                            <Label text="Challenging Puzzles" styleClass="feature-title"/>
+                            <Label wrapText="true"
+                                   maxWidth="260"
+                                   text="Solve word scrambles, ciphers, and logic puzzles with progressive hint systems."
+                                   styleClass="feature-text"/>
+                        </VBox>
+
+                        <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
+                            <Label text="🏆" styleClass="feature-emoji"/>
+                            <Label text="Leaderboards" styleClass="feature-title"/>
+                            <Label wrapText="true"
+                                   maxWidth="260"
+                                   text="Compete globally and track your achievements across all challenges."
+                                   styleClass="feature-text"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox alignment="CENTER" styleClass="footer-bar">
+            <padding>
+                <Insets top="8" right="16" bottom="8" left="16"/>
+            </padding>
+            <Label text="© 2025 Escape Room Software™ by S²TN. All rights reserved."
+                   styleClass="footer-text"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

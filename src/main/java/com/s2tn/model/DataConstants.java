@@ -26,7 +26,7 @@ public class DataConstants {
      * 
      * @return Path to rooms.json
      */
-    public static Path dungeonPath() {
+    public Path dungeonPath() {
         return Paths.get("S2TN","json", "rooms.json");
     }
 
@@ -35,7 +35,7 @@ public class DataConstants {
      * 
      * @return Path to users.json for leaderboard data
      */
-    public static Path lbPath() {
+    public Path lbPath() {
         return Paths.get("S2TN","json", "users.json");
     }
 }

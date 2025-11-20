@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ec5a6fd0-c293-4aca-95d8-888c3097bd02" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/ProgressTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/ProgressTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/s2tn/model/DataWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/s2tn/model/DataWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/s2tn/model/Timer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/s2tn/model/Timer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/s2tn/model/TimerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/s2tn/model/TimerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +25,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Gson" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -70,7 +77,7 @@
       <recent name="com.s2tn.model" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.java in S2TN">
+  <component name="RunManager" selected="JUnit.TimerTest">
     <configuration name="ProgressTest.testSetAndGetPuzzleState" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="S2TN" />
       <extension name="coverage">
@@ -112,9 +119,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TimerTest" />
         <item itemvalue="JUnit.java in S2TN" />
         <item itemvalue="JUnit.ProgressTest.testSetAndGetPuzzleState" />
-        <item itemvalue="JUnit.TimerTest" />
+        <item itemvalue="JUnit.java in S2TN" />
+        <item itemvalue="JUnit.ProgressTest.testSetAndGetPuzzleState" />
       </list>
     </recent_temporary>
   </component>

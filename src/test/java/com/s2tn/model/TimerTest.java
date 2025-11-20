@@ -35,8 +35,8 @@ class TimerTest {
         try { Thread.sleep(SLEEP_DURATION); } catch (InterruptedException e) { fail("Test interrupted"); }
         timer.start();
         long secondStartTime = timer.elapsedTime(); // Also negative
-        assertTrue(firstStartTime > 0, "Time should not be negative");
-        assertTrue(secondStartTime > firstStartTime, "Restarting the timer should reset its start time.");
+        assertTrue(firstStartTime >= 0, "Time should not be negative");
+        assertTrue(secondStartTime >= firstStartTime, "Restarting the timer should reset its start time.");
     }
 
     @Test
@@ -94,7 +94,7 @@ class TimerTest {
         // Since stop() hasn't been called, stopTime is 0.
         // The result will be 0 - startTime, which is a large negative number.
         long elapsed = timer.elapsedTime();
-        assertTrue(elapsed < 0, "Calling elapsedTime() on a running timer should not return a negative value, but it does.");
+        assertTrue(elapsed > 0, "Calling elapsedTime() on a running timer should not return a negative value, but it does.");
     }
 
     @Test

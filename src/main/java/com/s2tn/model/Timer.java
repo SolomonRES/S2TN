@@ -7,31 +7,40 @@ package com.s2tn.model;
 public class Timer {
     private long startTime;
     private long stopTime;
+    private long delayTime;
     private boolean running;
 
     /** Creates a new timer initialized in a stopped state. */
     public Timer(){
         startTime = 0;
         stopTime = 0;
+        delayTime = 0;
         running = false;
     }
 
     /** Starts or restarts the timer. */
     public void start(){
         this.startTime = System.currentTimeMillis();
+        this.stopTime = System.currentTimeMillis();
         this.running = true;
     }
 
     /** Stops the timer and records the stop time. */
     public void stop(){
-        this.stopTime = System.currentTimeMillis();
-        this.running = false;
+        if(this.running) {
+            this.stopTime = System.currentTimeMillis();
+            this.delayTime = System.currentTimeMillis();
+            this.running = false;
+        }
     }
 
     /** Resumes the timer from a paused state. */
     public void unPause(){
-        this.stopTime = 0;
-        this.running = true;
+        if(!this.running) {
+            this.stopTime = 0;
+            this.startTime = this.startTime + (this.delayTime - this.startTime);
+            this.running = true;
+        }
     }
 
     /** Adds a time penalty by shifting the start time backward. */
@@ -41,6 +50,9 @@ public class Timer {
 
     /** Returns the elapsed time in milliseconds between start and stop. */
     public long elapsedTime(){
+        if(startTime >= stopTime && running){
+            stopTime = System.currentTimeMillis();
+        }
         return stopTime - startTime;
     }
 

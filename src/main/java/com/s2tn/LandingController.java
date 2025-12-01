@@ -112,7 +112,7 @@ public class LandingController {
         Timeline ticker = new Timeline(
                 new KeyFrame(Duration.millis(40), e -> {
                     double h = challengeScroll.getHvalue();
-                    double delta = 0.002; // speed
+                    double delta = 0.001; // speed
                     double next = h + delta;
                     if (next >= 1.0) {
                         next = 0.0;

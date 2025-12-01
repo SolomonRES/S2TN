@@ -5,6 +5,8 @@ import com.s2tn.model.Facade;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -22,8 +24,15 @@ public class App extends Application {
         );
 
         Scene scene = new Scene(loader.load(), 1280, 720);
+
+        scene.setFill(Color.TRANSPARENT);
+
         scene.getStylesheets().add(
                 App.class.getResource("/com/s2tn/styles.css").toExternalForm()
+        );
+
+        stage.getIcons().add(
+                new Image(App.class.getResourceAsStream("/com/s2tn/assets/logo.png"))
         );
 
         stage.setTitle("Escape Room Software™ | S²TN");
@@ -43,9 +52,13 @@ public class App extends Application {
                     App.class.getResource("/com/s2tn/" + fxmlName + ".fxml")
             );
             Scene scene = new Scene(loader.load(), 1280, 720);
+
+            scene.setFill(Color.TRANSPARENT);
+
             scene.getStylesheets().add(
                     App.class.getResource("/com/s2tn/styles.css").toExternalForm()
             );
+
             primaryStage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();

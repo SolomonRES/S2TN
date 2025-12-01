@@ -33,6 +33,7 @@
 .hero-subtitle {
     -fx-font-size: 14px;
     -fx-text-fill: #6b6b6b;
+    -fx-text-alignment: center; 
 }
 
 /* Featured challenge container */
@@ -149,12 +150,13 @@
 
 .feature-emoji {
     -fx-font-size: 32px;
+    -fx-font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Symbol";
 }
 
 .feature-title {
     -fx-font-size: 16px;
     -fx-text-fill: #1a1a1a;
-    -fx-font-weight: bold;
+    /* -fx-font-weight: bold; */
 }
 
 .feature-text {

@@ -128,7 +128,7 @@ public class LandingController {
     @FXML
     private void playGuest() {
         System.out.println("Play as Guest clicked");
-        // e.g. App.setRoot("map");
+        App.setRoot("GuestMap");
     }
 
     @FXML

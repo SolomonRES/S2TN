@@ -34,7 +34,7 @@
       </HBox>
    </top>
 
-   <!-- SCROLLABLE CONTENT -->
+   <!-- Scroll contents -->
    <center>
       <ScrollPane fitToWidth="true" styleClass="main-scroll">
          <content>

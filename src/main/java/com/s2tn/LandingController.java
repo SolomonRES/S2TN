@@ -134,6 +134,7 @@ public class LandingController {
     @FXML
     private void login() {
         System.out.println("Login clicked");
+        App.setRoot("login");
     }
 
     @FXML

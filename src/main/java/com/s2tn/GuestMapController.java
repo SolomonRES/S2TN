@@ -57,9 +57,6 @@ public class GuestMapController {
             Image map = new Image(getClass().getResourceAsStream("/com/s2tn/assets/map.png"));
             mapImage.setImage(map);
             
-            // Optional: Load a default avatar if you have one
-            // Image avatar = new Image(getClass().getResourceAsStream("/com/s2tn/assets/avatar_guest.png"));
-            // userAvatar.setImage(avatar);
         } catch (Exception e) {
             System.err.println("Asset missing: " + e.getMessage());
         }

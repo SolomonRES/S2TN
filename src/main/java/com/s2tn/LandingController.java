@@ -140,5 +140,6 @@ public class LandingController {
     @FXML
     private void signup() {
         System.out.println("Signup clicked");
+        App.setRoot("signup");
     }
 }

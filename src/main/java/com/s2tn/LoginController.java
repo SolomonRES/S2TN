@@ -51,12 +51,13 @@ public class LoginController {
     @FXML
     private void onSignUpClicked(ActionEvent event) {
         System.out.println("Navigate to Sign Up...");
-        // App.setRoot("signup"); 
+        App.setRoot("signup");
     }
 
     @FXML
     private void onForgotPasswordClicked(ActionEvent event) {
         System.out.println("Forgot password clicked");
+        // App.setRoot("forgotpassword"); // Future implementation
     }
 
     @FXML

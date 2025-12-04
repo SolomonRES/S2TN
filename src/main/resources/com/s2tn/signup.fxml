@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" styleClass="app-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.s2tn.SignupController">
+
+    <!-- TOP DESIGN BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="top-design-bar">
+            <padding><Insets bottom="8" left="20" right="20" top="8" /></padding>
+            <Label styleClass="design-bar-title" text="Escape Room Software Design" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <Label styleClass="design-bar-link" text="Open in new tab ↗" />
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="clean-scroll">
+            <content>
+                <VBox alignment="CENTER" spacing="20.0">
+                    <padding><Insets bottom="40.0" top="40.0" /></padding>
+
+                    <!-- Header Section -->
+                    <VBox alignment="CENTER" spacing="5.0">
+                        <ImageView fx:id="logoImage" fitHeight="64.0" fitWidth="64.0" preserveRatio="true" />
+                        <Label styleClass="login-app-title" text="Escape Room Software™" />
+                        <Label styleClass="login-app-subtitle" text="Create your account" />
+                    </VBox>
+
+                    <!-- The White Signup Card -->
+                    <VBox maxWidth="450.0" styleClass="login-card">
+                        <padding><Insets bottom="30.0" left="30.0" right="30.0" top="30.0" /></padding>
+                        
+                        <Label styleClass="card-header" text="Get Started" />
+
+                        <!-- Error Message (Hidden by default) -->
+                        <Label fx:id="errorLabel" text="Error" visible="false" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+                        
+                        <!-- Inputs -->
+                        <VBox spacing="15.0">
+                            
+                            <!-- Email -->
+                            <VBox spacing="5.0">
+                                <Label styleClass="input-label" text="Email Address" />
+                                <TextField fx:id="emailField" promptText="you@example.com" styleClass="text-input-field" />
+                            </VBox>
+
+                            <!-- Username -->
+                            <VBox spacing="5.0">
+                                <Label styleClass="input-label" text="Username" />
+                                <TextField fx:id="usernameField" promptText="Choose a username" styleClass="text-input-field" />
+                            </VBox>
+
+                            <!-- Password -->
+                            <VBox spacing="5.0">
+                                <Label styleClass="input-label" text="Password" />
+                                <PasswordField fx:id="passwordField" promptText="Create a password" styleClass="text-input-field" />
+                            </VBox>
+
+                             <!-- Confirm Password -->
+                            <VBox spacing="5.0">
+                                <Label styleClass="input-label" text="Confirm Password" />
+                                <PasswordField fx:id="confirmPasswordField" promptText="Confirm your password" styleClass="text-input-field" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Terms Checkbox -->
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <VBox.margin><Insets top="20.0" bottom="20.0"/></VBox.margin>
+                            <CheckBox fx:id="termsCheckbox" styleClass="small-checkbox" text="I agree to the Terms and Conditions and Privacy Policy" wrapText="true"/>
+                        </HBox>
+
+                        <!-- Primary Button -->
+                        <Button maxWidth="Infinity" onAction="#onCreateAccountClicked" styleClass="btn-primary" text="Create Account" />
+
+                        <!-- Divider "or" -->
+                        <HBox alignment="CENTER" spacing="10.0">
+                            <padding><Insets bottom="10.0" top="10.0" /></padding>
+                            <Separator HBox.hgrow="ALWAYS" />
+                            <Label style="-fx-text-fill: #999; -fx-font-size: 12px;" text="or" />
+                            <Separator HBox.hgrow="ALWAYS" />
+                        </HBox>
+
+                        <!-- Secondary Button -->
+                        <Button maxWidth="Infinity" onAction="#onGuestClicked" styleClass="btn-secondary" text="Continue as Guest" />
+
+                        <!-- Login Link -->
+                        <HBox alignment="CENTER" spacing="5.0">
+                            <VBox.margin><Insets top="15.0" /></VBox.margin>
+                            <Label style="-fx-text-fill: #666; -fx-font-size: 12px;" text="Already have an account?" />
+                            <Hyperlink onAction="#onSignInClicked" styleClass="link-small-blue" text="Sign in" />
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- Back to Home -->
+                    <Hyperlink onAction="#onBackToHomeClicked" styleClass="link-back" text="← Back to home" />
+
+                    <!-- Footer -->
+                    <Label styleClass="footer-text" text="© 2025 Escape Room Software™ by S²TN" />
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

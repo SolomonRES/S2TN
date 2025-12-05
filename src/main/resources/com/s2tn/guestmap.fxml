@@ -4,117 +4,215 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 
-<BorderPane fx:id="root" styleClass="app-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.s2tn.GuestMapController">
-   
-   <!-- TOP HEADER -->
-   <top>
-      <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-bar">
-         <padding><Insets bottom="10.0" left="20.0" right="20.0" top="10.0" /></padding>
-         
-         <VBox alignment="CENTER_LEFT">
-            <Label styleClass="header-title" text="Dungeon Map" />
-            <Label styleClass="header-subtitle" text="Choose your adventure" />
-         </VBox>
-         
-         <Pane HBox.hgrow="ALWAYS" />
-         
-         <!-- Top right access for settings, exit, etc -->
-         <Button fx:id="statusPill" styleClass="status-pill" text="🏆 Loading..." />
-         <Button styleClass="icon-btn" text="🎒" />
-         <Button styleClass="icon-btn" text="⚙️" />
-         <Button onAction="#onLogoutClicked" styleClass="icon-btn-red" text="🚪" />
-      </HBox>
-   </top>
+<BorderPane fx:id="root" styleClass="app-root"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.s2tn.GuestMapController">
 
-   <!-- Scroll contents -->
-   <center>
-      <ScrollPane fitToWidth="true" styleClass="main-scroll">
-         <content>
-            <VBox spacing="20.0">
-               <padding><Insets bottom="30.0" left="30.0" right="30.0" top="30.0" /></padding>
-               
-               <!-- The Stats Row -->
-               <HBox spacing="20.0">
-                  <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                     <Label style="-fx-font-size: 28px;" text="🗺️" />
-                     <Label styleClass="card-label" text="Total Dungeons" />
-                     <Label fx:id="totalDungeonsLabel" styleClass="card-value-blue" text="-" />
-                  </VBox>
-                  <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                     <Label style="-fx-font-size: 28px;" text="✅" />
-                     <Label styleClass="card-label" text="Completed" />
-                     <Label fx:id="completedLabel" styleClass="card-value-green" text="0" />
-                  </VBox>
-                  <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
-                     <Label style="-fx-font-size: 28px;" text="🎯" />
-                     <Label styleClass="card-label" text="Remaining" />
-                     <Label fx:id="remainingLabel" styleClass="card-value-orange" text="-" />
-                  </VBox>
-               </HBox>
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-bar">
+            <padding><Insets bottom="10" left="20" right="20" top="10"/></padding>
 
-               <!-- Map area -->
-               <StackPane styleClass="map-container">
-                  <ImageView fx:id="mapImage" fitHeight="500.0" fitWidth="1000.0" preserveRatio="false" styleClass="map-image" />
-                  
-                  <Pane fx:id="mapOverlay">
-                     <!-- Beginner Mode -->
-                     <VBox alignment="CENTER" layoutX="150.0" layoutY="320.0" spacing="5.0">
-                         <Button fx:id="btnLevel1" onAction="#onLevel1Clicked" styleClass="map-node-btn" text="🔥" />
-                         <VBox alignment="CENTER" styleClass="node-label-box">
-                             <Label fx:id="lblLevel1Name" styleClass="node-title" text="Loading..." />
-                             <Label fx:id="lblLevel1Diff" styleClass="node-subtitle" text="Beginner" />
-                         </VBox>
-                     </VBox>
-
-                     <!-- Intermediate Mode -->
-                     <VBox alignment="CENTER" layoutX="480.0" layoutY="220.0" spacing="5.0">
-                         <Button fx:id="btnLevel2" onAction="#onLevel2Clicked" styleClass="map-node-btn" text="💰" />
-                         <VBox alignment="CENTER" styleClass="node-label-box">
-                            <Label fx:id="lblLevel2Name" styleClass="node-title" text="Loading..." />
-                            <Label fx:id="lblLevel2Diff" styleClass="node-subtitle" text="Intermediate" />
-                         </VBox>
-                     </VBox>
-
-                     <!-- Advanced Mode -->
-                     <VBox alignment="CENTER" layoutX="800.0" layoutY="100.0" spacing="5.0">
-                         <Button fx:id="btnLevel3" onAction="#onLevel3Clicked" styleClass="map-node-btn" text="⚱️" />
-                         <VBox alignment="CENTER" styleClass="node-label-box">
-                            <Label fx:id="lblLevel3Name" styleClass="node-title" text="Loading..." />
-                            <Label fx:id="lblLevel3Diff" styleClass="node-subtitle" text="Advanced" />
-                         </VBox>
-                     </VBox>
-                  </Pane>
-                  
-                  <!-- Legend near the bottom left) -->
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0" styleClass="glass-card" StackPane.alignment="BOTTOM_LEFT">
-                      <StackPane.margin><Insets bottom="20.0" left="20.0" /></StackPane.margin>
-                      <Label style="-fx-font-weight: bold; -fx-text-fill: #333;" text="Map Legend" />
-                      <HBox alignment="CENTER_LEFT" spacing="5"><Label text="📍 Available" /></HBox>
-                      <HBox alignment="CENTER_LEFT" spacing="5"><Label text="✅ Completed" /></HBox>
-                      <HBox alignment="CENTER_LEFT" spacing="5"><Label text="🔒 Locked" /></HBox>
-                  </VBox>
-                  
-                  <!-- The User Card near the Top Right -->
-                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0" styleClass="glass-card" StackPane.alignment="TOP_RIGHT">
-                      <StackPane.margin><Insets right="20.0" top="20.0" /></StackPane.margin>
-                      <Circle radius="18.0" styleClass="online-dot" /> 
-                      <VBox>
-                          <Label fx:id="userNameLabel" style="-fx-font-weight: bold; -fx-text-fill: #333;" text="Guest" />
-                          <Label fx:id="userRoleLabel" style="-fx-text-fill: gray; -fx-font-size: 10px;" text="Adventurer" />
-                      </VBox>
-                  </HBox>
-
-               </StackPane>
+            <VBox alignment="CENTER_LEFT">
+                <Label styleClass="header-title" text="Dungeon Map"/>
+                <Label styleClass="header-subtitle" text="Choose your adventure"/>
             </VBox>
-         </content>
-      </ScrollPane>
-   </center>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="statusPill" styleClass="status-pill" text="Loading..."/>
+
+            <Button fx:id="btnInventory" onAction="#onInventoryClicked" styleClass="icon-btn">
+                <graphic>
+                    <ImageView fitHeight="22" fitWidth="22" preserveRatio="true" styleClass="stat-icon">
+                        <image><Image url="@com/s2tn/assets/moneyBagEmoji.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnSettings" onAction="#onSettingsClicked" styleClass="icon-btn">
+                <graphic>
+                    <ImageView fitHeight="22" fitWidth="22" preserveRatio="true" styleClass="stat-icon">
+                        <image><Image url="@com/s2tn/assets/gearEmoji.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="btnLogout" onAction="#onLogoutClicked" styleClass="icon-btn-red">
+                <graphic>
+                    <ImageView fitHeight="22" fitWidth="22" preserveRatio="true" styleClass="stat-icon">
+                        <image><Image url="@com/s2tn/assets/doorEmoji.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll">
+            <content>
+                <VBox spacing="20">
+                    <padding><Insets bottom="30" left="30" right="30" top="30"/></padding>
+
+                    <!-- STAT CARDS -->
+                    <HBox spacing="20">
+
+                        <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <ImageView fitHeight="32" fitWidth="32" preserveRatio="true" styleClass="stat-icon">
+                                <image><Image url="@com/s2tn/assets/mapEmoji.png"/></image>
+                            </ImageView>
+                            <Label styleClass="card-label" text="Total Dungeons"/>
+                            <Label fx:id="totalDungeonsLabel" styleClass="card-value-blue" text="-"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <ImageView fitHeight="32" fitWidth="32" preserveRatio="true" styleClass="stat-icon">
+                                <image><Image url="@com/s2tn/assets/checkEmoji.png"/></image>
+                            </ImageView>
+                            <Label styleClass="card-label" text="Completed"/>
+                            <Label fx:id="completedLabel" styleClass="card-value-green" text="0"/>
+                        </VBox>
+
+                        <VBox alignment="CENTER" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <ImageView fitHeight="32" fitWidth="32" preserveRatio="true" styleClass="stat-icon">
+                                <image><Image url="@com/s2tn/assets/targetEmoji.png"/></image>
+                            </ImageView>
+                            <Label styleClass="card-label" text="Remaining"/>
+                            <Label fx:id="remainingLabel" styleClass="card-value-orange" text="-"/>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- MAP CONTAINER -->
+                    <StackPane styleClass="map-container" prefWidth="1000" prefHeight="500">
+
+                        <!-- BACKGROUND MAP -->
+                        <ImageView fx:id="mapImage"
+                                   fitWidth="1000"
+                                   fitHeight="500"
+                                   preserveRatio="false"
+                                   styleClass="map-image"/>
+
+                        <!-- OVERLAY -->
+                        <Pane fx:id="mapOverlay">
+
+                            <!-- LEVEL 1 -->
+                            <VBox alignment="CENTER" layoutX="450" layoutY="275" spacing="5">
+                                <Button fx:id="btnLevel1" onAction="#onLevel1Clicked" styleClass="map-node-btn">
+                                    <graphic>
+                                        <ImageView fx:id="imgLevel1" fitHeight="56" fitWidth="56" preserveRatio="true"
+                                                   styleClass="map-node-graphic">
+                                            <image><Image url="@com/s2tn/assets/fireEmoji.png"/></image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <VBox alignment="CENTER" styleClass="node-label-box">
+                                    <Label fx:id="lblLevel1Name" styleClass="node-title" text="Loading..."/>
+                                    <Label fx:id="lblLevel1Diff" styleClass="node-subtitle" text="Hard"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- LEVEL 2 -->
+                            <VBox alignment="CENTER" layoutX="650" layoutY="120" spacing="5">
+                                <Button fx:id="btnLevel2" onAction="#onLevel2Clicked" styleClass="map-node-btn">
+                                    <graphic>
+                                        <ImageView fx:id="imgLevel2" fitHeight="56" fitWidth="56" preserveRatio="true"
+                                                   styleClass="map-node-graphic">
+                                            <image><Image url="@com/s2tn/assets/moneyBagEmoji.png"/></image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <VBox alignment="CENTER" styleClass="node-label-box">
+                                    <Label fx:id="lblLevel2Name" styleClass="node-title" text="Loading..."/>
+                                    <Label fx:id="lblLevel2Diff" styleClass="node-subtitle" text="Intermediate"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- LEVEL 3 -->
+                            <VBox alignment="CENTER" layoutX="900" layoutY="180" spacing="5">
+                                <Button fx:id="btnLevel3" onAction="#onLevel3Clicked" styleClass="map-node-btn">
+                                    <graphic>
+                                        <ImageView fx:id="imgLevel3" fitHeight="56" fitWidth="56" preserveRatio="true"
+                                                   styleClass="map-node-graphic">
+                                            <image><Image url="@com/s2tn/assets/tombEmoji.png"/></image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                                <VBox alignment="CENTER" styleClass="node-label-box">
+                                    <Label fx:id="lblLevel3Name" styleClass="node-title" text="Locked"/>
+                                    <Label fx:id="lblLevel3Diff" styleClass="node-subtitle" text="---"/>
+                                </VBox>
+                            </VBox>
+
+                        </Pane>
+
+                        <!-- LEGEND -->
+                        <VBox spacing="6" styleClass="glass-card"
+                              maxHeight="-Infinity" maxWidth="-Infinity"
+                              StackPane.alignment="BOTTOM_LEFT">
+                            <StackPane.margin><Insets bottom="20" left="20"/></StackPane.margin>
+
+                            <Label style="-fx-font-weight: bold; -fx-text-fill: #333;" text="Map Legend"/>
+
+                            <HBox alignment="CENTER_LEFT" spacing="6">
+                                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                                    <image><Image url="@com/s2tn/assets/mapLegendAvailable.png"/></image>
+                                </ImageView>
+                                <Label text="Available"/>
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="6">
+                                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                                    <image><Image url="@com/s2tn/assets/mapLegendCompleted.png"/></image>
+                                </ImageView>
+                                <Label text="Completed"/>
+                            </HBox>
+
+                            <HBox alignment="CENTER_LEFT" spacing="6">
+                                <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                                    <image><Image url="@com/s2tn/assets/mapLegendLocked.png"/></image>
+                                </ImageView>
+                                <Label text="Locked"/>
+                            </HBox>
+
+                        </VBox>
+
+                        <!-- USER CARD -->
+                        <HBox spacing="10" styleClass="glass-card"
+                              maxHeight="-Infinity" maxWidth="-Infinity"
+                              StackPane.alignment="TOP_RIGHT">
+                            <StackPane.margin><Insets right="20" top="20"/></StackPane.margin>
+
+                            <ImageView fitHeight="36" fitWidth="36" preserveRatio="true">
+                                <image><Image url="@com/s2tn/assets/playerAvatar.png"/></image>
+                            </ImageView>
+
+                            <VBox>
+                                <Label fx:id="userNameLabel"
+                                       style="-fx-font-weight: bold; -fx-text-fill: #333;"
+                                       text="Guest"/>
+                                <Label fx:id="userRoleLabel"
+                                       style="-fx-text-fill: gray; -fx-font-size: 10px;"
+                                       text="Adventurer"/>
+                            </VBox>
+                        </HBox>
+
+                    </StackPane>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
 </BorderPane>

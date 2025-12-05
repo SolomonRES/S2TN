@@ -1,19 +1,19 @@
 package com.s2tn;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.s2tn.model.Account;
 import com.s2tn.model.Dungeon;
 import com.s2tn.model.Facade;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.event.ActionEvent;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class GuestMapController {
 
@@ -168,4 +168,3 @@ public class GuestMapController {
         App.setRoot("landing");
     }
 }
-

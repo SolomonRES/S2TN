@@ -97,31 +97,47 @@
 
                     <!-- FEATURE CARDS -->
                     <HBox spacing="24" alignment="CENTER" maxWidth="900">
+                        <!-- Interactive Maps -->
                         <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
-                            <Label text="🗺️" styleClass="feature-emoji"/>
+                            <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+                                <image>
+                                    <!-- relative to com/s2tn/landing.fxml -->
+                                    <Image url="@assets/mapEmoji.png"/>
+                                </image>
+                            </ImageView>
                             <Label text="Interactive Maps" styleClass="feature-title"/>
                             <Label wrapText="true"
-                                   maxWidth="260"
-                                   text="Navigate beautifully designed dungeon maps with real-time progress tracking."
-                                   styleClass="feature-text"/>
+                                maxWidth="260"
+                                text="Navigate beautifully designed dungeon maps with real-time progress tracking."
+                                styleClass="feature-text"/>
                         </VBox>
 
+                        <!-- Challenging Puzzles -->
                         <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
-                            <Label text="🧩" styleClass="feature-emoji"/>
+                            <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+                                <image>
+                                    <Image url="@assets/puzzleEmoji.png"/>
+                                </image>
+                            </ImageView>
                             <Label text="Challenging Puzzles" styleClass="feature-title"/>
                             <Label wrapText="true"
-                                   maxWidth="260"
-                                   text="Solve word scrambles, ciphers, and logic puzzles with progressive hint systems."
-                                   styleClass="feature-text"/>
+                                maxWidth="260"
+                                text="Solve word scrambles, ciphers, and logic puzzles with progressive hint systems."
+                                styleClass="feature-text"/>
                         </VBox>
 
+                        <!-- Leaderboards -->
                         <VBox spacing="8" alignment="TOP_CENTER" styleClass="feature-card">
-                            <Label text="🏆" styleClass="feature-emoji"/>
+                            <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+                                <image>
+                                    <Image url="@assets/trophyEmoji.png"/>
+                                </image>
+                            </ImageView>
                             <Label text="Leaderboards" styleClass="feature-title"/>
                             <Label wrapText="true"
-                                   maxWidth="260"
-                                   text="Compete globally and track your achievements across all challenges."
-                                   styleClass="feature-text"/>
+                                maxWidth="260"
+                                text="Compete globally and track your achievements across all challenges."
+                                styleClass="feature-text"/>
                         </VBox>
                     </HBox>
                 </VBox>

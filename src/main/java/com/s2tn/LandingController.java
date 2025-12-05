@@ -124,7 +124,7 @@ public class LandingController {
         ticker.play();
     }
 
-    // navigation hooks (wire to facade later, this is just a placeholder for now)
+    // navigation hooks 
     @FXML
     private void playGuest() {
         System.out.println("Play as Guest clicked");

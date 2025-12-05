@@ -97,18 +97,19 @@
                     <!-- MAP CONTAINER -->
                     <StackPane styleClass="map-container" prefWidth="1000" prefHeight="500">
 
-                        <!-- BACKGROUND MAP -->
+                        <!-- BACKGROUND MAP (UPDATED) -->
                         <ImageView fx:id="mapImage"
-                                   fitWidth="1000"
-                                   fitHeight="500"
                                    preserveRatio="false"
-                                   styleClass="map-image"/>
+                                   styleClass="map-image"
+                                   StackPane.alignment="CENTER"
+                                   fitWidth="1440"
+                                   fitHeight="700"/>
 
                         <!-- OVERLAY -->
                         <Pane fx:id="mapOverlay">
 
                             <!-- LEVEL 1 -->
-                            <VBox alignment="CENTER" layoutX="450" layoutY="275" spacing="5">
+                            <VBox alignment="CENTER" layoutX="350" layoutY="400" spacing="5">
                                 <Button fx:id="btnLevel1" onAction="#onLevel1Clicked" styleClass="map-node-btn">
                                     <graphic>
                                         <ImageView fx:id="imgLevel1" fitHeight="56" fitWidth="56" preserveRatio="true"
@@ -124,7 +125,7 @@
                             </VBox>
 
                             <!-- LEVEL 2 -->
-                            <VBox alignment="CENTER" layoutX="650" layoutY="120" spacing="5">
+                            <VBox alignment="CENTER" layoutX="875" layoutY="200" spacing="5">
                                 <Button fx:id="btnLevel2" onAction="#onLevel2Clicked" styleClass="map-node-btn">
                                     <graphic>
                                         <ImageView fx:id="imgLevel2" fitHeight="56" fitWidth="56" preserveRatio="true"
@@ -140,7 +141,7 @@
                             </VBox>
 
                             <!-- LEVEL 3 -->
-                            <VBox alignment="CENTER" layoutX="900" layoutY="180" spacing="5">
+                            <VBox alignment="CENTER" layoutX="1150" layoutY="300" spacing="5">
                                 <Button fx:id="btnLevel3" onAction="#onLevel3Clicked" styleClass="map-node-btn">
                                     <graphic>
                                         <ImageView fx:id="imgLevel3" fitHeight="56" fitWidth="56" preserveRatio="true"

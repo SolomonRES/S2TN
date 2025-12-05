@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.s2tn.InventoryController"
+            styleClass="app-root">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox spacing="16" styleClass="glass-card header-bar">
+            <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+
+            <Button fx:id="btnBack"
+                    text="Back"
+                    onAction="#onBack"
+                    styleClass="btn-secondary"/>
+
+            <Label text="Inventory" styleClass="node-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <!-- Inventory Layout -->
+    <center>
+        <HBox spacing="20">
+            <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+
+            <!-- LEFT: Inventory List -->
+            <VBox spacing="10" styleClass="glass-card" prefWidth="330">
+                <padding><Insets top="16" right="14" bottom="16" left="14"/></padding>
+
+                <Label text="Items" styleClass="node-title"/>
+                <ListView fx:id="inventoryList" prefHeight="600"/>
+            </VBox>
+
+            <!-- RIGHT: Details Panel -->
+            <VBox spacing="12" styleClass="glass-card" prefWidth="480">
+                <padding><Insets top="16" right="14" bottom="16" left="14"/></padding>
+
+                <Label fx:id="lblItemName" text="Select an item" styleClass="node-title"/>
+
+                <TextArea fx:id="txtItemDescription"
+                          wrapText="true"
+                          editable="false"
+                          prefRowCount="10"
+                          styleClass="clean-scroll"/>
+
+                <Button fx:id="btnUseItem"
+                        text="Use Item"
+                        onAction="#onUseItem"
+                        styleClass="btn-primary"
+                        disable="true"/>
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

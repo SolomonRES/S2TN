@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.s2tn.SettingsController"
+            styleClass="app-root">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox spacing="16" styleClass="glass-card header-bar">
+            <padding>
+                <Insets top="12" right="16" bottom="12" left="16"/>
+            </padding>
+
+            <Button fx:id="btnBack"
+                    text="Back"
+                    onAction="#onBack"
+                    styleClass="btn-secondary"/>
+
+            <Label text="Settings" styleClass="node-title"/>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <!-- Settings Content -->
+    <center>
+        <VBox spacing="20" alignment="TOP_LEFT">
+            <padding>
+                <Insets top="16" right="20" bottom="16" left="20"/>
+            </padding>
+
+            <!-- AUDIO / ACCESSIBILITY -->
+            <VBox spacing="8" styleClass="glass-card" prefWidth="600">
+                <padding>
+                    <Insets top="16" right="14" bottom="16" left="14"/>
+                </padding>
+
+                <Label text="Audio and Accessibility" styleClass="node-title"/>
+
+                <!-- Volume Slider (GUI-only for now) -->
+                <HBox spacing="10">
+                    <Label text="Master Volume"/>
+                    <Slider fx:id="sliderMasterVolume" prefWidth="300" value="75"/>
+                </HBox>
+
+                <!-- Text-to-Speech toggle (backed by Speak class) -->
+                <CheckBox fx:id="chkTextToSpeech"
+                          text="Enable Text-to-Speech"/>
+            </VBox>
+
+            <!-- ABOUT -->
+            <VBox spacing="6" styleClass="stat-card" prefWidth="600">
+                <Label text="About" styleClass="node-title"/>
+                <Label text="Escape Room Software - Version 1.0.0"/>
+                <Label text="Developed by S2TN"/>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

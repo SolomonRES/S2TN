@@ -17,22 +17,25 @@ import javafx.scene.image.ImageView;
 
 public class GuestMapController {
 
+
     @FXML private ImageView mapImage;
 
+    // Stats
     @FXML private Label totalDungeonsLabel;
     @FXML private Label completedLabel;
     @FXML private Label remainingLabel;
     @FXML private Button statusPill;
 
+    // User section
     @FXML private Label userNameLabel;
     @FXML private Label userRoleLabel;
 
-    // top-right icons
+    // Top-right buttons
     @FXML private Button btnInventory;
     @FXML private Button btnSettings;
     @FXML private Button btnLogout;
 
-    // Map nodes
+    // Dungeon Map Nodes
     @FXML private Button btnLevel1;
     @FXML private Label lblLevel1Name;
     @FXML private Label lblLevel1Diff;
@@ -49,8 +52,7 @@ public class GuestMapController {
     @FXML private ImageView imgLevel3;
 
     private final Facade facade = App.getFacade();
-    private List<Dungeon> dungeonList;
-
+    private List<Dungeon> dungeonList = new ArrayList<>();
     private int selectedIndex = -1;
 
     @FXML
@@ -72,19 +74,20 @@ public class GuestMapController {
     private ImageView makeIcon(String file, double size) {
         Image img = loadAsset(file);
         if (img == null) return null;
-        ImageView view = new ImageView(img);
-        view.setFitWidth(size);
-        view.setFitHeight(size);
-        view.setPreserveRatio(true);
-        return view;
+        ImageView v = new ImageView(img);
+        v.setFitWidth(size);
+        v.setFitHeight(size);
+        v.setPreserveRatio(true);
+        return v;
     }
 
     private void loadImages() {
 
-        // background map
+        // map background
         Image mp = loadAsset("map.png");
         if (mp != null) mapImage.setImage(mp);
 
+        // stats/leaderboard icon
         ImageView trophy = makeIcon("trophyEmoji.png", 18);
         if (trophy != null) statusPill.setGraphic(trophy);
 
@@ -98,15 +101,12 @@ public class GuestMapController {
         ImageView logout = makeIcon("doorEmoji.png", 22);
         if (logout != null) btnLogout.setGraphic(logout);
 
-        Image fire = loadAsset("fireEmoji.png");
-        if (fire != null) imgLevel1.setImage(fire);
-
-        Image money = loadAsset("moneyBagEmoji.png");
-        if (money != null) imgLevel2.setImage(money);
-
-        Image tomb = loadAsset("tombEmoji.png");
-        if (tomb != null) imgLevel3.setImage(tomb);
+        // dungeon icons
+        if (imgLevel1 != null) imgLevel1.setImage(loadAsset("fireEmoji.png"));
+        if (imgLevel2 != null) imgLevel2.setImage(loadAsset("moneyBagEmoji.png"));
+        if (imgLevel3 != null) imgLevel3.setImage(loadAsset("tombEmoji.png"));
     }
+
 
     private void updateUserProfile() {
         Account user = facade.getCurrentUser();
@@ -124,7 +124,12 @@ public class GuestMapController {
         if (dungeonList == null) dungeonList = new ArrayList<>();
 
         int total = dungeonList.size();
-        int completed = 0; // future: connect to actual progress
+
+        int completed = 0;
+        try {
+            completed = facade.getCompletedDungeonCount();
+        } catch (Exception ignored) {}
+
         int remaining = total - completed;
 
         totalDungeonsLabel.setText(String.valueOf(total));
@@ -142,23 +147,16 @@ public class GuestMapController {
 
     private void configureNode(int index, Button btn, Label nameLbl, Label diffLbl) {
 
-        btn.getStyleClass().removeAll(
-                "map-node-available",
-                "map-node-inprogress",
-                "map-node-completed",
-                "map-node-locked"
-        );
+        btn.getStyleClass().removeAll("map-node-available", "map-node-inprogress",
+                "map-node-completed", "map-node-locked");
 
         if (index < dungeonList.size()) {
 
             Dungeon d = dungeonList.get(index);
 
             nameLbl.setText(d.getName());
-
-            String diff = d.getDifficulty() != null
-                    ? d.getDifficulty().toString()
-                    : "NORMAL";
-            diffLbl.setText(toTitle(diff));
+            String diff = d.getDifficulty() == null ? "Normal" : toTitle(d.getDifficulty().toString());
+            diffLbl.setText(diff);
 
             btn.setDisable(false);
             btn.getStyleClass().add("map-node-available");
@@ -181,28 +179,37 @@ public class GuestMapController {
         if (index >= dungeonList.size()) return;
 
         Dungeon d = dungeonList.get(index);
-        UUID id = d.getUUID();
+        UUID dungeonId = d.getUUID();
 
-        if (facade.startDungeon(id)) {
-            selectedIndex = index;
-            updateSelectionHighlight();
-
-            if (facade.enterDungeon()) {
-                System.out.println("Entering Room: " + facade.getCurrentRoomId());
-                // TODO: navigate to puzzle/game page here
-            }
+        // Start dungeon session
+        if (!facade.startDungeon(dungeonId)) {
+            System.err.println("Failed to start dungeon: " + dungeonId);
+            return;
         }
+
+        selectedIndex = index;
+        updateSelectionHighlight();
+
+        // Enter first room
+        if (!facade.enterDungeon()) {
+            System.err.println("facade.enterDungeon() failed");
+            return;
+        }
+
+        UUID roomId = facade.getCurrentRoomId();
+        System.out.println("Entering Room: " + roomId);
+
+        App.transitionTo("dungeon");
     }
 
     private void updateSelectionHighlight() {
-        Button[] arr = { btnLevel1, btnLevel2, btnLevel3 };
+        Button[] btns = { btnLevel1, btnLevel2, btnLevel3 };
 
-        for (int i = 0; i < arr.length; i++) {
-            Button b = arr[i];
+        for (int i = 0; i < btns.length; i++) {
+            Button b = btns[i];
             if (b == null) continue;
 
             b.getStyleClass().remove("map-node-selected");
-
             if (i == selectedIndex && !b.isDisabled()) {
                 b.getStyleClass().add("map-node-selected");
             }
@@ -213,13 +220,16 @@ public class GuestMapController {
     @FXML private void onLevel2Clicked(ActionEvent e) { attemptEnterDungeon(1); }
     @FXML private void onLevel3Clicked(ActionEvent e) { attemptEnterDungeon(2); }
 
-    @FXML private void onSettingsClicked(ActionEvent e) { System.out.println("Settings clicked"); }
-    @FXML private void onInventoryClicked(ActionEvent e) { System.out.println("Inventory clicked"); }
-    @FXML private void onProfileClicked(ActionEvent e) { System.out.println("Profile clicked"); }
+    @FXML private void onSettingsClicked(ActionEvent e) {
+        App.transitionTo("settings");
+    }
 
-    @FXML
-    private void onLogoutClicked(ActionEvent e) {
+    @FXML private void onInventoryClicked(ActionEvent e) {
+        App.transitionTo("inventory");
+    }
+
+    @FXML private void onLogoutClicked(ActionEvent e) {
         facade.logout();
-        App.setRoot("landing");
+        App.transitionTo("landing");
     }
 }

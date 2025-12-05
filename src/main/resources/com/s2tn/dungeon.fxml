@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.s2tn.DungeonController"
+            styleClass="app-root"
+            minWidth="1200"
+            minHeight="720">
+
+    <!-- HEADER / COMMAND BAR -->
+    <top>
+        <HBox spacing="16"
+              styleClass="glass-card, header-bar"
+              alignment="CENTER_LEFT"
+              minHeight="56">
+            <padding>
+                <Insets top="12" right="16" bottom="12" left="12"/>
+            </padding>
+
+            <Button fx:id="btnBackToMap"
+                    text="← Back to Map"
+                    onAction="#onBackToMap"
+                    styleClass="btn-secondary"
+                    minWidth="120"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Map"       styleClass="node-subtitle"/>
+                <Label text="›"         styleClass="node-subtitle"/>
+                <Label text="Dungeon"   styleClass="node-subtitle"/>
+                <Label text="›"         styleClass="node-subtitle"/>
+                <Label fx:id="lblDungeonName"
+                       text="Unknown Room"
+                       styleClass="node-title"/>
+            </HBox>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="lblDifficulty"
+                   text="Normal"
+                   styleClass="difficulty-pill, pill-intermediate"
+                   minWidth="80"
+                   alignment="CENTER">
+                <padding>
+                    <Insets top="6" right="12" bottom="6" left="12"/>
+                </padding>
+            </Label>
+        </HBox>
+    </top>
+
+    <!-- MAIN BODY — LEFT PANEL + PUZZLE WORKSPACE -->
+    <center>
+        <HBox spacing="32"
+              alignment="TOP_CENTER"
+              styleClass="workspace-row"
+              HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="20" right="24" bottom="20" left="24"/>
+            </padding>
+
+            <!-- LEFT PANEL WRAPPER (Grows) -->
+            <VBox spacing="0"
+                  prefWidth="320"
+                  minWidth="300"
+                  maxWidth="360"
+                  VBox.vgrow="ALWAYS">
+
+                <!-- ACTUAL COMPACT GLASS-CARD (no vertical stretch) -->
+                <VBox spacing="20"
+                      styleClass="glass-card, sidebar-panel"
+                      prefWidth="320"
+                      minWidth="300"
+                      maxWidth="360">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+
+                    <!-- MAP SECTION -->
+                    <VBox spacing="6">
+                        <Label text="Rooms" styleClass="node-title"/>
+                        <Separator/>
+                        <ListView fx:id="miniMapList"
+                                  prefHeight="200"
+                                  maxHeight="220"
+                                  onMouseClicked="#onMiniMapClicked"
+                                  styleClass="clean-scroll, list-navigator"/>
+                    </VBox>
+
+                    <!-- PUZZLES SECTION -->
+                    <VBox spacing="6">
+                        <Label text="Puzzles" styleClass="node-title"/>
+                        <Separator/>
+                        <ListView fx:id="puzzlesListView"
+                                  prefHeight="220"
+                                  maxHeight="260"
+                                  onMouseClicked="#onPuzzleListClicked"
+                                  styleClass="clean-scroll, list-puzzles"/>
+                    </VBox>
+
+                    <!-- ROOM STATUS -->
+                    <VBox spacing="8" styleClass="stat-card">
+                        <Label fx:id="lblRoomStatusTitle"
+                               text="Room Status"
+                               styleClass="node-title"/>
+                        <Label fx:id="lblRoomStatus"
+                               text="Solved 0 / 0"
+                               wrapText="true"
+                               styleClass="node-subtitle"/>
+                    </VBox>
+
+                    <!-- INVENTORY -->
+                    <VBox spacing="8" styleClass="stat-card">
+                        <Label text="Inventory" styleClass="node-title"/>
+                        <ListView fx:id="inventoryList"
+                                  prefHeight="100"
+                                  maxHeight="120"
+                                  styleClass="clean-scroll, list-inventory"/>
+                    </VBox>
+
+                </VBox>
+            </VBox>
+
+            <!-- MAIN PUZZLE WORKSPACE -->
+            <VBox spacing="20"
+                  alignment="TOP_CENTER"
+                  styleClass="center-column"
+                  HBox.hgrow="ALWAYS"
+                  maxWidth="900">
+                <padding>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
+                </padding>
+
+                <!-- PUZZLE CARD -->
+                <VBox spacing="12"
+                      styleClass="glass-card, puzzle-card"
+                      maxWidth="900"
+                      VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="20" right="24" bottom="20" left="24"/>
+                    </padding>
+
+                    <VBox spacing="8">
+                        <Label fx:id="lblPuzzleTitle"
+                               text="Select a puzzle"
+                               wrapText="true"
+                               styleClass="node-title, puzzle-title"/>
+
+                        <Label fx:id="lblPuzzleState"
+                               text=""
+                               styleClass="difficulty-pill, pill-beginner"
+                               minWidth="80"
+                               alignment="CENTER">
+                            <padding>
+                                <Insets top="4" right="10" bottom="4" left="10"/>
+                            </padding>
+                        </Label>
+                    </VBox>
+
+                    <Separator/>
+
+                    <VBox spacing="8" VBox.vgrow="ALWAYS">
+                        <Label text="Question"
+                               styleClass="node-subtitle, section-label"/>
+
+                        <TextArea fx:id="txtQuestion"
+                                  editable="false"
+                                  wrapText="true"
+                                  styleClass="clean-scroll, question-text"
+                                  VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                </VBox>
+
+                <!-- ANSWER ROW -->
+                <HBox spacing="12" alignment="CENTER">
+                    <Button fx:id="btnShowHint"
+                            text="💡 Show Hint"
+                            onAction="#onShowHint"
+                            styleClass="btn-secondary"
+                            minWidth="120"/>
+
+                    <TextField fx:id="txtAnswer"
+                               promptText="Type your answer…"
+                               HBox.hgrow="ALWAYS"
+                               minWidth="260"
+                               styleClass="text-input-field, answer-input"/>
+
+                    <Button fx:id="btnSubmit"
+                            text="Submit Answer"
+                            onAction="#onSubmitAnswer"
+                            styleClass="btn-primary"
+                            minWidth="140"
+                            defaultButton="true"/>
+                </HBox>
+
+                <Label fx:id="lblFeedback"
+                       text=""
+                       wrapText="true"
+                       alignment="CENTER"
+                       maxWidth="800"
+                       styleClass="node-subtitle, feedback-text"/>
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- EMPTY BOTTOM SPACER BAR -->
+    <bottom>
+        <HBox spacing="24"
+              alignment="CENTER"
+              styleClass="status-bar">
+            <padding>
+                <Insets top="12" right="24" bottom="12" left="24"/>
+            </padding>
+            <Pane HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -68,6 +68,7 @@
                                     vbarPolicy="NEVER"
                                     pannable="false"
                                     fitToHeight="true"
+                                    fitToWidth="true"
                                     styleClass="ticker-scroll">
                             <content>
                                 <HBox fx:id="challengeStrip" spacing="16" alignment="CENTER_LEFT">

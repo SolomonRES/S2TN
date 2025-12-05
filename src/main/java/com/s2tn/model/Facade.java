@@ -289,4 +289,8 @@ public class Facade {
             dungeonsLoaded = true;
         }
     }
+
+    public int getCompletedDungeonCount() {
+        throw new UnsupportedOperationException("Not supported yet putting here for now unless I have time");
+    }
 }

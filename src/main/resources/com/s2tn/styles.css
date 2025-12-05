@@ -414,3 +414,290 @@
     -fx-font-weight: bold;
     -fx-text-alignment: center;
 }
+
+/* Sidebar Panels for Dungeon */
+.sidebar-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0.2, 0, 2);
+}
+
+/* Puzzle Card - Main Content Area */
+.puzzle-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,103,184,0.15), 12, 0.3, 0, 4);
+}
+
+/* Puzzle Title */
+.puzzle-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a1a;
+}
+
+/* Section Labels */
+.section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 4 0 4 0;
+}
+
+/* Question TextArea Styling */
+.question-text {
+    -fx-background-color: #fafafa;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 12;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.question-text:focused {
+    -fx-border-color: #0067b8;
+    -fx-background-color: white;
+}
+
+.question-text .content {
+    -fx-background-color: transparent;
+}
+
+/* Answer Input Field */
+.answer-input {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-border-width: 1.5;
+    -fx-padding: 10 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.answer-input:focused {
+    -fx-border-color: #0067b8;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,103,184,0.25), 6, 0, 0, 0);
+}
+
+/* Large Button for Maze Entry */
+.btn-large {
+    -fx-padding: 12 32;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Interaction Bar */
+.interaction-bar {
+    -fx-background-color: transparent;
+    -fx-spacing: 12;
+}
+
+/* Feedback Display */
+.feedback-container {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.feedback-text {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #333333;
+    -fx-text-alignment: center;
+}
+
+/* Content Workspace */
+.content-workspace {
+    -fx-background-color: transparent;
+}
+
+/* Status Bar Bottom */
+.status-bar {
+    -fx-background-color: transparent;
+    -fx-spacing: 24;
+}
+
+/* Stat Labels and Values */
+.stat-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.stat-value {
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #0067b8;
+}
+
+/* Status Cards in Bottom Bar */
+.status-progress,
+.status-inventory {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0.2, 0, 2);
+}
+
+/* Base List View Styling */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 4;
+}
+
+.list-view .viewport {
+    -fx-background-color: transparent;
+}
+
+/* List Cell Base */
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13px;
+    -fx-padding: 10 12;
+    -fx-cursor: hand;
+}
+
+.list-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #f0f6fb;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #e1f0ff;
+    -fx-text-fill: #0067b8;
+    -fx-font-weight: bold;
+}
+
+.list-cell:filled:selected:hover {
+    -fx-background-color: #d1e7ff;
+}
+
+/* Navigator List - Left Sidebar */
+.list-navigator .list-cell {
+    -fx-padding: 12 10;
+    -fx-font-size: 13px;
+}
+
+/* Puzzles List - Right Sidebar */
+.list-puzzles .list-cell {
+    -fx-padding: 14 12;
+    -fx-font-size: 14px;
+}
+
+/* Inventory List - Bottom Section */
+.list-inventory .list-cell {
+    -fx-padding: 8 10;
+    -fx-font-size: 12px;
+}
+
+
+/* SCROLLBARS */
+.list-view .scroll-bar:vertical,
+.text-area .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+    -fx-padding: 2;
+}
+
+.list-view .scroll-bar:vertical .track,
+.text-area .scroll-bar:vertical .track {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 5;
+}
+
+.list-view .scroll-bar:vertical .thumb,
+.text-area .scroll-bar:vertical .thumb {
+    -fx-background-color: #c0c0c0;
+    -fx-background-radius: 5;
+    -fx-background-insets: 2;
+}
+
+.list-view .scroll-bar:vertical .thumb:hover,
+.text-area .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #a0a0a0;
+}
+
+.list-view .scroll-bar:vertical .thumb:pressed,
+.text-area .scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #808080;
+}
+
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button,
+.text-area .scroll-bar:vertical .increment-button,
+.text-area .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+}
+
+.list-view .scroll-bar:vertical .increment-arrow,
+.list-view .scroll-bar:vertical .decrement-arrow,
+.text-area .scroll-bar:vertical .increment-arrow,
+.text-area .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+
+/* SEPARATORS - Dungeon Page */
+.separator {
+    -fx-background-color: transparent;
+}
+
+.separator .line {
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1 0 0 0;
+}
+
+.separator:vertical .line {
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 0 1;
+    -fx-pref-width: 1;
+}
+
+
+/* BUTTON FOR DUNGEON */
+.btn-primary:focused,
+.btn-secondary:focused {
+    -fx-effect: dropshadow(gaussian, rgba(0,103,184,0.4), 8, 0, 0, 0);
+}
+
+.btn-primary:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #888888;
+    -fx-opacity: 0.6;
+}
+
+.btn-secondary:disabled {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-text-fill: #888888;
+    -fx-opacity: 0.6;
+}
+
+/* ACCESSIBILITY & FOCUS INDICATORS */
+.button:focused,
+.text-field:focused,
+.text-area:focused,
+.list-view:focused {
+    -fx-background-insets: 0;
+}
+

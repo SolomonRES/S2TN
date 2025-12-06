@@ -59,10 +59,15 @@ summary.
 ## 🧪 Demonstrations
 
 - 🎥 **Video Walkthrough:**  
-  [▶️ Backend Implementation Demo](https://www.youtube.com/watch?v=alsl0cOmVb8)
-  [▶️ V1 Frontend Prototype Demo](https://youtu.be/1OyZo8GrogI) 
-  [▶️ V2 Frontend Prototype Demo](https://youtu.be/7E78pGgg7p4)
-  [📺 GUI Demo](https://youtu.be/Qw4zy5op2-A)
+  - 
+    [▶️ Backend Implementation Demo](https://www.youtube.com/watch?v=alsl0cOmVb8)
+  - 
+    [▶️ V1 Frontend Prototype Demo](https://youtu.be/1OyZo8GrogI) 
+  - 
+    [▶️ V2 Frontend Prototype Demo](https://youtu.be/7E78pGgg7p4)
+  - 
+    [▶️ GUI Demo](https://youtu.be/Qw4zy5op2-A)
+  - 
 
 ---
 

@@ -1,7 +1,6 @@
 package com.s2tn;
 
 import com.s2tn.model.Facade;
-import com.s2tn.model.Maze;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;

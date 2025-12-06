@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 
-import com.s2tn.Speak;
-
 public class SettingsController {
 
     @FXML private Slider sliderMasterVolume;
@@ -17,9 +15,18 @@ public class SettingsController {
         chkTextToSpeech.setSelected(Speak.isEnabled());
 
         chkTextToSpeech.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            Speak.setEnabled(newVal);
-        });
+            if (newVal != Speak.isEnabled()) {
+                Speak.toggle();
+            }
 
+            if (Speak.isEnabled()) {
+                Speak.speak("Voice enabled.");
+            } else {
+                Speak.toggle();
+                Speak.speak("Voice disabled.");
+                Speak.toggle();
+            }
+        });
     }
 
     @FXML

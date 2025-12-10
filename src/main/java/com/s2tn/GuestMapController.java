@@ -34,6 +34,7 @@ public class GuestMapController {
     @FXML private Button btnInventory;
     @FXML private Button btnSettings;
     @FXML private Button btnLogout;
+    @FXML private Button btnProfile;
 
     // Dungeon Map Nodes
     @FXML private Button btnLevel1;
@@ -100,6 +101,9 @@ public class GuestMapController {
 
         ImageView logout = makeIcon("doorEmoji.png", 22);
         if (logout != null) btnLogout.setGraphic(logout);
+
+        ImageView profile = makeIcon("playerAvatar.png", 22);
+        if(profile != null) btnProfile.setGraphic(profile);
 
         // dungeon icons
         if (imgLevel1 != null) imgLevel1.setImage(loadAsset("fireEmoji.png"));
@@ -231,5 +235,8 @@ public class GuestMapController {
     @FXML private void onLogoutClicked(ActionEvent e) {
         facade.logout();
         App.transitionTo("landing");
+    }
+    @FXML private void onProfileClicked(ActionEvent e){
+        App.transitionTo("profile");
     }
 }

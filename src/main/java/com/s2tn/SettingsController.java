@@ -31,6 +31,6 @@ public class SettingsController {
 
     @FXML
     private void onBack(ActionEvent e) {
-        App.transitionTo("landing");
+        App.transitionTo("guestmap");
     }
 }

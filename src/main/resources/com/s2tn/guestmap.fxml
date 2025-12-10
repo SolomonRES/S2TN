@@ -55,6 +55,14 @@
                 </graphic>
             </Button>
 
+            <Button fx:id="btnProfile" onAction="#onProfileClicked" styleClass="icon-btn-red">
+                <graphic>
+                    <ImageView fitHeight="22" fitWidth="22" preserveRatio="true" styleClass="stat-icon">
+                        <image><Image url="@com/s2tn/assets/playerAvatar.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
         </HBox>
     </top>
 

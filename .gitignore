@@ -30,6 +30,8 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+/htmlReport/
+htmlReport.zip/
 
 ### VS Code ###
 .vscode/

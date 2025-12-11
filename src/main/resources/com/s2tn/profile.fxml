@@ -5,60 +5,83 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="773.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.s2tn.ProfileController">
-   <children>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
-      <Label layoutX="62.0" layoutY="14.0" text="Player Profile">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="62.0" layoutY="39.0" text="Stats and Achievements" />
-      <HBox layoutX="62.0" layoutY="86.0" prefHeight="100.0" prefWidth="491.0">
-         <children>
-            <ImageView fitHeight="84.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@assets/playerAvatar.png" />
-               </image>
-            </ImageView>
-            <VBox prefHeight="100.0" prefWidth="440.0">
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.s2tn.ProfileController">
+   <center>
+      <ScrollPane>
+         <content>
+            <AnchorPane prefHeight="773.0" prefWidth="1026.0">
                <children>
-                  <Label fx:id="name" prefHeight="17.0" prefWidth="118.0" />
-                  <Label fx:id="title" prefHeight="17.0" prefWidth="67.0" />
-                  <HBox prefHeight="66.0" prefWidth="306.0">
+                  <HBox layoutX="323.0" layoutY="135.0" prefHeight="100.0" prefWidth="491.0" styleClass="glass-card">
                      <children>
-                        <VBox prefHeight="66.0" prefWidth="122.0">
+                        <ImageView fitHeight="84.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/playerAvatar.png" />
+                           </image>
+                        </ImageView>
+                        <VBox prefHeight="100.0" prefWidth="440.0">
                            <children>
-                              <Label text="Total Score" />
-                              <Label fx:id="playerScore" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="66.0" prefWidth="120.0">
-                           <children>
-                              <Label text="Dungeons Completed" />
-                              <Label fx:id="completion" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="66.0" prefWidth="139.0">
-                           <children>
-                              <Label text="Global Rank" />
-                              <Label fx:id="rank" />
+                              <Label fx:id="name" prefHeight="17.0" prefWidth="118.0" />
+                              <Label fx:id="title" prefHeight="17.0" prefWidth="67.0" />
+                              <HBox prefHeight="66.0" prefWidth="306.0">
+                                 <children>
+                                    <VBox prefHeight="66.0" prefWidth="82.0">
+                                       <children>
+                                          <Label text="Total Score" />
+                                          <Label fx:id="playerScore" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="66.0" prefWidth="139.0">
+                                       <children>
+                                          <Label text="Dungeons Completed" />
+                                          <Label fx:id="completion" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="66.0" prefWidth="139.0">
+                                       <children>
+                                          <Label text="Global Rank" />
+                                          <Label fx:id="rank" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>
                   </HBox>
+                  <TableView fx:id="leaderboard" layoutX="323.0" layoutY="537.0" prefHeight="200.0" prefWidth="491.0" styleClass="glass-card">
+                    <columns>
+                      <TableColumn fx:id="boardRank" prefWidth="75.0" text="Rank" />
+                      <TableColumn fx:id="boardName" prefWidth="312.0" text="Name" />
+                        <TableColumn fx:id="score" minWidth="0.0" prefWidth="98.0" text="Score" />
+                    </columns>
+                  </TableView>
+                  <VBox layoutX="323.0" layoutY="287.0" prefHeight="200.0" prefWidth="491.0" styleClass="glass-card">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="109.0" text="Achievements" />
+                        <ListView fx:id="achivementList" prefHeight="175.0" prefWidth="142.0" styleClass="glass-card" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </center>
+   <top>
+      <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="1046.0" styleClass="header-bar" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onBack" prefHeight="25.0" prefWidth="83.0" styleClass="btn-secondary" text="Back" />
+            <VBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="468.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="121.0" text="Player Profile">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label text="Stats and Achievements" />
                </children>
             </VBox>
+            <Pane prefHeight="42.0" prefWidth="458.0" />
          </children>
       </HBox>
-      <HBox layoutX="177.0" layoutY="225.0" prefHeight="192.0" prefWidth="246.0">
-         <children>
-            <VBox prefHeight="192.0" prefWidth="240.0">
-               <children>
-                  <ListView fx:id="achivementList" prefHeight="175.0" prefWidth="246.0" />
-               </children></VBox>
-         </children>
-      </HBox>
-      <ListView fx:id="leaderboard" layoutX="62.0" layoutY="471.0" prefHeight="200.0" prefWidth="491.0" />
-   </children>
-</AnchorPane>
+   </top>
+</BorderPane>

@@ -2,6 +2,7 @@ package com.s2tn;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 
@@ -9,6 +10,10 @@ public class SettingsController {
 
     @FXML private Slider sliderMasterVolume;
     @FXML private CheckBox chkTextToSpeech;
+    @FXML private Button btnchangePassword;
+    @FXML private Button btnResetData;
+    @FXML private Button btnExportData;
+    @FXML private Button btnDeleteAccount;
 
     @FXML
     private void initialize() {

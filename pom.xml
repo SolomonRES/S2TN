@@ -180,6 +180,11 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
+        <configuration>
+          <options>
+            <option>--add-opens=com.s2tn/com.s2tn.model=javafx.base</option>
+          </options>
+        </configuration>
         <executions>
           <execution>
             <id>default-cli</id>

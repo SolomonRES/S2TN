@@ -1,63 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.s2tn.SettingsController"
-            styleClass="app-root">
+<BorderPane styleClass="app-root" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.s2tn.SettingsController">
 
     <!-- Top Bar -->
     <top>
         <HBox spacing="16" styleClass="glass-card header-bar">
             <padding>
-                <Insets top="12" right="16" bottom="12" left="16"/>
+                <Insets bottom="12" left="16" right="16" top="12" />
             </padding>
 
-            <Button fx:id="btnBack"
-                    text="Back"
-                    onAction="#onBack"
-                    styleClass="btn-secondary"/>
+            <Button fx:id="btnBack" onAction="#onBack" styleClass="btn-secondary" text="Back" />
 
-            <Label text="Settings" styleClass="node-title"/>
+            <Label styleClass="node-title" text="Settings" />
 
-            <Pane HBox.hgrow="ALWAYS"/>
+            <Pane HBox.hgrow="ALWAYS" />
         </HBox>
     </top>
 
     <!-- Settings Content -->
     <center>
-        <VBox spacing="20" alignment="TOP_LEFT">
+        <VBox alignment="TOP_LEFT" spacing="20">
             <padding>
-                <Insets top="16" right="20" bottom="16" left="20"/>
+                <Insets bottom="16" left="20" right="20" top="16" />
             </padding>
 
             <!-- AUDIO / ACCESSIBILITY -->
-            <VBox spacing="8" styleClass="glass-card" prefWidth="600">
+            <VBox prefWidth="600" spacing="8" styleClass="glass-card">
                 <padding>
-                    <Insets top="16" right="14" bottom="16" left="14"/>
+                    <Insets bottom="16" left="14" right="14" top="16" />
                 </padding>
 
-                <Label text="Audio and Accessibility" styleClass="node-title"/>
+                <Label styleClass="node-title" text="Audio and Accessibility" />
 
                 <!-- Volume Slider (GUI-only for now) -->
                 <HBox spacing="10">
-                    <Label text="Master Volume"/>
-                    <Slider fx:id="sliderMasterVolume" prefWidth="300" value="75"/>
+                    <Label text="Master Volume" />
+                    <Slider fx:id="sliderMasterVolume" prefWidth="300" value="75" />
                 </HBox>
 
                 <!-- Text-to-Speech toggle (backed by Speak class) -->
-                <CheckBox fx:id="chkTextToSpeech"
-                          text="Enable Text-to-Speech"/>
+                <CheckBox fx:id="chkTextToSpeech" text="Enable Text-to-Speech" />
             </VBox>
+         <VBox prefHeight="66.0" prefWidth="600.0" styleClass="glass-card">
+            <children>
+               <Label prefHeight="17.0" prefWidth="124.0" text="Account" />
+               <Button fx:id="btnchangePassword" mnemonicParsing="false" text="Change Password" />
+               <Button fx:id="btnResetData" mnemonicParsing="false" text="Reset Data" />
+               <Button fx:id="btnExportData" mnemonicParsing="false" text="Export Data" />
+               <Button fx:id="btnDeleteAccount" mnemonicParsing="false" text="Delete Account" />
+            </children>
+         </VBox>
 
             <!-- ABOUT -->
-            <VBox spacing="6" styleClass="stat-card" prefWidth="600">
-                <Label text="About" styleClass="node-title"/>
-                <Label text="Escape Room Software - Version 1.0.0"/>
-                <Label text="Developed by S2TN"/>
+            <VBox prefWidth="600" spacing="6" styleClass="stat-card">
+                <Label styleClass="node-title" text="About" />
+                <Label text="Escape Room Software - Version 1.0.0" />
+                <Label text="Developed by S2TN" />
             </VBox>
         </VBox>
     </center>

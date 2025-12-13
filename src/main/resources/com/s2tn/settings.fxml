@@ -48,10 +48,9 @@
          <VBox prefHeight="66.0" prefWidth="600.0" styleClass="glass-card">
             <children>
                <Label prefHeight="17.0" prefWidth="124.0" text="Account" />
-               <Button fx:id="btnchangePassword" mnemonicParsing="false" text="Change Password" />
-               <Button fx:id="btnResetData" mnemonicParsing="false" text="Reset Data" />
-               <Button fx:id="btnExportData" mnemonicParsing="false" text="Export Data" />
-               <Button fx:id="btnDeleteAccount" mnemonicParsing="false" text="Delete Account" />
+               <Button fx:id="btnResetData" mnemonicParsing="false" onAction="#onReset" prefHeight="25.0" prefWidth="110.0" text="Reset Data" />
+               <Button fx:id="btnExportData" mnemonicParsing="false" onAction="#onExport" prefHeight="25.0" prefWidth="110.0" text="Export Data" />
+               <Button fx:id="btnDeleteAccount" mnemonicParsing="false" onAction="#onDelete" prefHeight="25.0" prefWidth="110.0" text="Delete Account" />
             </children>
          </VBox>
 

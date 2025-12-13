@@ -172,7 +172,7 @@ public class DataWriter extends DataConstants {
      * @param a the account to convert
      * @return JSON string representation of the account
      */
-    private static String userToJson(Account a) {
+    public static String userToJson(Account a) {
         StringBuilder sb = new StringBuilder(128);
         sb.append("{");
         sb.append("\"accountID\":").append(toJsonString(a.getAccountID()));

@@ -116,4 +116,8 @@ public class Account {
     public void setRank(int rank) {
         this.rank = Math.max(0, rank);
     }
+
+    public void setAchievements(List<Achievement> achievements) {
+        this.achievements = achievements;
+    }
 }
